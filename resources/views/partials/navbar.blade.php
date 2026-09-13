@@ -35,7 +35,7 @@
         >
             <a href="{{ url('/#beranda') }}" class="rounded-lg px-3 py-2 font-subtitle text-sm text-void hover:text-primary">Beranda</a>
             <a href="{{ url('/#program') }}" class="rounded-lg px-3 py-2 font-subtitle text-sm text-void hover:text-primary">Program</a>
-            <a href="{{ route('pendaftaran') }}" class="rounded-lg px-3 py-2 font-subtitle text-sm {{ request()->routeIs('pendaftaran') ? 'text-primary font-bold' : 'text-void' }} hover:text-primary">Pendaftaran</a>
+            <a href="{{ url('/#daftar') }}" class="rounded-lg px-3 py-2 font-subtitle text-sm text-void hover:text-primary">Pendaftaran</a>
             <a href="{{ url('/#kontak') }}" class="rounded-lg px-3 py-2 font-subtitle text-sm text-void hover:text-primary">Kontak</a>
             <a
                 href="{{ route('pendaftaran') }}"

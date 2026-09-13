@@ -501,14 +501,13 @@
 
                     {{-- Tombol Aksi --}}
                     <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                        {{-- Tombol 1: Buka Modal Form Pendaftaran --}}
-                        <button 
-                            type="button" 
-                            id="btn-open-modal"
-                            class="inline-flex items-center justify-center rounded-full bg-highlight px-8 py-3.5 font-subtitle text-xs sm:text-sm font-bold text-void shadow-lg hover:bg-highlight/80 hover:translate-y-0.5 transition-all"
+                        {{-- Tombol 1: Menuju Halaman Formulir Pendaftaran --}}
+                        <a
+                            href="{{ route('pendaftaran') }}"
+                            class="inline-flex items-center justify-center rounded-full bg-highlight px-8 py-3.5 font-subtitle text-xs sm:text-sm font-bold text-void shadow-lg hover:bg-highlight/80 hover:translate-y-0.5 transition-all text-center"
                         >
                             DAFTAR SEKARANG SECARA ONLINE ➔
-                        </button>
+                        </a>
 
                         {{-- Tombol 2: Konsultasi Langsung via WhatsApp --}}
                         <a 
