@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Nunito:wght@700&family=Poppins:wght@400;500&display=swap');
+@import 'tailwindcss';
+
+@config '../../tailwind.config.js';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    --font-headline: 'Fredoka', sans-serif;
+    --font-subtitle: 'Nunito', sans-serif;
+    --font-body: 'Poppins', sans-serif;
+    --color-primary: #079a92;
+    --color-primary-2: #325b55;
+    --color-highlight: #FFEF01;
+    --color-canvas: #ffffff;
+    --color-void: #000000;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-canvas font-body text-void antialiased;
+    }
+
+    h1, h2, h3 {
+        @apply font-headline font-bold;
+    }
+
+    h4, h5, .section-label {
+        @apply font-subtitle font-bold;
+    }
+}
