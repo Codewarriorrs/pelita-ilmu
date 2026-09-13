@@ -56,7 +56,7 @@
 
                         {{-- Box Foto yang Lebih Panjang (h-72 = 288px) --}}
                         <div class="mt-4 rounded-2xl bg-primary/5 p-2 border border-primary/20 shadow-sm">
-                            <img src="{{ asset('images/Ruang.jpg') }}" alt="Suasana Belajar" class="h-72 w-full object-cover rounded-xl">
+                            <img src="{{ asset('images/ruang.jpg') }}" alt="Suasana Belajar" class="h-72 w-full object-cover rounded-xl">
                         </div>
                     </div>
                 </div>
