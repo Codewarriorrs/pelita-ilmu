@@ -1,6 +1,6 @@
 <header class="fixed top-0 left-0 right-0 z-50 h-20 bg-canvas border-b border-primary-2/15">
     <nav class="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6" aria-label="Navigasi utama">
-        <a href="#beranda" class="flex items-center gap-2">
+        <a href="{{ route('beranda') }}" class="flex items-center gap-2">
             <img src="{{ asset('images/logo-bimbel-removebg.png') }}" alt="Logo Pelita Ilmu" class="h-15 w-15 object-contain">
             <div class="flex flex-col">
                 <span class="font-headline text-xl text-primary">
@@ -33,13 +33,13 @@
             id="nav-menu"
             class="absolute left-0 right-0 top-20 hidden flex-col gap-1 border-b border-primary-2/15 bg-canvas px-4 py-4 lg:static lg:flex lg:flex-row lg:items-center lg:gap-6 lg:border-0 lg:p-0"
         >
-            <a href="#beranda" class="rounded-lg px-3 py-2 font-subtitle text-sm text-void hover:text-primary">Beranda</a>
-            <a href="#program" class="rounded-lg px-3 py-2 font-subtitle text-sm text-void hover:text-primary">Program</a>
-            <a href="#daftar" class="rounded-lg px-3 py-2 font-subtitle text-sm text-void hover:text-primary">Daftar</a>
-            <a href="#kontak" class="rounded-lg px-3 py-2 font-subtitle text-sm text-void hover:text-primary">Kontak</a>
+            <a href="{{ url('/#beranda') }}" class="rounded-lg px-3 py-2 font-subtitle text-sm text-void hover:text-primary">Beranda</a>
+            <a href="{{ url('/#program') }}" class="rounded-lg px-3 py-2 font-subtitle text-sm text-void hover:text-primary">Program</a>
+            <a href="{{ route('pendaftaran') }}" class="rounded-lg px-3 py-2 font-subtitle text-sm {{ request()->routeIs('pendaftaran') ? 'text-primary font-bold' : 'text-void' }} hover:text-primary">Pendaftaran</a>
+            <a href="{{ url('/#kontak') }}" class="rounded-lg px-3 py-2 font-subtitle text-sm text-void hover:text-primary">Kontak</a>
             <a
-                href="#daftar"
-                class="mt-2 inline-flex items-center justify-center rounded-xl bg-highlight px-4 py-2.5 font-subtitle text-sm text-void lg:mt-0 hover:translate-y-0.5 transition-all"
+                href="{{ route('pendaftaran') }}"
+                class="mt-2 inline-flex items-center justify-center rounded-xl bg-highlight px-4 py-2.5 font-subtitle text-sm font-bold text-void lg:mt-0 hover:translate-y-0.5 transition-all shadow-sm"
             >
                 Daftar Bimbel Sekarang ➜
             </a>

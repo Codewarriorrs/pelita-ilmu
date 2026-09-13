@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
         <title>@yield('title', 'Pelita Ilmu Bimbel')</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @livewireStyles
     </head>
     <body class="bg-canvas text-void min-h-screen flex flex-col">
         @include('partials.navbar')
@@ -15,5 +16,6 @@
         </main>
 
         @include('partials.footer')
+        @livewireScripts
     </body>
 </html>
