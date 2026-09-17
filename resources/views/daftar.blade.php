@@ -496,11 +496,52 @@
             </div>
         </div>
         <div class="border-t border-stone-700 py-4 text-center text-xs text-stone-400">
-            &copy; {{ date('Y') }} <strong class="text-white">Pelita Ilmu Bimbel</strong>. Semua hak dilindungi.
+            &copy; {{ date('Y') }} 
+            <button type="button" onclick="triggerEasterEgg()" class="text-white hover:text-[#FFE500] font-bold transition-all inline-flex items-center gap-1 group focus:outline-none" title="Klik untuk kejutan Easter Egg! 💡">
+                <span>Pelita Ilmu Bimbel</span>
+                <span class="text-[#FFE500] group-hover:scale-125 transition-transform inline-block">💡✨</span>
+            </button>. Semua hak dilindungi.
         </div>
     </footer>
 
-    <!-- JAVASCRIPT DINAMIS CHECKBOX MATA PELAJARAN -->
+    <!-- EASTER EGG MODAL -->
+    <div id="easter-egg-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+        <div class="relative w-full max-w-md bg-[#193836] border-4 border-[#FFE500] rounded-3xl p-6 sm:p-8 text-white shadow-2xl text-center overflow-hidden">
+            <!-- Floating Glow Decor -->
+            <div class="absolute -top-10 -left-10 w-36 h-36 bg-[#FFE500]/20 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-10 -right-10 w-36 h-36 bg-[#009688]/40 rounded-full blur-2xl"></div>
+            
+            <!-- Trophy Lightbulb Badge -->
+            <div class="relative mx-auto mb-4 w-20 h-20 rounded-full bg-[#FFE500] text-stone-950 flex items-center justify-center border-4 border-black shadow-xl animate-pulse">
+                <svg class="w-10 h-10 text-stone-950" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7zm-2 18h4v1a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1z"/>
+                </svg>
+            </div>
+
+            <span class="inline-block px-3 py-1 bg-[#009688] text-white text-[10px] font-black uppercase tracking-widest rounded-full mb-3 border border-black shadow-sm">
+                🎉 YOU FOUND THE EASTER EGG!
+            </span>
+            
+            <h3 class="text-2xl font-heading font-extrabold text-[#FFE500] mb-2">
+                Rahasia Pelita Ilmu 🌟
+            </h3>
+            
+            <p class="text-xs sm:text-sm text-stone-200 leading-relaxed mb-6 font-medium">
+                "Pendidikan adalah senjata paling mematikan di dunia, karena dengan pendidikan Anda dapat mengubah dunia."
+                <span class="block text-[#FFE500] font-bold mt-2">— Nelson Mandela</span>
+            </p>
+
+            <div class="p-3.5 bg-white/10 rounded-2xl border border-white/20 mb-6 text-xs text-stone-300 leading-relaxed">
+                ⚡ <strong>Tips Sukses Belajar:</strong> Konsistensi 30 menit belajar setiap hari jauh lebih efektif dari belajar semalaman! Tetap semangat meraih mimpi bareng Pelita Ilmu! 🚀
+            </div>
+
+            <button type="button" onclick="closeEasterEgg()" class="w-full py-3.5 bg-[#FFE500] hover:bg-yellow-400 text-stone-950 font-heading font-black rounded-xl text-xs uppercase tracking-wider border-2 border-black shadow-md transition-all">
+                Siap Berprestasi! 🎓
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT DINAMIS CHECKBOX MATA PELAJARAN & EASTER EGG -->
     <script>
         const mapelData = {
             'TK': ['Membaca & Calistung', 'Mengaji / Iqro', 'Bahasa Inggris Dasar', 'Kreativitas & Seni'],
@@ -585,6 +626,44 @@
         function toggleMobileMenu() {
             const menu = document.getElementById('liquid-mobile-menu');
             menu.classList.toggle('hidden');
+        }
+
+        function triggerEasterEgg() {
+            const modal = document.getElementById('easter-egg-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                createConfetti();
+            }
+        }
+
+        function closeEasterEgg() {
+            const modal = document.getElementById('easter-egg-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function createConfetti() {
+            const colors = ['#FFE500', '#009688', '#ffffff', '#FF5722', '#4CAF50'];
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'fixed pointer-events-none z-[130] rounded-full';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = Math.random() * 100 + 'vh';
+                confetti.style.width = (Math.random() * 10 + 6) + 'px';
+                confetti.style.height = (Math.random() * 10 + 6) + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.opacity = Math.random();
+                confetti.style.transition = 'all 1.5s ease-out';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.style.transform = `translate(${(Math.random() - 0.5) * 200}px, ${(Math.random() - 0.5) * 200}px) scale(0)`;
+                    confetti.style.opacity = '0';
+                }, 50);
+
+                setTimeout(() => confetti.remove(), 1500);
+            }
         }
     </script>
 </body>

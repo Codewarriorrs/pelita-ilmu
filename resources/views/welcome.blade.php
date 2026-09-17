@@ -241,56 +241,88 @@
             </div>
         </section>
 
-        <!-- FEATURE BAR SECTION (SOFT YELLOW CARDS WITH BLACK BORDER) -->
+        <!-- FEATURE BAR SECTION (SLEEK DARK TEAL CARDS WITH VECTOR ICONS) -->
         <section class="bg-[#193836] text-white py-12 border-t border-[#00796B] relative overflow-hidden">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
-                        <span class="text-2xl shrink-0">🎓</span>
+                    <!-- CARD 1: Pengajar Berpengalaman -->
+                    <div class="group flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-stone-700/80 shadow-md hover:border-[#FFE500] transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-[#FFE500]/15 border border-[#FFE500]/30 text-[#FFE500] flex items-center justify-center shrink-0 group-hover:bg-[#FFE500] group-hover:text-stone-950 transition-all">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14v6.5"/>
+                            </svg>
+                        </div>
                         <div>
-                            <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Pengajar Berpengalaman</h4>
-                            <p class="text-xs text-stone-700 mt-1 leading-relaxed">Pengajar berpendidikan S1 & S2 berkualitas tinggi.</p>
+                            <h4 class="font-heading font-extrabold text-white group-hover:text-[#FFE500] transition-colors text-sm sm:text-base">Pengajar Berpengalaman</h4>
+                            <p class="text-xs text-stone-300 mt-1 leading-relaxed">Pengajar berpendidikan S1 & S2 berkualitas tinggi.</p>
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
-                        <span class="text-2xl shrink-0">🙂</span>
+                    <!-- CARD 2: Active & Fun Learning -->
+                    <div class="group flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-stone-700/80 shadow-md hover:border-[#FFE500] transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-[#FFE500]/15 border border-[#FFE500]/30 text-[#FFE500] flex items-center justify-center shrink-0 group-hover:bg-[#FFE500] group-hover:text-stone-950 transition-all">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                            </svg>
+                        </div>
                         <div>
-                            <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Active & Fun Learning</h4>
-                            <p class="text-xs text-stone-700 mt-1 leading-relaxed">Belajar dua arah, aktif, dan tidak membosankan.</p>
+                            <h4 class="font-heading font-extrabold text-white group-hover:text-[#FFE500] transition-colors text-sm sm:text-base">Active & Fun Learning</h4>
+                            <p class="text-xs text-stone-300 mt-1 leading-relaxed">Belajar dua arah, aktif, dan tidak membosankan.</p>
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
-                        <span class="text-2xl shrink-0">⭐</span>
+                    <!-- CARD 3: Pendidikan Berkarakter -->
+                    <div class="group flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-stone-700/80 shadow-md hover:border-[#FFE500] transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-[#FFE500]/15 border border-[#FFE500]/30 text-[#FFE500] flex items-center justify-center shrink-0 group-hover:bg-[#FFE500] group-hover:text-stone-950 transition-all">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                        </div>
                         <div>
-                            <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Pendidikan Berkarakter</h4>
-                            <p class="text-xs text-stone-700 mt-1 leading-relaxed">Menanamkan kedisiplinan dan moral baik siswa.</p>
+                            <h4 class="font-heading font-extrabold text-white group-hover:text-[#FFE500] transition-colors text-sm sm:text-base">Pendidikan Berkarakter</h4>
+                            <p class="text-xs text-stone-300 mt-1 leading-relaxed">Menanamkan kedisiplinan dan moral baik siswa.</p>
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
-                        <span class="text-2xl shrink-0">💬</span>
+                    <!-- CARD 4: Komunikatif & Terbuka -->
+                    <div class="group flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-stone-700/80 shadow-md hover:border-[#FFE500] transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-[#FFE500]/15 border border-[#FFE500]/30 text-[#FFE500] flex items-center justify-center shrink-0 group-hover:bg-[#FFE500] group-hover:text-stone-950 transition-all">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                        </div>
                         <div>
-                            <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Komunikatif & Terbuka</h4>
-                            <p class="text-xs text-stone-700 mt-1 leading-relaxed">Pendekatan hangat kepada siswa dan orang tua.</p>
+                            <h4 class="font-heading font-extrabold text-white group-hover:text-[#FFE500] transition-colors text-sm sm:text-base">Komunikatif & Terbuka</h4>
+                            <p class="text-xs text-stone-300 mt-1 leading-relaxed">Pendekatan hangat kepada siswa dan orang tua.</p>
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
-                        <span class="text-2xl shrink-0">🏫</span>
+                    <!-- CARD 5: Area Belajar Nyaman -->
+                    <div class="group flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-stone-700/80 shadow-md hover:border-[#FFE500] transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-[#FFE500]/15 border border-[#FFE500]/30 text-[#FFE500] flex items-center justify-center shrink-0 group-hover:bg-[#FFE500] group-hover:text-stone-950 transition-all">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h6M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5"/>
+                            </svg>
+                        </div>
                         <div>
-                            <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Area Belajar Nyaman</h4>
-                            <p class="text-xs text-stone-700 mt-1 leading-relaxed">Ruang kelas tenang, ber-AC, & tersedia Wi-Fi gratis.</p>
+                            <h4 class="font-heading font-extrabold text-white group-hover:text-[#FFE500] transition-colors text-sm sm:text-base">Area Belajar Nyaman</h4>
+                            <p class="text-xs text-stone-300 mt-1 leading-relaxed">Ruang kelas tenang, ber-AC, & tersedia Wi-Fi gratis.</p>
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
-                        <span class="text-2xl shrink-0">🏷️</span>
+                    <!-- CARD 6: Harga Sangat Terjangkau -->
+                    <div class="group flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-stone-700/80 shadow-md hover:border-[#FFE500] transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-[#FFE500]/15 border border-[#FFE500]/30 text-[#FFE500] flex items-center justify-center shrink-0 group-hover:bg-[#FFE500] group-hover:text-stone-950 transition-all">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                            </svg>
+                        </div>
                         <div>
-                            <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Harga Sangat Terjangkau</h4>
-                            <p class="text-xs text-stone-700 mt-1 leading-relaxed">Mulai Rp195.000/bulan kualitas pendidikan terjamin.</p>
+                            <h4 class="font-heading font-extrabold text-white group-hover:text-[#FFE500] transition-colors text-sm sm:text-base">Harga Sangat Terjangkau</h4>
+                            <p class="text-xs text-stone-300 mt-1 leading-relaxed">Mulai Rp195.000/bulan kualitas pendidikan terjamin.</p>
                         </div>
                     </div>
 
@@ -582,14 +614,93 @@
             </div>
         </div>
         <div class="border-t border-stone-700 py-4 text-center text-xs text-stone-400">
-            &copy; {{ date('Y') }} <strong class="text-white">Pelita Ilmu Bimbel</strong>. Semua hak dilindungi.
+            &copy; {{ date('Y') }} 
+            <button type="button" onclick="triggerEasterEgg()" class="text-white hover:text-[#FFE500] font-bold transition-all inline-flex items-center gap-1 group focus:outline-none" title="Klik untuk kejutan Easter Egg! 💡">
+                <span>Pelita Ilmu Bimbel</span>
+                <span class="text-[#FFE500] group-hover:scale-125 transition-transform inline-block">💡✨</span>
+            </button>. Semua hak dilindungi.
         </div>
     </footer>
+
+    <!-- EASTER EGG MODAL -->
+    <div id="easter-egg-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+        <div class="relative w-full max-w-md bg-[#193836] border-4 border-[#FFE500] rounded-3xl p-6 sm:p-8 text-white shadow-2xl text-center overflow-hidden animate-bounce-once">
+            <!-- Floating Glow Decor -->
+            <div class="absolute -top-10 -left-10 w-36 h-36 bg-[#FFE500]/20 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-10 -right-10 w-36 h-36 bg-[#009688]/40 rounded-full blur-2xl"></div>
+            
+            <!-- Trophy Lightbulb Badge -->
+            <div class="relative mx-auto mb-4 w-20 h-20 rounded-full bg-[#FFE500] text-stone-950 flex items-center justify-center border-4 border-black shadow-xl animate-pulse">
+                <svg class="w-10 h-10 text-stone-950" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7zm-2 18h4v1a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1z"/>
+                </svg>
+            </div>
+
+            <span class="inline-block px-3 py-1 bg-[#009688] text-white text-[10px] font-black uppercase tracking-widest rounded-full mb-3 border border-black shadow-sm">
+                🎉 YOU FOUND THE EASTER EGG!
+            </span>
+            
+            <h3 class="text-2xl font-heading font-extrabold text-[#FFE500] mb-2">
+                Rahasia Pelita Ilmu 🌟
+            </h3>
+            
+            <p class="text-xs sm:text-sm text-stone-200 leading-relaxed mb-6 font-medium">
+                "Pendidikan adalah senjata paling mematikan di dunia, karena dengan pendidikan Anda dapat mengubah dunia."
+                <span class="block text-[#FFE500] font-bold mt-2">— Nelson Mandela</span>
+            </p>
+
+            <div class="p-3.5 bg-white/10 rounded-2xl border border-white/20 mb-6 text-xs text-stone-300 leading-relaxed">
+                ⚡ <strong>Tips Sukses Belajar:</strong> Konsistensi 30 menit belajar setiap hari jauh lebih efektif dari belajar semalaman! Tetap semangat meraih mimpi bareng Pelita Ilmu! 🚀
+            </div>
+
+            <button type="button" onclick="closeEasterEgg()" class="w-full py-3.5 bg-[#FFE500] hover:bg-yellow-400 text-stone-950 font-heading font-black rounded-xl text-xs uppercase tracking-wider border-2 border-black shadow-md transition-all">
+                Siap Berprestasi! 🎓
+            </button>
+        </div>
+    </div>
 
     <script>
         function toggleMobileMenu() {
             const menu = document.getElementById('liquid-mobile-menu');
             menu.classList.toggle('hidden');
+        }
+
+        function triggerEasterEgg() {
+            const modal = document.getElementById('easter-egg-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                createConfetti();
+            }
+        }
+
+        function closeEasterEgg() {
+            const modal = document.getElementById('easter-egg-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function createConfetti() {
+            const colors = ['#FFE500', '#009688', '#ffffff', '#FF5722', '#4CAF50'];
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'fixed pointer-events-none z-[130] rounded-full';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = Math.random() * 100 + 'vh';
+                confetti.style.width = (Math.random() * 10 + 6) + 'px';
+                confetti.style.height = (Math.random() * 10 + 6) + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.opacity = Math.random();
+                confetti.style.transition = 'all 1.5s ease-out';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.style.transform = `translate(${(Math.random() - 0.5) * 200}px, ${(Math.random() - 0.5) * 200}px) scale(0)`;
+                    confetti.style.opacity = '0';
+                }, 50);
+
+                setTimeout(() => confetti.remove(), 1500);
+            }
         }
     </script>
 </body>
