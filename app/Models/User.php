@@ -10,7 +10,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles; 
 
-class User extends Authenticatable
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, SoftDeletes, HasRoles;
@@ -49,6 +52,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Keamanan Otorisasi Akses Panel Admin / Tentor / Guru.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return in_array($this->role, ['ADMIN', 'TENTOR']);
     }
 
     /**

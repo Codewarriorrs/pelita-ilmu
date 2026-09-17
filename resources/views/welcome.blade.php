@@ -330,7 +330,7 @@
             </div>
         </section>
 
-        <!-- PROGRAM SECTION (IMAGE 1 MATCH: UNIFORM TEAL PILL BUTTONS ACROSS ALL CARDS) -->
+        <!-- PROGRAM SECTION (UNIFORM STYLING & YELLOW NEOBRUTALIST BOX CTA BUTTONS) -->
         <section id="program" class="py-16 bg-white">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-2xl mx-auto mb-12">
@@ -341,10 +341,10 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
                     
                     <!-- CARD 1: JENJANG TK -->
-                    <div class="bg-white rounded-[32px] border-2 border-black shadow-lg overflow-hidden flex flex-col justify-between">
+                    <div class="bg-white rounded-[32px] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col justify-between">
                         <div>
-                            <!-- Header Banner -->
-                            <div class="bg-[#193836] text-white p-6 relative">
+                            <!-- Uniform Header Banner -->
+                            <div class="bg-[#009688] text-white p-6 relative border-b-2 border-black">
                                 <span class="text-[10px] font-extrabold text-[#FFE500] uppercase tracking-wider block mb-1">TINGKAT PRASEKOLAH</span>
                                 <h3 class="text-2xl font-heading font-extrabold text-white">Jenjang TK</h3>
                                 <span class="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#FFE500] text-stone-950 font-black flex items-center justify-center text-xs border border-black shadow-sm">
@@ -382,19 +382,19 @@
                             </div>
                         </div>
                         
-                        <!-- CTA BUTTON (TEAL PILL BUTTON MATCHING IMAGE 1) -->
+                        <!-- CTA BUTTON (YELLOW KOTAK NEOBRUTALIST BUTTON) -->
                         <div class="p-6 pt-0">
-                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all shadow-sm">
+                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-[#FFE500] hover:bg-yellow-400 text-stone-950 font-heading font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all text-center">
                                 PILIH PAKET TK &rarr;
                             </a>
                         </div>
                     </div>
 
                     <!-- CARD 2: JENJANG SD -->
-                    <div class="bg-white rounded-[32px] border-2 border-black shadow-lg overflow-hidden flex flex-col justify-between">
+                    <div class="bg-white rounded-[32px] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col justify-between">
                         <div>
-                            <!-- Header Banner -->
-                            <div class="bg-[#009688] text-white p-6 relative">
+                            <!-- Uniform Header Banner -->
+                            <div class="bg-[#009688] text-white p-6 relative border-b-2 border-black">
                                 <span class="text-[10px] font-extrabold text-[#FFE500] uppercase tracking-wider block mb-1">SEKOLAH DASAR</span>
                                 <h3 class="text-2xl font-heading font-extrabold text-white">Jenjang SD</h3>
                                 <span class="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#FFE500] text-stone-950 font-black flex items-center justify-center text-xs border border-black shadow-sm">
@@ -432,19 +432,19 @@
                             </div>
                         </div>
                         
-                        <!-- CTA BUTTON (TEAL PILL BUTTON MATCHING IMAGE 1) -->
+                        <!-- CTA BUTTON (YELLOW KOTAK NEOBRUTALIST BUTTON) -->
                         <div class="p-6 pt-0">
-                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all shadow-sm">
+                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-[#FFE500] hover:bg-yellow-400 text-stone-950 font-heading font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all text-center">
                                 PILIH PAKET SD &rarr;
                             </a>
                         </div>
                     </div>
 
                     <!-- CARD 3: JENJANG SMP -->
-                    <div class="bg-white rounded-[32px] border-2 border-black shadow-lg overflow-hidden flex flex-col justify-between">
+                    <div class="bg-white rounded-[32px] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col justify-between">
                         <div>
-                            <!-- Header Banner -->
-                            <div class="bg-[#193836] text-white p-6 relative">
+                            <!-- Uniform Header Banner -->
+                            <div class="bg-[#009688] text-white p-6 relative border-b-2 border-black">
                                 <span class="text-[10px] font-extrabold text-[#FFE500] uppercase tracking-wider block mb-1">SEKOLAH MENENGAH PERTAMA</span>
                                 <h3 class="text-2xl font-heading font-extrabold text-white">Jenjang SMP</h3>
                                 <span class="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#FFE500] text-stone-950 font-black flex items-center justify-center text-xs border border-black shadow-sm">
@@ -479,19 +479,19 @@
                             </div>
                         </div>
                         
-                        <!-- CTA BUTTON (TEAL PILL BUTTON MATCHING IMAGE 1) -->
+                        <!-- CTA BUTTON (YELLOW KOTAK NEOBRUTALIST BUTTON) -->
                         <div class="p-6 pt-0">
-                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all shadow-sm">
+                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-[#FFE500] hover:bg-yellow-400 text-stone-950 font-heading font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all text-center">
                                 PILIH PAKET SMP &rarr;
                             </a>
                         </div>
                     </div>
 
                     <!-- CARD 4: SMA & UTBK -->
-                    <div class="bg-white rounded-[32px] border-2 border-black shadow-lg overflow-hidden flex flex-col justify-between">
+                    <div class="bg-white rounded-[32px] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col justify-between">
                         <div>
-                            <!-- Header Banner -->
-                            <div class="bg-[#009688] text-white p-6 relative">
+                            <!-- Uniform Header Banner -->
+                            <div class="bg-[#009688] text-white p-6 relative border-b-2 border-black">
                                 <span class="text-[10px] font-extrabold text-[#FFE500] uppercase tracking-wider block mb-1">SEKOLAH MENENGAH ATAS</span>
                                 <h3 class="text-2xl font-heading font-extrabold text-white">SMA & UTBK</h3>
                                 <span class="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#FFE500] text-stone-950 font-black flex items-center justify-center text-xs border border-black shadow-sm">
@@ -526,9 +526,9 @@
                             </div>
                         </div>
                         
-                        <!-- CTA BUTTON (TEAL PILL BUTTON MATCHING IMAGE 1) -->
+                        <!-- CTA BUTTON (YELLOW KOTAK NEOBRUTALIST BUTTON) -->
                         <div class="p-6 pt-0">
-                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all shadow-sm">
+                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-[#FFE500] hover:bg-yellow-400 text-stone-950 font-heading font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all text-center">
                                 PILIH PAKET SMA &rarr;
                             </a>
                         </div>
