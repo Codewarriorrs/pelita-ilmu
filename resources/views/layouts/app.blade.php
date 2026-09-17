@@ -9,7 +9,9 @@
         @livewireStyles
     </head>
     <body class="bg-canvas text-void min-h-screen flex flex-col">
-        @include('partials.navbar')
+        @unless (View::hasSection('hide_navbar'))
+            @include('partials.navbar')
+        @endunless
 
         <main class="flex-1 pt-20">
             @yield('content')

@@ -7,8 +7,23 @@
     </div>
 
     <div class="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-
-        @if (! $isSubmitted)
+    @if (! $isSubmitted)
+        {{-- TAMBAHKAN BANNER DI SINI --}}
+        <div class="flex justify-center items-center mb-6">
+            <img 
+                src="{{ asset('images/logo-bimbel-removebg.png') }}" 
+                alt="Logo Pelita Ilmu" 
+                class="h-30 sm:h-40 w-auto object-contain drop-shadow"
+            >
+            <div class="flex flex-col">
+                <span class="font-headline text-4xl text-primary">
+                    Pelita Ilmu 
+                </span>
+                <span class="font-subtitle text-sm text-primary-2">
+                    Bimbingan Belajar
+                </span>
+            </div>
+        </div>
             {{-- ========================================== --}}
             {{-- STATE 1: TAMPILAN FORMULIR PENDAFTARAN     --}}
             {{-- ========================================== --}}
