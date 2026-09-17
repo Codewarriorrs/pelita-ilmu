@@ -11,8 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pembayarans', function (Blueprint $table) {
+        Schema::create('pembayaran', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
+            $table->foreignId('admin_pencatat_id')->constrained('users')->cascadeOnDelete();
+            $table->decimal('biaya_dibayar', 12, 2);
+            $table->enum('metode_bayar', ['TUNAI', 'TRANSFER', 'QRIS'])->default('TUNAI');
+            $table->enum('status_bayar', ['LUNAS', 'BELUM'])->default('BELUM');
+            $table->dateTime('tanggal_bayar')->nullable();
+            $table->unsignedTinyInteger('untuk_bulan'); // 1 - 12 (misal: 8 = Agustus)
+            $table->year('untuk_tahun'); // Contoh: 2026
             $table->timestamps();
         });
     }

@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jadwal_kelompoks', function (Blueprint $table) {
+        Schema::create('jadwal_kelompok', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('kelompok_id')->constrained('kelompok')->cascadeOnDelete();
+            $table->date('tanggal_sesi'); // Tanggal fleksibel saat tentor buka sesi
             $table->timestamps();
         });
     }

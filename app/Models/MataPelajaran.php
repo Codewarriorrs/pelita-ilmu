@@ -10,14 +10,14 @@ class MataPelajaran extends Model
 {
     use HasFactory;
 
-    protected $table = 'mata_pelajarans';
+    protected $table = 'mata_pelajaran';
 
     protected $fillable = [
         'nama_mapel',
         'jenjang',
     ];
 
-    public function kelompoks(): HasMany
+    public function kelompok(): HasMany
     {
         return $this->hasMany(Kelompok::class, 'mapel_id');
     }

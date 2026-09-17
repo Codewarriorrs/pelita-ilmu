@@ -40,7 +40,7 @@ class StatsOverviewWidget extends BaseWidget
             ->where('status_bayar', 'LUNAS')
             ->where('untuk_bulan', $bulanSekarang)
             ->where('untuk_tahun', $tahunSekarang)
-            ->sum('biaya_bulanan');
+            ->sum('biaya_dibayar');
 
         // Format mata uang Rupiah tanpa resiko floating point issue
         $formattedPemasukan = 'Rp ' . number_format((float) $totalPemasukan, 0, ',', '.');

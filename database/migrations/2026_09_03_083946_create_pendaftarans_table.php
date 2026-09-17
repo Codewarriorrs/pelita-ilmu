@@ -11,8 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pendaftarans', function (Blueprint $table) {
+        Schema::create('pendaftaran', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_lengkap');
+            $table->string('asal_sekolah')->nullable();
+            $table->string('minat_program')->nullable();
+            $table->string('nomor_wa', 20);
+            $table->enum('status_tindak_lanjut', ['BARU', 'DIHUBUNGI', 'DITERIMA'])->default('BARU');
+            $table->dateTime('tanggal_masuk')->useCurrent();
             $table->timestamps();
         });
     }

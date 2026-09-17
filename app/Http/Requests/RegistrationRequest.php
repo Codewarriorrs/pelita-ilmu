@@ -15,10 +15,20 @@ class RegistrationRequest extends FormRequest
     }
 
     /**
-     * Sanitasi data sebelum validasi (pembersihan format no telepon).
+     * Sanitasi data sebelum validasi.
      */
     protected function prepareForValidation(): void
     {
+        if ($this->filled('nomor_wali') && !$this->filled('no_telp_ortu')) {
+            $this->merge(['no_telp_ortu' => $this->input('nomor_wali')]);
+        }
+        if ($this->filled('nama_wali') && !$this->filled('nama_ortu')) {
+            $this->merge(['nama_ortu' => $this->input('nama_wali')]);
+        }
+        if ($this->filled('nomor_telepon_siswa') && !$this->filled('no_telp_siswa')) {
+            $this->merge(['no_telp_siswa' => $this->input('nomor_telepon_siswa')]);
+        }
+
         if ($this->filled('no_telp_siswa')) {
             $this->merge([
                 'no_telp_siswa' => preg_replace('/[^\d+]/', '', (string) $this->input('no_telp_siswa')),
@@ -33,47 +43,39 @@ class RegistrationRequest extends FormRequest
     }
 
     /**
-     * Aturan validasi server-side sesuai PRD & Form.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Aturan validasi server-side.
      */
     public function rules(): array
     {
         return [
             'nama_lengkap' => ['required', 'string', 'max:100'],
-            'tanggal_lahir' => ['required', 'date', 'before:today'],
+            'tanggal_lahir' => ['required', 'date', 'before_or_equal:today'],
             'asal_sekolah' => ['required', 'string', 'max:100'],
+            'kategori_kelas' => ['nullable', 'string', 'in:Reguler,Privat,KELOMPOK,PRIVAT'],
+            'minat_program' => ['required', 'string'],
+            'mata_pelajaran' => ['nullable', 'array'],
             'alamat_rumah' => ['required', 'string', 'max:255'],
-            'no_telp_siswa' => ['nullable', 'string', 'regex:/^(\+62|62|0)8[1-9][0-9]{7,11}$/'],
             'nama_ortu' => ['required', 'string', 'max:100'],
-            'no_telp_ortu' => ['required', 'string', 'regex:/^(\+62|62|0)8[1-9][0-9]{7,11}$/'],
-            'paket_bulanan' => ['required', 'in:TK,SD,SMP,SMA'],
-            'biaya_pendaftaran' => ['accepted'],
-            'setuju_syarat' => ['accepted'],
+            'no_telp_ortu' => ['required', 'string'],
+            'no_telp_siswa' => ['nullable', 'string'],
             'website_address' => ['nullable', 'max:0', 'prohibited'],
         ];
     }
 
     /**
      * Pesan validasi dalam bahasa Indonesia.
-     *
-     * @return array<string, string>
      */
     public function messages(): array
     {
         return [
             'nama_lengkap.required' => 'Nama lengkap calon siswa wajib diisi.',
             'tanggal_lahir.required' => 'Tanggal lahir calon siswa wajib diisi.',
-            'tanggal_lahir.before' => 'Tanggal lahir tidak valid.',
+            'tanggal_lahir.before_or_equal' => 'Tanggal lahir tidak boleh melebihi hari ini.',
             'asal_sekolah.required' => 'Asal sekolah calon siswa wajib diisi.',
-            'alamat_rumah.required' => 'Alamat rumah wajib diisi.',
+            'minat_program.required' => 'Silakan pilih program bimbingan belajar.',
+            'alamat_rumah.required' => 'Alamat rumah tempat tinggal wajib diisi.',
             'nama_ortu.required' => 'Nama orang tua / wali wajib diisi.',
-            'no_telp_ortu.required' => 'Nomor WhatsApp orang tua wajib diisi untuk konfirmasi jadwal.',
-            'no_telp_ortu.regex' => 'Format nomor WhatsApp orang tua tidak valid (gunakan 08xx / +628xx).',
-            'no_telp_siswa.regex' => 'Format nomor WhatsApp siswa tidak valid (gunakan 08xx / +628xx).',
-            'paket_bulanan.required' => 'Silakan pilih paket bimbingan bulanan.',
-            'biaya_pendaftaran.accepted' => 'Centang konfirmasi biaya pendaftaran Rp. 35.000 untuk melanjutkan.',
-            'setuju_syarat.accepted' => 'Anda harus menyetujui syarat dan ketentuan bimbingan Pelita Ilmu.',
+            'no_telp_ortu.required' => 'Nomor WhatsApp orang tua wajib diisi untuk konfirmasi pendaftaran.',
             'website_address.prohibited' => 'Aktivitas bot terdeteksi.',
         ];
     }

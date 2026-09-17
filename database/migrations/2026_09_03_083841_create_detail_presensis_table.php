@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('detail_presensis', function (Blueprint $table) {
+        Schema::create('detail_presensi', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('jadwal_id')->constrained('jadwal_kelompok')->cascadeOnDelete();
+            $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
+            $table->enum('status_kehadiran', ['HADIR', 'IZIN', 'SAKIT', 'ALPA'])->default('HADIR');
             $table->timestamps();
+
+            // 1 siswa cuma punya 1 status presensi per jadwal sesi
+            $table->unique(['jadwal_id', 'siswa_id']);
         });
     }
 

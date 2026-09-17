@@ -126,7 +126,7 @@
 
             <div class="mt-6 pt-5 border-t border-stone-100 text-center">
                 <a href="/" class="text-xs font-semibold text-teal-700 hover:text-teal-900 transition-colors">
-                    ← Kembali ke Halaman Utama
+                    Kembali ke Halaman Utama
                 </a>
             </div>
         </div>

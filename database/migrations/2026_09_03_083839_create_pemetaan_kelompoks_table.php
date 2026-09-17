@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pemetaan_kelompoks', function (Blueprint $table) {
+        Schema::create('pemetaan_kelompok', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
+            $table->foreignId('kelompok_id')->constrained('kelompok')->cascadeOnDelete();
             $table->timestamps();
+
+            // Cegah duplikasi siswa di dalam kelompok yang sama
+            $table->unique(['siswa_id', 'kelompok_id']);
         });
     }
 

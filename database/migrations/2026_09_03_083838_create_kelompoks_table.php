@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kelompoks', function (Blueprint $table) {
+        Schema::create('kelompok', function (Blueprint $table) {
             $table->id();
             $table->string('nama_kelompok');
-            $table->foreignId('mapel_id')->constrained('mata_pelajarans');
-            $table->foreignId('tentor_id')->constrained('users');
-            $table->string('jadwal_hari'); // contoh: "Senin & Rabu"
-            $table->time('jam_mulai');
-            $table->time('jam_selesai');
+            $table->foreignId('mapel_id')->constrained('mata_pelajaran')->cascadeOnDelete();
+            $table->foreignId('tentor_id')->constrained('users')->cascadeOnDelete();
+            $table->string('jadwal_hari')->nullable(); // Contoh: "Senin & Rabu"
+            $table->time('jam_mulai')->nullable();
+            $table->time('jam_selesai')->nullable();
             $table->timestamps();
         });
     }

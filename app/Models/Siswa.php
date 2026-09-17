@@ -11,7 +11,7 @@ class Siswa extends Model
 {
     use HasFactory;
 
-    protected $table = 'siswas';
+    protected $table = 'siswa';
 
     protected $fillable = [
         'nama_lengkap',
@@ -46,9 +46,13 @@ class Siswa extends Model
     /**
      * Relasi ke Kelompok belajar.
      */
-    public function kelompoks(): BelongsToMany
+    public function kelompok(): BelongsToMany
     {
-        return $this->belongsToMany(Kelompok::class, 'pemetaan_kelompoks', 'siswa_id', 'kelompok_id')
+        return $this->belongsToMany(Kelompok::class, 'pemetaan_kelompok', 'siswa_id', 'kelompok_id')
             ->withTimestamps();
+    }
+    public function detailPresensi(): HasMany
+    {
+        return $this->hasMany(DetailPresensi::class, 'siswa_id');
     }
 }

@@ -1,0 +1,33 @@
+<?php
+namespace App\Policies;
+
+use App\Models\User;
+use Spatie\Permission\Models\Permission;
+
+class PermissionPolicy
+{
+    public function viewAny(User $user): bool
+    {
+        return false; // Menu otomatis hilang dari sidebar
+    }
+
+    public function view(User $user, Permission $permission): bool
+    {
+        return false;
+    }
+
+    public function create(User $user): bool
+    {
+        return false;
+    }
+
+    public function update(User $user, Permission $permission): bool
+    {
+        return false;
+    }
+
+    public function delete(User $user, Permission $permission): bool
+    {
+        return false;
+    }
+}

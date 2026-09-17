@@ -10,28 +10,33 @@ class Pembayaran extends Model
 {
     use HasFactory;
 
-    protected $table = 'pembayarans';
+    protected $table = 'pembayaran';
 
     protected $fillable = [
         'siswa_id',
+        'admin_pencatat_id',
         'status_bayar',
         'untuk_bulan',
         'untuk_tahun',
-        'biaya_bulanan',
+        'biaya_dibayar',
         'tanggal_bayar',
         'metode_bayar',
-        'keterangan',
     ];
 
     protected $casts = [
         'untuk_bulan' => 'integer',
         'untuk_tahun' => 'integer',
-        'biaya_bulanan' => 'decimal:2',
+        'biaya_dibayar' => 'decimal:2',
         'tanggal_bayar' => 'date',
     ];
 
     public function siswa(): BelongsTo
     {
         return $this->belongsTo(Siswa::class, 'siswa_id');
+    }
+
+    public function adminPencatat(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'admin_pencatat_id');
     }
 }

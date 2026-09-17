@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegistrationRequest;
+use App\Models\Pendaftaran;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -31,10 +32,23 @@ class RegistrationController extends Controller
     {
         $validated = $request->validated();
 
-        // Saat ini UI dan validasi sudah siap. Data siap disimpan ke model Siswa/Pendaftaran.
-        // Contoh: Siswa::create([...]);
+        $mapelList = isset($validated['mata_pelajaran']) && is_array($validated['mata_pelajaran']) 
+            ? ' (Mapel: ' . implode(', ', $validated['mata_pelajaran']) . ')' 
+            : '';
+
+        $kategori = $validated['kategori_kelas'] ?? 'Reguler';
+        $programDetail = $kategori . ' - ' . $validated['minat_program'] . $mapelList;
+
+        Pendaftaran::create([
+            'nama_lengkap' => $validated['nama_lengkap'],
+            'asal_sekolah' => $validated['asal_sekolah'],
+            'minat_program' => $programDetail,
+            'nomor_wa' => $validated['no_telp_ortu'],
+            'status_tindak_lanjut' => 'BARU',
+            'tanggal_masuk' => now(),
+        ]);
 
         return redirect()->route('daftar')
-            ->with('success', 'Terima kasih, data pendaftaran ananda ' . e($validated['nama_lengkap']) . ' telah kami terima. Tim admin Pelita Ilmu akan menghubungi nomor ' . e($validated['no_telp_ortu']) . ' via WhatsApp dalam kurun waktu 1x24 jam.');
+            ->with('success', 'Terima kasih! Data pendaftaran ananda ' . e($validated['nama_lengkap']) . ' telah berhasil diterima. Tim Bimbel Pelita Ilmu akan menghubungi WhatsApp orang tua (' . e($validated['no_telp_ortu']) . ') untuk konfirmasi jadwal dan rincian biaya.');
     }
 }
