@@ -24,17 +24,10 @@
                         highlight: '#FFE500',
                         'highlight-dark': '#F5D000',
                         canvas: '#F8FAFC',
-                        main: '#009688',
-                        border: '#000000',
-                        bw: '#FFFFFF',
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
                         heading: ['Quicksand', 'Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        neo: '4px 4px 0px 0px #000000',
-                        'neo-sm': '3px 3px 0px 0px #000000',
                     }
                 }
             }
@@ -99,9 +92,9 @@
                 <a href="{{ route('daftar') }}" class="px-3 py-2 text-stone-700 hover:text-[#009688] font-heading font-bold transition-colors">Pendaftaran</a>
                 <a href="#kontak" class="px-3 py-2 text-stone-700 hover:text-[#009688] font-heading font-bold transition-colors">Kontak</a>
                 
-                <!-- ANTI-METAL BUTTON: Primary Action -->
+                <!-- ANTI-METAL BUTTON: Primary Action (HOVER TEXT TURNS TO DARK GREEN #193836) -->
                 <a href="{{ route('daftar') }}" class="group/btn relative inline-flex h-11 min-w-[220px] items-center justify-center overflow-hidden rounded-xl bg-[#009688] active:scale-[0.98] transition-transform shadow-md">
-                    <span class="relative z-20 font-heading font-bold text-sm text-white pl-12 pr-5">Daftar Bimbel Sekarang</span>
+                    <span class="relative z-20 font-heading font-bold text-sm text-white group-hover/btn:text-[#193836] pl-12 pr-5 transition-colors duration-300">Daftar Bimbel Sekarang</span>
                     <span aria-hidden="true" class="absolute bottom-1 left-1 top-1 z-10 flex w-9 items-center justify-center overflow-hidden rounded-lg bg-[#FFE500] transition-[width] duration-300 ease-[cubic-bezier(0.65,0,0.35,1)] group-hover/btn:w-[calc(100%-0.5rem)]">
                         <svg width="14" height="16" viewBox="0 0 14 16" class="shrink-0 overflow-visible">
                             <g fill="#193836">
@@ -125,7 +118,7 @@
             <button
                 type="button"
                 onclick="toggleMobileMenu()"
-                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-white text-stone-900 shadow-neo hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all lg:hidden"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-white text-stone-900 shadow-sm hover:bg-stone-50 transition-all lg:hidden"
                 aria-label="Buka menu"
             >
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -144,7 +137,7 @@
             <a href="{{ route('daftar') }}" onclick="toggleMobileMenu()" class="text-base font-heading font-extrabold text-[#FFE500]">Pendaftaran</a>
             <a href="#kontak" onclick="toggleMobileMenu()" class="text-base font-heading font-extrabold text-white hover:text-[#FFE500] transition-colors">Kontak</a>
             
-            <button onclick="toggleMobileMenu()" class="mt-2 py-2.5 px-4 bg-[#FFE500] text-stone-950 font-heading font-black rounded-xl text-xs uppercase tracking-wider border-2 border-black shadow-neo hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+            <button onclick="toggleMobileMenu()" class="mt-2 py-2.5 px-4 bg-[#FFE500] text-stone-950 font-heading font-black rounded-xl text-xs uppercase tracking-wider shadow-sm hover:bg-yellow-400 transition-all">
                 Tutup Menu
             </button>
         </div>
@@ -152,7 +145,7 @@
 
     <main id="main-content" class="pt-20">
         
-        <!-- HERO BANNER SECTION WITH BUBBLE / PATTERN ACCENTS -->
+        <!-- HERO BANNER SECTION -->
         <section id="beranda" class="bg-[#009688] relative py-12 lg:py-16 text-white overflow-hidden bubble-bg">
             
             <!-- Floating Decorative Circles/Bubbles -->
@@ -201,10 +194,10 @@
                             DAN RAIH PRESTASIMU!
                         </h2>
 
-                        <!-- ANTI-METAL BUTTON HERO CTA -->
+                        <!-- ANTI-METAL BUTTON HERO CTA (HOVER TEXT TURNS TO DARK GREEN #193836) -->
                         <div class="mt-8 flex justify-center">
-                            <a href="{{ route('daftar') }}" class="group/btn relative inline-flex h-14 min-w-[280px] items-center justify-center overflow-hidden rounded-2xl bg-[#FFE500] shadow-xl active:scale-95 transition-all">
-                                <span class="relative z-20 font-heading font-extrabold text-base text-stone-950 pl-14 pr-6 group-hover/btn:text-white transition-colors duration-300">DAFTAR BIMBEL SEKARANG</span>
+                            <a href="{{ route('daftar') }}" class="group/btn relative inline-flex h-14 min-w-[280px] items-center justify-center overflow-hidden rounded-2xl bg-[#FFE500] shadow-xl active:scale-95 transition-all border-2 border-black">
+                                <span class="relative z-20 font-heading font-extrabold text-base text-stone-950 group-hover/btn:text-[#193836] pl-14 pr-6 transition-colors duration-300">DAFTAR BIMBEL SEKARANG</span>
                                 <span aria-hidden="true" class="absolute bottom-1 left-1 top-1 z-10 flex w-10 items-center justify-center overflow-hidden rounded-xl bg-[#193836] transition-[width] duration-300 ease-[cubic-bezier(0.65,0,0.35,1)] group-hover/btn:w-[calc(100%-0.5rem)]">
                                     <svg width="14" height="16" viewBox="0 0 14 16" class="shrink-0 overflow-visible">
                                         <g fill="#FFE500">
@@ -248,15 +241,12 @@
             </div>
         </section>
 
-        <!-- FEATURE BAR SECTION (IMAGE 2: SOFT YELLOW / SOFT TEAL CARDS WITH NEO-BRUTALIST BORDERS) -->
+        <!-- FEATURE BAR SECTION (SOFT YELLOW CARDS WITH BLACK BORDER) -->
         <section class="bg-[#193836] text-white py-12 border-t border-[#00796B] relative overflow-hidden">
-            <!-- Decorative circle overlay -->
-            <div class="absolute top-0 right-0 w-80 h-80 rounded-full bg-white/5 pointer-events-none"></div>
-            
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-neo">
+                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
                         <span class="text-2xl shrink-0">🎓</span>
                         <div>
                             <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Pengajar Berpengalaman</h4>
@@ -264,7 +254,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-neo">
+                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
                         <span class="text-2xl shrink-0">🙂</span>
                         <div>
                             <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Active & Fun Learning</h4>
@@ -272,7 +262,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-neo">
+                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
                         <span class="text-2xl shrink-0">⭐</span>
                         <div>
                             <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Pendidikan Berkarakter</h4>
@@ -280,7 +270,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-neo">
+                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
                         <span class="text-2xl shrink-0">💬</span>
                         <div>
                             <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Komunikatif & Terbuka</h4>
@@ -288,7 +278,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-neo">
+                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
                         <span class="text-2xl shrink-0">🏫</span>
                         <div>
                             <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Area Belajar Nyaman</h4>
@@ -296,7 +286,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-neo">
+                    <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#FEF9C3] text-stone-900 border-2 border-black shadow-md">
                         <span class="text-2xl shrink-0">🏷️</span>
                         <div>
                             <h4 class="font-heading font-extrabold text-stone-900 text-sm sm:text-base">Harga Sangat Terjangkau</h4>
@@ -308,7 +298,7 @@
             </div>
         </section>
 
-        <!-- PROGRAM SECTION (IMAGE 3 MATCH: EXACT CONTENT, SUBSTANCE, PRICING & BUTTONS) -->
+        <!-- PROGRAM SECTION (IMAGE 1 MATCH: UNIFORM TEAL PILL BUTTONS ACROSS ALL CARDS) -->
         <section id="program" class="py-16 bg-white">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-2xl mx-auto mb-12">
@@ -319,7 +309,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
                     
                     <!-- CARD 1: JENJANG TK -->
-                    <div class="bg-white rounded-3xl border-2 border-black shadow-neo overflow-hidden flex flex-col justify-between">
+                    <div class="bg-white rounded-[32px] border-2 border-black shadow-lg overflow-hidden flex flex-col justify-between">
                         <div>
                             <!-- Header Banner -->
                             <div class="bg-[#193836] text-white p-6 relative">
@@ -333,7 +323,7 @@
                             <!-- Body Content -->
                             <div class="p-6 space-y-4">
                                 <div>
-                                    <span class="text-xs font-extrabold text-stone-500 uppercase tracking-wider block mb-1">Fokus Pembelajaran:</span>
+                                    <span class="text-xs font-extrabold text-stone-500 uppercase tracking-wider block mb-1">FOKUS PEMBELAJARAN:</span>
                                     <p class="text-xs text-stone-800 font-medium leading-relaxed">
                                         Calistung (Membaca, Menulis, Berhitung), Mengaji, & Bahasa Inggris Dasar
                                     </p>
@@ -360,16 +350,16 @@
                             </div>
                         </div>
                         
-                        <!-- CTA BUTTON -->
+                        <!-- CTA BUTTON (TEAL PILL BUTTON MATCHING IMAGE 1) -->
                         <div class="p-6 pt-0">
-                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all">
-                                Pilih Paket TK &rarr;
+                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all shadow-sm">
+                                PILIH PAKET TK &rarr;
                             </a>
                         </div>
                     </div>
 
                     <!-- CARD 2: JENJANG SD -->
-                    <div class="bg-white rounded-3xl border-2 border-black shadow-neo overflow-hidden flex flex-col justify-between">
+                    <div class="bg-white rounded-[32px] border-2 border-black shadow-lg overflow-hidden flex flex-col justify-between">
                         <div>
                             <!-- Header Banner -->
                             <div class="bg-[#009688] text-white p-6 relative">
@@ -383,7 +373,7 @@
                             <!-- Body Content -->
                             <div class="p-6 space-y-4">
                                 <div>
-                                    <span class="text-xs font-extrabold text-stone-500 uppercase tracking-wider block mb-1">Fokus Pembelajaran:</span>
+                                    <span class="text-xs font-extrabold text-stone-500 uppercase tracking-wider block mb-1">FOKUS PEMBELAJARAN:</span>
                                     <p class="text-xs text-stone-800 font-medium leading-relaxed">
                                         Semua Mapel Pokok (Tematik, Matematika, IPA, B. Indonesia, B. Inggris)
                                     </p>
@@ -410,16 +400,16 @@
                             </div>
                         </div>
                         
-                        <!-- CTA BUTTON -->
+                        <!-- CTA BUTTON (TEAL PILL BUTTON MATCHING IMAGE 1) -->
                         <div class="p-6 pt-0">
-                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all">
-                                Pilih Paket SD &rarr;
+                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all shadow-sm">
+                                PILIH PAKET SD &rarr;
                             </a>
                         </div>
                     </div>
 
                     <!-- CARD 3: JENJANG SMP -->
-                    <div class="bg-white rounded-3xl border-2 border-black shadow-neo overflow-hidden flex flex-col justify-between">
+                    <div class="bg-white rounded-[32px] border-2 border-black shadow-lg overflow-hidden flex flex-col justify-between">
                         <div>
                             <!-- Header Banner -->
                             <div class="bg-[#193836] text-white p-6 relative">
@@ -433,7 +423,7 @@
                             <!-- Body Content -->
                             <div class="p-6 space-y-4">
                                 <div>
-                                    <span class="text-xs font-extrabold text-stone-500 uppercase tracking-wider block mb-1">Mapel Pilihan:</span>
+                                    <span class="text-xs font-extrabold text-stone-500 uppercase tracking-wider block mb-1">MAPEL PILIHAN:</span>
                                     <p class="text-xs text-stone-800 font-medium leading-relaxed">
                                         Matematika, IPA, Inggris, B. Indo, IPS, TKA
                                     </p>
@@ -443,30 +433,30 @@
                                 <div class="space-y-2 pt-2 border-t border-stone-100">
                                     <div class="flex items-center justify-between text-xs py-1.5 px-3 rounded-xl bg-stone-50 border border-stone-200">
                                         <span class="font-bold text-stone-700">Paket 3 Mapel</span>
-                                        <span class="font-extrabold text-stone-950 bg-[#FFE500] px-2.5 py-0.5 rounded-lg border border-black">Rp 240k/bln</span>
+                                        <span class="font-extrabold text-stone-950 bg-[#FFE500] px-3 py-1 rounded-full border border-black shadow-sm">Rp 240k/bln</span>
                                     </div>
                                     <div class="flex items-center justify-between text-xs py-1.5 px-3 rounded-xl bg-stone-50 border border-stone-200">
                                         <span class="font-bold text-stone-700">Paket 4 Mapel</span>
-                                        <span class="font-extrabold text-stone-950 bg-[#FFE500] px-2.5 py-0.5 rounded-lg border border-black">Rp 290k/bln</span>
+                                        <span class="font-extrabold text-stone-950 bg-[#FFE500] px-3 py-1 rounded-full border border-black shadow-sm">Rp 290k/bln</span>
                                     </div>
                                     <div class="flex items-center justify-between text-xs py-1.5 px-3 rounded-xl bg-stone-50 border border-stone-200">
                                         <span class="font-bold text-stone-700">Paket 5 Mapel</span>
-                                        <span class="font-extrabold text-stone-950 bg-[#FFE500] px-2.5 py-0.5 rounded-lg border border-black">Rp 340k/bln</span>
+                                        <span class="font-extrabold text-stone-950 bg-[#FFE500] px-3 py-1 rounded-full border border-black shadow-sm">Rp 340k/bln</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- CTA BUTTON -->
+                        <!-- CTA BUTTON (TEAL PILL BUTTON MATCHING IMAGE 1) -->
                         <div class="p-6 pt-0">
-                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all">
-                                Pilih Paket SMP &rarr;
+                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all shadow-sm">
+                                PILIH PAKET SMP &rarr;
                             </a>
                         </div>
                     </div>
 
                     <!-- CARD 4: SMA & UTBK -->
-                    <div class="bg-white rounded-3xl border-2 border-black shadow-neo overflow-hidden flex flex-col justify-between">
+                    <div class="bg-white rounded-[32px] border-2 border-black shadow-lg overflow-hidden flex flex-col justify-between">
                         <div>
                             <!-- Header Banner -->
                             <div class="bg-[#009688] text-white p-6 relative">
@@ -480,7 +470,7 @@
                             <!-- Body Content -->
                             <div class="p-6 space-y-3">
                                 <div>
-                                    <span class="text-xs font-extrabold text-stone-500 uppercase tracking-wider block mb-1">Mapel Pilihan:</span>
+                                    <span class="text-xs font-extrabold text-stone-500 uppercase tracking-wider block mb-1">MAPEL PILIHAN:</span>
                                     <p class="text-[11px] text-stone-800 font-medium leading-relaxed">
                                         Matematika Lanjutan, Matematika Wajib, Fisika, Kimia, Biologi, B. Indo, B. Ing, Ekonomi, TKA
                                     </p>
@@ -490,11 +480,11 @@
                                 <div class="space-y-2 pt-1 border-t border-stone-100">
                                     <div class="flex items-center justify-between text-xs py-1.5 px-3 rounded-xl bg-stone-50 border border-stone-200">
                                         <span class="font-bold text-stone-700">Paket 4 Mapel</span>
-                                        <span class="font-extrabold text-stone-950 bg-[#FFE500] px-2.5 py-0.5 rounded-lg border border-black">Rp 350k/bln</span>
+                                        <span class="font-extrabold text-stone-950 bg-[#FFE500] px-3 py-1 rounded-full border border-black shadow-sm">Rp 350k/bln</span>
                                     </div>
                                     <div class="flex items-center justify-between text-xs py-1.5 px-3 rounded-xl bg-stone-50 border border-stone-200">
                                         <span class="font-bold text-stone-700">Paket 5 Mapel</span>
-                                        <span class="font-extrabold text-stone-950 bg-[#FFE500] px-2.5 py-0.5 rounded-lg border border-black">Rp 400k/bln</span>
+                                        <span class="font-extrabold text-stone-950 bg-[#FFE500] px-3 py-1 rounded-full border border-black shadow-sm">Rp 400k/bln</span>
                                     </div>
                                 </div>
 
@@ -504,10 +494,10 @@
                             </div>
                         </div>
                         
-                        <!-- CTA BUTTON -->
+                        <!-- CTA BUTTON (TEAL PILL BUTTON MATCHING IMAGE 1) -->
                         <div class="p-6 pt-0">
-                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all">
-                                Pilih Paket SMA &rarr;
+                            <a href="{{ route('daftar') }}" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#009688] hover:bg-[#00796B] text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-full border border-black transition-all shadow-sm">
+                                PILIH PAKET SMA &rarr;
                             </a>
                         </div>
                     </div>
@@ -516,13 +506,13 @@
             </div>
         </section>
 
-        <!-- CTA & KONTAK SECTION (IMAGE 4 MATCH: DECORATIVE BUBBLE/CIRCLE BG, CTA BUTTONS & WHATSAPP) -->
+        <!-- CTA & KONTAK SECTION (WHATSAPP LOGO ADDED & GREEN TEXT) -->
         <section class="py-16 bg-[#F8FAFC]">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 
                 <div class="relative bg-[#193836] text-white rounded-3xl p-8 sm:p-12 lg:p-16 overflow-hidden border-2 border-black shadow-2xl">
                     
-                    <!-- Decorative Circles/Bubbles Background Layer (No Linear Solid) -->
+                    <!-- Decorative Circles/Bubbles Background Layer -->
                     <div class="absolute -top-16 -right-16 w-80 h-80 rounded-full bg-[#009688]/30 pointer-events-none blur-2xl"></div>
                     <div class="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-[#FFE500]/20 pointer-events-none blur-3xl"></div>
                     <div class="absolute top-1/2 right-10 -translate-y-1/2 w-64 h-64 rounded-full border-8 border-white/10 pointer-events-none"></div>
@@ -537,14 +527,19 @@
                         </p>
 
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
-                            <!-- Yellow CTA Online Registration Button -->
-                            <a href="{{ route('daftar') }}" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#FFE500] hover:bg-yellow-400 text-stone-950 font-heading font-extrabold text-sm uppercase tracking-wider rounded-full border-2 border-black shadow-neo hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all text-center">
-                                DAFTAR SEKARANG SECARA ONLINE &rarr;
+                            <!-- Yellow CTA Online Registration Button (HOVER TEXT TURNS TO DARK GREEN #193836) -->
+                            <a href="{{ route('daftar') }}" class="group/btn relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-[#FFE500] active:scale-95 transition-all border-2 border-black shadow-md px-8">
+                                <span class="relative z-20 font-heading font-extrabold text-sm text-stone-950 group-hover/btn:text-[#193836] uppercase tracking-wider transition-colors duration-300">
+                                    DAFTAR SEKARANG SECARA ONLINE &rarr;
+                                </span>
                             </a>
 
-                            <!-- White WhatsApp Consultation Button -->
-                            <a href="https://wa.me/6289624601717?text=Halo%20Admin%20Pelita%20Ilmu,%20saya%20ingin%20bertanya%20mengenai%20bimbingan%20belajar" target="_blank" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white hover:bg-stone-100 text-[#193836] font-heading font-extrabold text-sm rounded-full border-2 border-black shadow-neo hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all text-center">
-                                💬 Konsultasi via WhatsApp
+                            <!-- White WhatsApp Button with WhatsApp SVG Logo & Green Text -->
+                            <a href="https://wa.me/6289624601717?text=Halo%20Admin%20Pelita%20Ilmu,%20saya%20ingin%20bertanya%20mengenai%20bimbingan%20belajar" target="_blank" class="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white hover:bg-stone-50 text-[#009688] font-heading font-extrabold text-sm rounded-full border-2 border-black shadow-md transition-all text-center">
+                                <svg class="w-5 h-5 fill-current text-[#25D366] shrink-0" viewBox="0 0 24 24">
+                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                                </svg>
+                                <span class="text-[#009688]">Konsultasi via WhatsApp</span>
                             </a>
                         </div>
                     </div>
