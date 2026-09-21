@@ -94,11 +94,11 @@ return [
             // already embedded 'options=' themselves.
             if (!str_contains($sslmode, 'options=')
                 && (str_contains($host, 'neon.tech') || env('DB_ENDPOINT'))) {
-                // Extract bare endpoint ID: strip the '-pooler' suffix if present
-                // e.g. "ep-spring-term-azlgehdt-pooler" -> "ep-spring-term-azlgehdt"
-                $rawEndpoint = env('DB_ENDPOINT') ?: explode('.', $host)[0];
-                $endpoint    = preg_replace('/-pooler$/', '', $rawEndpoint);
-                $sslmode     = "{$sslmode};options='endpoint={$endpoint}'";
+                // For Neon pooler connections the endpoint in options MUST match
+                // the SNI, which is the full first segment of the hostname
+                // (e.g. "ep-spring-term-azlgehdt-pooler").  Do NOT strip -pooler.
+                $endpoint = env('DB_ENDPOINT') ?: explode('.', $host)[0];
+                $sslmode  = "{$sslmode};options='endpoint={$endpoint}'";
             }
 
             return [
