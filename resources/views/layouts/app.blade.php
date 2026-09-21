@@ -138,10 +138,10 @@
                     ✕
                 </button>
 
-                <!-- Header Badge -->
-                <div class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-highlight text-void border-2 border-black rounded-full font-headline font-black text-xs uppercase tracking-wider mb-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <!-- Header Text -->
+                <p class="font-headline font-black text-xs sm:text-sm text-primary uppercase tracking-widest mb-3">
                     🚀 PELITA ROCKET RUNNER 💡
-                </div>
+                </p>
 
                 <h3 class="font-headline text-2xl font-black text-[#193836] mb-1">
                     Game Rahasia Pelita Ilmu!

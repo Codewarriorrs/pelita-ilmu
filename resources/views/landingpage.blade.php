@@ -19,10 +19,10 @@
         </div>
 
         <div class="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-            <!-- Floating Badge -->
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-highlight/20 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-highlight font-headline font-bold text-xs uppercase tracking-wider mb-6 animate-bounce">
-                <span>🌟 BIMBEL KELOMPOK PRESTASI SEMARANG BARAT</span>
-            </div>
+            <!-- Clean Header Text (Teks Biasa Tanpa Frame Pill/Badge) -->
+            <p class="text-highlight font-headline font-extrabold text-xs sm:text-sm uppercase tracking-widest mb-4">
+                🌟 BIMBEL KELOMPOK PRESTASI SEMARANG BARAT
+            </p>
 
             <h1 class="font-headline text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white uppercase tracking-tight drop-shadow-md">
                 DAFTAR SEKARANG KE
@@ -75,10 +75,10 @@
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-12">
             
             <div class="text-center max-w-2xl mx-auto">
-                <span class="font-headline text-xs font-black uppercase text-highlight tracking-widest px-3 py-1 bg-white/10 rounded-full border border-white/20">
+                <span class="font-headline text-xs sm:text-sm font-extrabold uppercase text-highlight tracking-widest block mb-1">
                     FASILITAS & KEUNGGULAN
                 </span>
-                <h2 class="font-headline text-3xl sm:text-4xl font-extrabold text-white mt-3">
+                <h2 class="font-headline text-3xl sm:text-4xl font-extrabold text-white mt-2">
                     Suasana Belajar Kondusif & Berkelanjutan
                 </h2>
             </div>
@@ -158,7 +158,7 @@
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void font-bold">⭐</div>
                     <div>
                         <h3 class="font-subtitle text-base font-bold text-white">Pendidikan Berkarakter</h3>
-                        <p class="font-body text-xs text-white/80 mt-1">Menanamkan kedisiplinan dan sopan santun.</p>
+                        <p class="font-body text-xs text-white/80 mt-1">Menanamkan kedisiplinan dan moral baik.</p>
                     </div>
                 </div>
 
@@ -201,9 +201,9 @@
                         Kelompok mini 4–6 siswa per kelas agar perhatian tentor merata.
                     </p>
                 </div>
-                <div class="inline-flex items-center gap-2 rounded-full border-2 border-black bg-highlight px-4 py-2 text-void font-subtitle text-xs sm:text-sm font-extrabold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] shrink-0 self-start md:self-auto">
-                    <span>⏱️ Durasi 90 Menit Tiap Sesi</span>
-                </div>
+                <span class="font-subtitle text-xs sm:text-sm font-bold text-[#193836] shrink-0 self-start md:self-auto flex items-center gap-1.5">
+                    ⏱️ Durasi 90 Menit Tiap Sesi
+                </span>
             </div>
 
             <!-- Grid 4 Card Program -->
