@@ -6,6 +6,8 @@ RUN sed -i 's|expires           5d;|try_files $uri /index.php?$query_string;\n  
 
 COPY . .
 
+EXPOSE 80
+
 ENV WEBROOT=/var/www/html/public
 ENV PHP_ERRORS_STDERR=1
 ENV RUN_SCRIPTS=1

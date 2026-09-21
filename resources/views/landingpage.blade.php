@@ -4,109 +4,93 @@
 
 @section('content')
     {{-- ================= HERO SECTION ================= --}}
-    <section id="beranda" class="relative bg-primary py-16 lg:py-20 border-b border-primary-2/10 overflow-hidden">
-        
-        {{-- ================= BACKGROUND DECORATIVE ASSETS (PRIMARY 2) ================= --}}
+    <section id="beranda" class="relative overflow-hidden border-b border-primary-2/10 bg-primary py-16 lg:py-24">
         <div class="absolute inset-0 pointer-events-none">
-            {{-- 1. Lingkaran Cincin Ganda di Kiri Atas --}}
-            <div class="absolute -top-16 -left-16 h-72 w-72 rounded-full border-4 border-primary-2/35"></div>
-            <div class="absolute top-8 left-8 h-40 w-40 rounded-full border-2 border-dashed border-primary-2/40"></div>
-
-            {{-- 2. Lingkaran Besar di Kanan Bawah --}}
-            <div class="absolute -bottom-24 -right-24 h-96 w-96 rounded-full border-4 border-primary-2/30"></div>
-            <div class="absolute bottom-10 right-10 h-56 w-56 rounded-full border-2 border-dashed border-primary-2/40"></div>
-
-            {{-- 3. Aksen Garis-Garis Horizontal (Dashed Lines) di Sisi Kiri Bawah --}}
+            <div class="hero-orbit hero-orbit-one"></div>
+            <div class="hero-orbit hero-orbit-two"></div>
+            <div class="hero-orbit hero-orbit-three"></div>
             <svg class="absolute bottom-8 left-1/4 h-24 w-36 text-primary-2/40 hidden lg:block" fill="none" viewBox="0 0 140 80" stroke="currentColor" stroke-width="2">
                 <line x1="0" y1="15" x2="140" y2="15" stroke-dasharray="6 6" />
                 <line x1="0" y1="35" x2="140" y2="35" stroke-dasharray="6 6" />
                 <line x1="0" y1="55" x2="140" y2="55" stroke-dasharray="6 6" />
                 <line x1="0" y1="75" x2="140" y2="75" stroke-dasharray="6 6" />
             </svg>
-
-            {{-- 4. Aksen Garis-Garis Diagonal di Sisi Kanan Atas --}}
-            <svg class="absolute top-8 right-1/4 h-28 w-28 text-primary-2/35 hidden lg:block" fill="none" viewBox="0 0 100 100" stroke="currentColor" stroke-width="2">
+            <svg class="absolute top-10 right-1/4 h-28 w-28 text-primary-2/35 hidden lg:block" fill="none" viewBox="0 0 100 100" stroke="currentColor" stroke-width="2">
                 <line x1="0" y1="20" x2="80" y2="100" stroke-dasharray="4 4" />
                 <line x1="20" y1="0" x2="100" y2="80" stroke-dasharray="4 4" />
                 <line x1="40" y1="0" x2="100" y2="60" stroke-dasharray="4 4" />
             </svg>
-
-            {{-- 5. Titik/Dots Geometris di Tengah Atas --}}
-            <div class="absolute top-6 left-1/2 -translate-x-1/2 flex gap-3 text-primary-2/40">
-                <span class="h-2.5 w-2.5 rounded-full bg-primary-2/50"></span>
-                <span class="h-2.5 w-2.5 rounded-full bg-primary-2/50"></span>
-                <span class="h-2.5 w-2.5 rounded-full bg-primary-2/50"></span>
-            </div>
         </div>
 
-        {{-- Pembungkus Container (Diberi 'relative z-10' agar konten selalu di atas dekorasi) --}}
         <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="grid items-center gap-8 lg:grid-cols-12">
-                
-                {{-- 1. Kolom Kiri: Card Pembelajaran (Lebar 3 Kolom) --}}
-                <div class="order-2 lg:order-1 lg:col-span-3">
-                    <div class="rounded-3xl border-2 border-primary-2/15 bg-canvas p-5 shadow-sm">
-                        <div class="flex items-center gap-3 border-b border-primary-2/10 pb-4">
-                            <img src="{{ asset('images/kursi.png') }}" alt="Kursi" class="h-10 w-10 shrink-0 object-contain hover:scale-110 transition-transform">
-                            <div>
-                                <h3 class="font-headline text-base font-bold text-primary-2">Ruang Kelas</h3>
-                                <p class="font-subtitle text-xs text-primary">Nyaman &amp; Terang</p>
-                            </div>
-                        </div>
+            <div class="mx-auto max-w-3xl text-center">
+                <span class="hero-badge inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-canvas/90 backdrop-blur-sm">
+                    <span class="inline-block h-2.5 w-2.5 rounded-full bg-highlight shadow-[0_0_16px_rgba(255,239,1,0.9)]"></span>
+                    Bimbel Terbaik Semarang Barat
+                </span>
 
-                        {{-- Box Foto yang Lebih Panjang (h-72 = 288px) --}}
-                        <div class="mt-4 rounded-2xl bg-primary/5 p-2 border border-primary/20 shadow-sm">
-                            <img src="{{ asset('images/ruang.jpg') }}" alt="Suasana Belajar" class="h-72 w-full object-cover rounded-xl">
-                        </div>
-                    </div>
+                <h1 class="hero-title mt-6 font-headline text-3xl font-bold leading-tight text-canvas sm:text-4xl lg:text-6xl">
+                    DAFTAR SEKARANG KE
+                </h1>
+
+                <div class="hero-logo my-5 flex justify-center">
+                    <img src="{{ asset('images/logo-bimbel-removebg.png') }}" alt="Logo Pelita Ilmu" class="h-40 w-40 object-contain sm:h-52 sm:w-52">
                 </div>
 
-                {{-- 2. Kolom Tengah: Teks Headline & CTA (Lebar 6 Kolom) --}}
-                <div class="order-1 lg:order-2 text-center lg:col-span-6 px-2">
-                    <h1 class="font-headline text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-canvas">
-                        DAFTAR SEKARANG KE
-                    </h1>
-                    <div class="my-3 flex justify-center">
-                        <img src="{{ asset('images/logo-bimbel-removebg.png') }}" alt="Logo Pelita Ilmu" class="h-44 w-44 sm:h-52 sm:w-52 object-contain">
-                    </div>
-                    <h3 class="font-headline text-xl sm:text-3xl font-bold text-highlight">
-                        DAN RAIH PRESTASIMU!
-                    </h3>
+                <h2 class="hero-subtitle font-headline text-xl font-bold text-highlight sm:text-3xl lg:text-4xl">
+                    DAN RAIH PRESTASIMU!
+                </h2>
 
-                    <div class="mt-8 flex justify-center">
-                        <a 
-                            href="#daftar" 
-                            class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-highlight px-8 py-3.5 font-subtitle text-base font-bold text-void shadow-lg hover:bg-highlight/80 hover:translate-y-0.5 transition-all"
-                        >
-                            Daftar Bimbel Sekarang ➜
-                        </a>
-                    </div>
+                <p class="mt-4 text-sm text-canvas/80 sm:text-base">
+                    Kelas interaktif, tutor berpengalaman, dan program belajar yang fokus ke hasil nyata.
+                </p>
+
+                <div class="mt-8 flex justify-center">
+                    <a href="#daftar" class="group inline-flex items-center gap-3 rounded-2xl bg-highlight px-7 py-3.5 font-subtitle text-base font-bold text-void shadow-[0_10px_0_0_rgba(0,0,0,0.18)] transition-all duration-200 hover:-translate-y-1 hover:bg-[#ffe84a]">
+                        <span>Daftar Bimbel Sekarang</span>
+                        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-void text-highlight transition-transform duration-200 group-hover:translate-x-1">→</span>
+                    </a>
                 </div>
-
-                {{-- 3. Kolom Kanan: Card Lokasi (Lebar 3 Kolom) --}}
-                <div class="order-3 lg:order-3 lg:col-span-3">
-                    <div class="rounded-3xl border-2 border-primary-2/15 bg-canvas p-5 shadow-sm">
-                        <div class="border-b border-primary-2/10 pb-4">
-                            <a href="https://maps.app.goo.gl/4mZR8LgBXbN69YL4A" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 group">
-                                <img src="{{ asset('images/gps.png') }}" alt="Red Location Pin" class="h-10 w-10 shrink-0 object-contain hover:scale-110 transition-transform">
-                                <div>
-                                    <h3 class="font-headline text-base font-bold text-primary-2">Lokasi</h3>
-                                    <p class="font-subtitle text-xs text-primary">Manyaran, Semarang Barat</p>
-                                </div>
-                            </a>
-                        </div>
-
-                        {{-- Box Foto yang Lebih Panjang (h-72 = 288px) --}}
-                        <div class="mt-4 rounded-2xl bg-primary/5 p-2 border border-primary/20 shadow-sm">
-                            <img src="{{ asset('images/lokasi.jpg') }}" alt="Lokasi Bimbel" class="h-72 w-full object-cover rounded-xl">
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </section>
 
+    <section class="bg-canvas py-8 lg:py-12">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="grid gap-6 md:grid-cols-2">
+                <article class="group overflow-hidden rounded-[28px] border border-primary-2/10 bg-white p-5 shadow-[0_16px_30px_rgba(16,55,54,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(16,55,54,0.12)]">
+                    <div class="mb-4 flex items-center gap-3">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M4 7.5A2.5 2.5 0 016.5 5h11A2.5 2.5 0 0120 7.5v9A2.5 2.5 0 0117.5 19h-11A2.5 2.5 0 014 16.5v-9z" />
+                                <path d="M8 9.5h8M8 13.5h5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-headline text-xl font-bold text-primary-2">Ruang Kelas</h3>
+                            <p class="font-subtitle text-sm text-primary">Nyaman &amp; Terang</p>
+                        </div>
+                    </div>
+                    <img src="{{ asset('images/ruang.jpg') }}" alt="Suasana Belajar Pelita Ilmu" class="h-60 w-full rounded-2xl object-cover" />
+                </article>
+
+                <article class="group overflow-hidden rounded-[28px] border border-primary-2/10 bg-white p-5 shadow-[0_16px_30px_rgba(16,55,54,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(16,55,54,0.12)]">
+                    <div class="mb-4 flex items-center gap-3">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-highlight/20 text-primary-2">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M12 21s6-4.35 9-9.1C21.6 9.17 19.47 4 15.4 4A4.76 4.76 0 0012 6.08 4.76 4.76 0 008.6 4C4.53 4 2.4 9.17 3 11.9 6 16.65 12 21 12 21z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-headline text-xl font-bold text-primary-2">Lokasi</h3>
+                            <p class="font-subtitle text-sm text-primary">Manyaran, Semarang Barat</p>
+                        </div>
+                    </div>
+                    <img src="{{ asset('images/lokasi.jpg') }}" alt="Lokasi Bimbel Pelita Ilmu" class="h-60 w-full rounded-2xl object-cover" />
+                </article>
+            </div>
+        </div>
+    </section>
 
         {{-- ================= SECTION KEUNGGULAN (HORIZONTAL BANNER 2 BARIS) ================= --}}
     <section class="relative bg-primary-2 text-canvas py-10 lg:py-12 border-b border-canvas/10">
