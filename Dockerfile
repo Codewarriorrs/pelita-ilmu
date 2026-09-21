@@ -15,6 +15,10 @@ RUN sed -i 's|expires           5d;|try_files $uri /index.php?$query_string;\n  
 
 COPY . .
 
+# Make startup scripts executable (richarvey/nginx-php-fpm picks these up via RUN_SCRIPTS=1)
+COPY scripts/ /var/www/html/scripts/
+RUN chmod +x /var/www/html/scripts/*.sh
+
 # Salin hasil build asset dari tahap 1 ke folder public
 COPY --from=build-assets /app/public/build /var/www/html/public/build
 

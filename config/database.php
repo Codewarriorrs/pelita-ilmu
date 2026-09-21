@@ -84,28 +84,38 @@ return [
             ]) : [],
         ],
 
-        'pgsql' => [
-            'driver' => 'pgsql',
-            'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'laravel'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => env('DB_CHARSET', 'utf8'),
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'search_path' => 'public',
-            'sslmode' => (function () {
-                $sslmode = env('DB_SSLMODE', 'require');
-                $host = env('DB_HOST', '');
-                if (!str_contains($sslmode, 'options=') && (str_contains($host, 'neon.tech') || env('DB_ENDPOINT'))) {
-                    $endpoint = env('DB_ENDPOINT') ?: explode('.', $host)[0];
-                    return "{$sslmode};options='endpoint={$endpoint}'";
-                }
-                return $sslmode;
-            })(),
-        ],
+        'pgsql' => (function () {
+            $host    = env('DB_HOST', '127.0.0.1');
+            $sslmode = env('DB_SSLMODE', 'require');
+
+            // Neon.tech poolers require the endpoint name to be passed in the
+            // sslmode options string so the router can authenticate the right
+            // project.  We inject it automatically unless the caller has
+            // already embedded 'options=' themselves.
+            if (!str_contains($sslmode, 'options=')
+                && (str_contains($host, 'neon.tech') || env('DB_ENDPOINT'))) {
+                // Extract bare endpoint ID: strip the '-pooler' suffix if present
+                // e.g. "ep-spring-term-azlgehdt-pooler" -> "ep-spring-term-azlgehdt"
+                $rawEndpoint = env('DB_ENDPOINT') ?: explode('.', $host)[0];
+                $endpoint    = preg_replace('/-pooler$/', '', $rawEndpoint);
+                $sslmode     = "{$sslmode};options='endpoint={$endpoint}'";
+            }
+
+            return [
+                'driver'         => 'pgsql',
+                'url'            => env('DB_URL'),
+                'host'           => $host,
+                'port'           => env('DB_PORT', '5432'),
+                'database'       => env('DB_DATABASE', 'laravel'),
+                'username'       => env('DB_USERNAME', 'root'),
+                'password'       => env('DB_PASSWORD', ''),
+                'charset'        => env('DB_CHARSET', 'utf8'),
+                'prefix'         => '',
+                'prefix_indexes' => true,
+                'search_path'    => 'public',
+                'sslmode'        => $sslmode,
+            ];
+        })(),
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
