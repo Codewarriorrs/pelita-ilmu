@@ -14,7 +14,7 @@ class RegistrationController extends Controller
      */
     public function index(): View
     {
-        return view('LandingPage');
+        return view('landingpage');
     }
 
     /**
@@ -48,7 +48,7 @@ class RegistrationController extends Controller
             'tanggal_masuk' => now(),
         ]);
 
-        return redirect()->route('daftar')
+        return redirect()->route('pendaftaran')
             ->with('success', 'Terima kasih! Data pendaftaran ananda ' . e($validated['nama_lengkap']) . ' telah berhasil diterima. Tim Bimbel Pelita Ilmu akan menghubungi WhatsApp orang tua (' . e($validated['no_telp_ortu']) . ') untuk konfirmasi jadwal dan rincian biaya.');
     }
 }

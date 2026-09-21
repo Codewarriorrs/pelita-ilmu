@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 // Public Landing Page & Pendaftaran
 Route::get('/', [RegistrationController::class, 'index'])->name('home');
-Route::get('/daftar', [RegistrationController::class, 'create'])->name('daftar');
+Route::get('/daftar', [RegistrationController::class, 'create'])->name('pendaftaran');
 Route::post('/daftar', [RegistrationController::class, 'store'])->name('daftar.store');
 
 // Auth Login Routes (Custom Pelita Ilmu Style)
