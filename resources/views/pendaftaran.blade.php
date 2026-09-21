@@ -6,9 +6,9 @@
     <!-- SOLID HEADER BANNER -->
     <section class="bg-primary text-white py-10 lg:py-12 relative overflow-hidden">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
-            <span class="inline-block bg-highlight text-void text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider mb-3 shadow-sm border border-black font-headline">
+            <p class="text-highlight text-xs sm:text-sm font-headline font-black uppercase tracking-widest mb-3">
                 Formulir Pendaftaran Siswa Baru
-            </span>
+            </p>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-headline font-extrabold text-white tracking-tight leading-tight">
                 Mulai Raih Prestasimu Bersama Kami
             </h1>
