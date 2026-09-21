@@ -333,12 +333,17 @@
     <!-- CTA & DAFTAR SECTION -->
     <section id="daftar" class="bg-canvas py-16 lg:py-24 border-b-2 border-black">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div class="relative bg-[#193836] text-white rounded-[32px] p-8 sm:p-12 lg:p-16 overflow-hidden border-2 border-black shadow-2xl">
+            <div class="relative bg-gradient-to-br from-[#193836] via-[#122A28] to-[#0D1F1D] text-white rounded-[32px] p-8 sm:p-12 lg:p-16 overflow-hidden border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                <!-- Decorative Glow Circles & Ambient Aura -->
+                <div class="absolute -top-16 -right-16 w-80 h-80 rounded-full bg-primary/40 pointer-events-none blur-3xl"></div>
+                <div class="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-highlight/25 pointer-events-none blur-3xl"></div>
+                <div class="absolute top-1/2 right-10 -translate-y-1/2 w-64 h-64 rounded-full border-8 border-white/10 pointer-events-none"></div>
+
                 <div class="relative z-10 max-w-3xl space-y-6">
                     <h2 class="font-headline text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
                         Siap Antarkan Putra-Putri Anda Meraih Prestasi Terbaik?
                     </h2>
-                    <p class="font-body text-white/85 text-sm sm:text-base leading-relaxed max-w-2xl">
+                    <p class="font-body text-white/90 text-sm sm:text-base leading-relaxed max-w-2xl">
                         Daftarkan putra-putri Anda hari ini di Bimbel Pelita Ilmu. Dapatkan bimbingan intensif 4-6 siswa per kelompok dengan pengajar S1/S2 berdedikasi tinggi!
                     </p>
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
