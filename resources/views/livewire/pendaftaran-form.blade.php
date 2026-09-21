@@ -300,11 +300,7 @@
                     <div class="pt-6 border-t border-primary-2/10">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <a
-<<<<<<< HEAD
                                 href="{{ route('home') }}"
-=======
-                                href="beranda"
->>>>>>> f7c3637e37fcfac5ad8c1efa09696db0d95f612b
                                 class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-primary-2/20 px-5 py-3.5 font-subtitle text-sm font-bold text-primary-2 hover:bg-primary-2/5 transition-all text-center"
                             >
                                 ← Kembali ke Beranda
