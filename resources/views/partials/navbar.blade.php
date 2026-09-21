@@ -17,10 +17,10 @@
 
         <!-- Desktop Links -->
         <div class="hidden lg:flex lg:items-center lg:gap-6 font-subtitle text-sm">
-            <a href="{{ url('/#beranda') }}" class="px-3 py-2 text-void hover:text-primary font-bold transition-colors">Beranda</a>
-            <a href="{{ url('/#program') }}" class="px-3 py-2 text-void hover:text-primary font-bold transition-colors">Program</a>
+            <a href="{{ route('home') }}" class="px-3 py-2 text-void hover:text-primary font-bold transition-colors">Beranda</a>
+            <a href="{{ route('home') }}#program" class="px-3 py-2 text-void hover:text-primary font-bold transition-colors">Program</a>
             <a href="{{ route('pendaftaran') }}" class="px-3 py-2 text-void hover:text-primary font-bold transition-colors">Pendaftaran</a>
-            <a href="{{ url('/#kontak') }}" class="px-3 py-2 text-void hover:text-primary font-bold transition-colors">Kontak</a>
+            <a href="{{ route('home') }}#kontak" class="px-3 py-2 text-void hover:text-primary font-bold transition-colors">Kontak</a>
 
             <!-- Anti-Metal CTA Button — hanya muncul setelah scroll melewati hero CTA -->
             <a id="navbar-cta" href="{{ route('pendaftaran') }}" class="group/btn relative inline-flex h-11 min-w-[160px] items-center justify-center overflow-hidden rounded-xl bg-primary active:scale-[0.98] shadow-md whitespace-nowrap">
@@ -68,10 +68,10 @@
 <div id="nav-menu" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] lg:hidden hidden">
     <div class="bg-[#193836] text-white rounded-3xl p-6 shadow-2xl border-2 border-highlight w-72 flex flex-col gap-4 text-center">
         <span class="text-xs font-bold text-highlight uppercase tracking-wider block mb-1">Navigasi Pelita Ilmu</span>
-        <a href="{{ url('/#beranda') }}" onclick="toggleMobileMenu()" class="text-base font-headline font-extrabold text-white hover:text-highlight transition-colors">Beranda</a>
-        <a href="{{ url('/#program') }}" onclick="toggleMobileMenu()" class="text-base font-headline font-extrabold text-white hover:text-highlight transition-colors">Program</a>
+        <a href="{{ route('home') }}" onclick="toggleMobileMenu()" class="text-base font-headline font-extrabold text-white hover:text-highlight transition-colors">Beranda</a>
+        <a href="{{ route('home') }}#program" onclick="toggleMobileMenu()" class="text-base font-headline font-extrabold text-white hover:text-highlight transition-colors">Program</a>
         <a href="{{ route('pendaftaran') }}" onclick="toggleMobileMenu()" class="text-base font-headline font-extrabold text-highlight">Pendaftaran</a>
-        <a href="{{ url('/#kontak') }}" onclick="toggleMobileMenu()" class="text-base font-headline font-extrabold text-white hover:text-highlight transition-colors">Kontak</a>
+        <a href="{{ route('home') }}#kontak" onclick="toggleMobileMenu()" class="text-base font-headline font-extrabold text-white hover:text-highlight transition-colors">Kontak</a>
         <button type="button" onclick="toggleMobileMenu()" class="mt-2 py-2.5 px-4 bg-highlight text-void font-headline font-black rounded-xl text-xs uppercase tracking-wider shadow-sm hover:bg-yellow-400 transition-all">
             Tutup Menu
         </button>

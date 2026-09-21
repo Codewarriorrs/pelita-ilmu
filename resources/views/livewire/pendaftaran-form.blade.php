@@ -300,7 +300,7 @@
                     <div class="pt-6 border-t border-primary-2/10">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <a
-                                href="{{ route('beranda') }}"
+                                href="{{ route('home') }}"
                                 class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-primary-2/20 px-5 py-3.5 font-subtitle text-sm font-bold text-primary-2 hover:bg-primary-2/5 transition-all text-center"
                             >
                                 ← Kembali ke Beranda
@@ -470,7 +470,7 @@
 
                     {{-- Link Beranda --}}
                     <a
-                        href="{{ route('beranda') }}"
+                        href="{{ route('home') }}"
                         class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-3.5 font-subtitle text-sm font-bold text-void/70 hover:text-primary transition-colors text-center"
                     >
                         Ke Halaman Beranda
