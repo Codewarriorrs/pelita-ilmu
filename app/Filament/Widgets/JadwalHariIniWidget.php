@@ -36,7 +36,7 @@ class JadwalHariIniWidget extends BaseWidget
                     // 2. Eager Loading relasi untuk menghindari N+1 Query Problem
                     ->with([
                         'kelompok.tentor',
-                        'kelompok.mataPelajaran',
+                        'kelompok.mapel',
                     ])
             )
             ->columns([
@@ -45,7 +45,7 @@ class JadwalHariIniWidget extends BaseWidget
                     ->searchable()
                     ->weight('bold'),
 
-                TextColumn::make('kelompok.mataPelajaran.nama_mapel')
+                TextColumn::make('kelompok.mapel.nama_mapel')
                     ->label('Mata Pelajaran')
                     ->badge()
                     ->color('primary'),
