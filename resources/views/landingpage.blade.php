@@ -22,71 +22,102 @@
             </svg>
         </div>
 
-        <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="mx-auto max-w-3xl text-center">
-                <span class="hero-badge inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-canvas/90 backdrop-blur-sm">
-                    <span class="inline-block h-2.5 w-2.5 rounded-full bg-highlight shadow-[0_0_16px_rgba(255,239,1,0.9)]"></span>
-                    Bimbel Terbaik Semarang Barat
-                </span>
+        <div class="relative z-10 mx-auto max-w-[90rem] px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                {{-- KIRI: Ruang Kelas Card --}}
+                <div class="order-2 lg:order-1 lg:col-span-3">
+                    <div class="rounded-3xl border-2 border-primary-2/15 bg-canvas p-5 shadow-sm">
+                        <div class="flex items-center gap-3 border-b border-primary-2/10 pb-4">
+                            <img src="{{ asset('images/kursi.png') }}" alt="Kursi" class="h-10 w-10 shrink-0 object-contain hover:scale-110 transition-transform">
+                            <div>
+                                <h3 class="font-headline text-base font-bold text-primary-2">Ruang Kelas</h3>
+                                <p class="font-subtitle text-xs text-primary">Nyaman &amp; Terang</p>
+                            </div>
+                        </div>
 
-                <h1 class="hero-title mt-6 font-headline text-3xl font-bold leading-tight text-canvas sm:text-4xl lg:text-6xl">
-                    DAFTAR SEKARANG KE
-                </h1>
+                        {{-- Box Foto yang Lebih Panjang (h-72 = 288px) --}}
+                        <div class="mt-4 rounded-2xl bg-primary/5 p-2 border border-primary/20 shadow-sm">
+                            <img src="{{ asset('images/ruang.jpg') }}" alt="Suasana Belajar" class="h-72 w-full object-cover rounded-xl">
+                        </div>
+                    </div>
+                </div>
+                
+                {{-- TENGAH: Hero Content --}}
+                <div class="lg:col-span-6 order-1 lg:order-2 text-center">
+                    <h1 class="hero-title font-headline text-3xl font-bold leading-tight text-canvas sm:text-4xl lg:text-[42px] tracking-wide">
+                        DAFTAR SEKARANG KE
+                    </h1>
 
-                <div class="hero-logo my-5 flex justify-center">
-                    <img src="{{ asset('images/logo-bimbel-removebg.png') }}" alt="Logo Pelita Ilmu" class="h-40 w-40 object-contain sm:h-52 sm:w-52">
+                    <div class="hero-logo my-4 flex justify-center">
+                        <img src="{{ asset('images/logo-bimbel-removebg.png') }}" alt="Logo Pelita Ilmu" class="h-44 w-44 object-contain sm:h-56 sm:w-56 drop-shadow-lg">
+                    </div>
+
+                    <h2 class="hero-subtitle font-headline text-xl font-bold text-highlight sm:text-3xl lg:text-3xl tracking-wide">
+                        DAN RAIH PRESTASIMU!
+                    </h2>
+
+                    <div class="mt-8 flex justify-center hero-cta">
+                        <a href="#pendaftaran" class="inline-flex items-center gap-2 rounded-full bg-highlight px-8 py-3.5 font-subtitle text-sm font-bold text-void shadow-md transition-all hover:scale-105 hover:bg-[#ffe84a]">
+                            <span>Daftar Bimbel Sekarang</span>
+                            <span>➔</span>
+                        </a>
+                    </div>
                 </div>
 
-                <h2 class="hero-subtitle font-headline text-xl font-bold text-highlight sm:text-3xl lg:text-4xl">
-                    DAN RAIH PRESTASIMU!
-                </h2>
+                {{-- KANAN: Lokasi Card --}}
+                <div class="order-3 lg:order-3 lg:col-span-3">
+                    <div class="rounded-3xl border-2 border-primary-2/15 bg-canvas p-5 shadow-sm">
+                        <div class="border-b border-primary-2/10 pb-4">
+                            <a href="https://maps.app.goo.gl/4mZR8LgBXbN69YL4A" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 group">
+                                <img src="{{ asset('images/gps.png') }}" alt="Red Location Pin" class="h-10 w-10 shrink-0 object-contain hover:scale-110 transition-transform">
+                                <div>
+                                    <h3 class="font-headline text-base font-bold text-primary-2">Lokasi</h3>
+                                    <p class="font-subtitle text-xs text-primary">Manyaran, Semarang Barat</p>
+                                </div>
+                            </a>
+                        </div>
 
-                <p class="mt-4 text-sm text-canvas/80 sm:text-base">
-                    Kelas interaktif, tutor berpengalaman, dan program belajar yang fokus ke hasil nyata.
-                </p>
-
-                <div class="mt-8 flex justify-center">
-                    <a href="#daftar" class="group inline-flex items-center gap-3 rounded-2xl bg-highlight px-7 py-3.5 font-subtitle text-base font-bold text-void shadow-[0_10px_0_0_rgba(0,0,0,0.18)] transition-all duration-200 hover:-translate-y-1 hover:bg-[#ffe84a]">
-                        <span>Daftar Bimbel Sekarang</span>
-                        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-void text-highlight transition-transform duration-200 group-hover:translate-x-1">→</span>
-                    </a>
+                        {{-- Box Foto yang Lebih Panjang (h-72 = 288px) --}}
+                        <div class="mt-4 rounded-2xl bg-primary/5 p-2 border border-primary/20 shadow-sm">
+                            <img src="{{ asset('images/lokasi.jpg') }}" alt="Lokasi Bimbel" class="h-72 w-full object-cover rounded-xl">
+                        </div>
+                    </div>
                 </div>
+
             </div>
-        </div>
-    </section>
-
-    <section class="bg-canvas py-8 lg:py-12">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="grid gap-6 md:grid-cols-2">
-                <article class="group overflow-hidden rounded-[28px] border border-primary-2/10 bg-white p-5 shadow-[0_16px_30px_rgba(16,55,54,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(16,55,54,0.12)]">
+            
+            {{-- Mobile Only Cards (Visible only on small screens) --}}
+            <div class="mt-12 grid grid-cols-1 gap-6 md:hidden">
+                <article class="overflow-hidden rounded-3xl bg-white p-4 shadow-xl">
                     <div class="mb-4 flex items-center gap-3">
-                        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path d="M4 7.5A2.5 2.5 0 016.5 5h11A2.5 2.5 0 0120 7.5v9A2.5 2.5 0 0117.5 19h-11A2.5 2.5 0 014 16.5v-9z" />
                                 <path d="M8 9.5h8M8 13.5h5" stroke-linecap="round" />
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-headline text-xl font-bold text-primary-2">Ruang Kelas</h3>
-                            <p class="font-subtitle text-sm text-primary">Nyaman &amp; Terang</p>
+                            <h3 class="font-headline text-base font-bold text-primary-2">Ruang Kelas</h3>
+                            <p class="font-subtitle text-xs text-primary">Nyaman &amp; Terang</p>
                         </div>
                     </div>
-                    <img src="{{ asset('images/ruang.jpg') }}" alt="Suasana Belajar Pelita Ilmu" class="h-60 w-full rounded-2xl object-cover" />
+                    <img src="{{ asset('images/ruang.jpg') }}" alt="Suasana Belajar Pelita Ilmu" class="h-64 w-full rounded-2xl object-cover" />
                 </article>
 
-                <article class="group overflow-hidden rounded-[28px] border border-primary-2/10 bg-white p-5 shadow-[0_16px_30px_rgba(16,55,54,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(16,55,54,0.12)]">
+                <article class="overflow-hidden rounded-3xl bg-white p-4 shadow-xl">
                     <div class="mb-4 flex items-center gap-3">
-                        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-highlight/20 text-primary-2">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-highlight/20 text-primary-2">
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path d="M12 21s6-4.35 9-9.1C21.6 9.17 19.47 4 15.4 4A4.76 4.76 0 0012 6.08 4.76 4.76 0 008.6 4C4.53 4 2.4 9.17 3 11.9 6 16.65 12 21 12 21z" />
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-headline text-xl font-bold text-primary-2">Lokasi</h3>
-                            <p class="font-subtitle text-sm text-primary">Manyaran, Semarang Barat</p>
+                            <h3 class="font-headline text-base font-bold text-primary-2">Lokasi</h3>
+                            <p class="font-subtitle text-xs text-primary">Manyaran, Semarang Barat</p>
                         </div>
                     </div>
-                    <img src="{{ asset('images/lokasi.jpg') }}" alt="Lokasi Bimbel Pelita Ilmu" class="h-60 w-full rounded-2xl object-cover" />
+                    <img src="{{ asset('images/lokasi.jpg') }}" alt="Lokasi Bimbel Pelita Ilmu" class="h-64 w-full rounded-2xl object-cover" />
                 </article>
             </div>
         </div>
@@ -461,7 +492,7 @@
     </section>
 
         {{-- ================= SECTION PENDAFTARAN (CTA BANNER & FORM) ================= --}}
-    <section id="daftar" class="bg-canvas py-16 lg:py-24 border-b border-primary-2/10">
+    <section id="pendaftaran" class="bg-canvas py-16 lg:py-24 border-b border-primary-2/10">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             
             {{-- Big CTA Card (Sesuai Gambar) --}}
@@ -487,7 +518,7 @@
                     <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                         {{-- Tombol 1: Menuju Halaman Formulir Pendaftaran --}}
                         <a
-                            href="{{ route('pendaftaran') }}"
+                            href="daftar"
                             target="_blank"
                             rel="noopener noreferrer"
                             class="inline-flex items-center justify-center rounded-full bg-highlight px-8 py-3.5 font-subtitle text-xs sm:text-sm font-bold text-void shadow-lg hover:bg-highlight/80 hover:translate-y-0.5 transition-all text-center"

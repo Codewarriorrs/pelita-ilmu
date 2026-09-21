@@ -7,7 +7,7 @@
             <div class="md:col-span-5 flex items-start gap-4 sm:gap-5">
                 <img src="{{ asset('images/logo-bimbel-removebg.png') }}" alt="Logo Pelita Ilmu" class="h-20 w-20 sm:h-24 sm:w-24 shrink-0 object-contain">
                 <div class="space-y-2">
-                    <h2 class="font-headline text-xl sm:text-2xl text-canvas">Pelita Ilmu</h2>
+                    <h2 class="font-headline font-bold text-xl sm:text-2xl text-canvas">Pelita Ilmu</h2>
                     <p class="font-subtitle text-xs text-highlight font-bold tracking-wide uppercase">Bimbingan Belajar</p>
                     <p class="text-sm text-canvas/85 leading-relaxed max-w-sm font-body">
                         <a href="https://maps.app.goo.gl/4mZR8LgBXbN69YL4A" target="_blank" rel="noopener noreferrer" class="hover:text-highlight transition-colors inline-flex items-center gap-2">Jl. Rorojonggrang XV No. 6 RT 05 RW 10 Manyaran, Semarang Barat. </a>
@@ -17,7 +17,7 @@
 
             {{-- Kolom 2: Kontak Langsung (Lebar 4 Kolom) --}}
             <div class="md:col-span-4 space-y-3">
-                <h3 class="font-subtitle text-base sm:text-lg font-bold text-canvas flex items-center gap-2">
+                <h3 class="font-headline text-base sm:text-lg font-bold text-canvas flex items-center gap-2">
                     <span>Hubungi Kami</span>
                 </h3>
                 <ul class="space-y-2.5 font-body text-sm">
@@ -38,7 +38,7 @@
 
             {{-- Kolom 3: Sosial Media (Lebar 3 Kolom) --}}
             <div class="md:col-span-3 space-y-3">
-                <h3 class="font-subtitle text-base sm:text-lg font-bold text-canvas flex items-center gap-2">
+                <h3 class="font-headline text-base sm:text-lg font-bold text-canvas flex items-center gap-2">
                     <span>Media Sosial</span>
                 </h3>
                 <ul class="space-y-2.5 font-body text-sm">

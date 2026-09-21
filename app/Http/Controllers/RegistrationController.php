@@ -14,7 +14,7 @@ class RegistrationController extends Controller
      */
     public function index(): View
     {
-        return view('welcome');
+        return view('landingpage');
     }
 
     /**
@@ -22,7 +22,7 @@ class RegistrationController extends Controller
      */
     public function create(): View
     {
-        return view('daftar');
+        return view('pendaftaran');
     }
 
     /**
