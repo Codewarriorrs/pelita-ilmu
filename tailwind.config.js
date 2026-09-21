@@ -15,6 +15,7 @@ export default {
                 void: '#000000',
             },
             fontFamily: {
+                sans: ['Instrument Sans', 'ui-sans-serif', 'system-ui', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
                 headline: ['Fredoka', 'sans-serif'],
                 subtitle: ['Nunito', 'sans-serif'],
                 body: ['Poppins', 'sans-serif'],

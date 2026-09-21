@@ -97,6 +97,13 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
+            'options' => env('DB_OPTIONS') ?: (
+                env('DB_ENDPOINT') 
+                    ? sprintf("-c endpoint=%s", env('DB_ENDPOINT')) 
+                    : (str_contains(env('DB_HOST', ''), 'neon.tech') 
+                        ? sprintf("-c endpoint=%s", explode('.', env('DB_HOST'))[0]) 
+                        : null)
+            ),
         ],
 
         'sqlsrv' => [

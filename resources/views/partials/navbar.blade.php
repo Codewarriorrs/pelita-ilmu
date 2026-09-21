@@ -1,6 +1,7 @@
 <!-- HEADER NAVIGATION -->
 <header class="fixed top-0 left-0 right-0 z-50 h-20 bg-white border-b border-stone-200 shadow-sm">
     <nav class="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6" aria-label="Navigasi utama">
+<<<<<<< HEAD
 
         <!-- Logo -->
         <a href="{{ route('home') }}" class="flex items-center gap-2 shrink-0">
@@ -10,6 +11,15 @@
                     Pelita Ilmu
                 </span>
                 <span class="font-subtitle text-[10px] text-[#193836] leading-tight">
+=======
+        <a href="beranda" class="flex items-center gap-2">
+            <img src="{{ asset('images/logo-bimbel-removebg.png') }}" alt="Logo Pelita Ilmu" class="h-15 w-15 object-contain">
+            <div class="flex flex-col">
+                <span class="font-headline font-bold text-xl text-primary">
+                    Pelita Ilmu 
+                </span>
+                <span class="font-subtitle font-bold text-sm text-primary-2">
+>>>>>>> f7c3637e37fcfac5ad8c1efa09696db0d95f612b
                     Bimbingan Belajar
                 </span>
             </div>
@@ -61,6 +71,25 @@
                 <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18" />
             </svg>
         </button>
+<<<<<<< HEAD
+=======
+
+        <div
+            id="nav-menu"
+            class="absolute left-0 right-0 top-20 hidden flex-col gap-1 border-b border-primary-2/15 bg-canvas px-4 py-4 lg:static lg:flex lg:flex-row lg:items-center lg:gap-6 lg:border-0 lg:p-0"
+        >
+            <a href="{{ url('/#beranda') }}" class="rounded-lg px-3 py-2 font-body font-medium text-sm text-void hover:text-primary">Beranda</a>
+            <a href="{{ url('/#program') }}" class="rounded-lg px-3 py-2 font-body font-medium text-sm text-void hover:text-primary">Program</a>
+            <a href="{{ url('/#pendaftaran') }}" class="rounded-lg px-3 py-2 font-body font-medium text-sm text-void hover:text-primary">Pendaftaran</a>
+            <a href="{{ url('/#kontak') }}" class="rounded-lg px-3 py-2 font-body font-medium text-sm text-void hover:text-primary">Kontak</a>
+            <a
+                href="{{ url('/#pendaftaran') }}"
+                class="mt-2 inline-flex items-center justify-center rounded-xl bg-highlight px-4 py-2.5 font-subtitle text-sm font-bold text-void lg:mt-0 hover:translate-y-0.5 transition-all shadow-sm"
+            >
+                Daftar Bimbel Sekarang ➜
+            </a>
+        </div>
+>>>>>>> f7c3637e37fcfac5ad8c1efa09696db0d95f612b
     </nav>
 </header>
 

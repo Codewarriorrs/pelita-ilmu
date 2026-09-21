@@ -19,6 +19,8 @@ class JadwalKelompok extends Model
         'kelompok_id',
         'tanggal_sesi',
         'status_sesi',
+        'materi_pembahasan',
+        'catatan_tentor',
         'catatan',
     ];
 

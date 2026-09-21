@@ -16,8 +16,6 @@ class SiswaJatuhTempoWidget extends BaseWidget
 
     protected int | string | array $columnSpan = 'full';
 
-    protected static ?string $heading = 'Daftar Siswa Jatuh Tempo / Menunggak Bulan Ini';
-
     /**
      * Otorisasi: Hanya role ADMIN yang dapat melihat daftar siswa jatuh tempo & finansial.
      */
@@ -36,6 +34,8 @@ class SiswaJatuhTempoWidget extends BaseWidget
         $tahunSekarang = Carbon::now()->year;
 
         return $table
+            ->heading('Daftar Siswa Jatuh Tempo / Menunggak Bulan Ini')
+            ->searchPlaceholder('Cari nama siswa...')
             ->query(
                 Siswa::query()
                     ->where('status_siswa', 'AKTIF')
