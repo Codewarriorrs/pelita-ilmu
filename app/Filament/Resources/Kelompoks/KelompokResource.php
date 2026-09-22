@@ -73,16 +73,6 @@ class KelompokResource extends Resource
                 TimePicker::make('jam_selesai')
                     ->label('Jam Selesai')
                     ->required(),
-
-                // 3. Relasi Many-to-Many ke Siswa (Tabel pemetaan_kelompok)
-                Select::make('siswa')
-                    ->label('Pilih Anggota Siswa')
-                    ->relationship('siswa', 'nama_lengkap')
-                    ->multiple()
-                    ->preload()
-                    ->searchable()
-                    ->columnSpanFull()
-                    ->helperText('Pilih siswa-siswa yang dimasukkan ke dalam kelompok ini.'),
             ]);
     }
 
