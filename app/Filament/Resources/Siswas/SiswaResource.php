@@ -91,7 +91,7 @@ class SiswaResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn($query) => $query->with(['kelompok', 'pembayarans']))
+            ->defaultSort('nama_lengkap', 'asc')
             ->columns([
                 TextColumn::make('nama_lengkap')
                     ->label('Nama')

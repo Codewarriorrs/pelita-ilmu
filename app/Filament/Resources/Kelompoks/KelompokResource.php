@@ -88,7 +88,7 @@ class KelompokResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn($query) => $query->with(['mapel', 'tentor', 'siswa', 'jadwalKelompok']))
+            ->modifyQueryUsing(fn($query) => $query->with(['mapel', 'tentor']))
             ->columns([
                 TextColumn::make('nama_kelompok')
                     ->label('Kelompok')

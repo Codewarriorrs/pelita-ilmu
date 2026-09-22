@@ -14,6 +14,9 @@ class JadwalHariIniWidget extends BaseWidget
 
     protected int | string | array $columnSpan = 'full';
 
+    // Poll setiap 60 detik — kurangi round-trip ke DB
+    protected static ?string $pollingInterval = '60s';
+
     protected static ?string $heading = 'Jadwal Bimbingan Belajar Hari Ini';
 
     /**

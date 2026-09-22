@@ -76,7 +76,7 @@ class JadwalKelompokResource extends Resource
     {
         return $table
 
-            ->modifyQueryUsing(fn (Builder $query) => $query->with(['kelompok.siswa', 'detailPresensi']))
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['kelompok.siswa', 'kelompok.tentor', 'detailPresensi']))
             ->defaultSort('tanggal_sesi', 'desc')
             ->emptyStateHeading('Belum Ada Sesi Pertemuan')
             ->emptyStateDescription('Buat jadwal pertemuan baru untuk memulai pencatatan absensi.')
