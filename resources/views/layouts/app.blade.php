@@ -136,11 +136,11 @@
     </head>
     <body class="bg-canvas text-void min-h-screen flex flex-col antialiased selection:bg-primary selection:text-white pb-20 md:pb-0">
 
-        @unless (View::hasSection('hide_navbar'))
+        @if (! View::hasSection('hide_navbar'))
             @include('partials.navbar')
-        @endunless
+        @endif
 
-        <main class="flex-1 @unless (View::hasSection('hide_navbar')) pt-20 @endunless">
+        <main class="flex-1 {{ View::hasSection('hide_navbar') ? '' : 'pt-20' }}">
             @yield('content')
         </main>
 
