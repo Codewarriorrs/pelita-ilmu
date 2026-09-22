@@ -91,9 +91,15 @@ class JadwalKelompokResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('kelompok.tentor.name')
-                    ->label('Tentor')
-                    ->sortable(),
+                TextColumn::make('jam_sesi')
+                    ->label('Waktu / Jam')
+                    ->state(function (JadwalKelompok $record): string {
+                        $mulai = $record->kelompok?->jam_mulai ? substr((string) $record->kelompok->jam_mulai, 0, 5) : '-';
+                        $selesai = $record->kelompok?->jam_selesai ? substr((string) $record->kelompok->jam_selesai, 0, 5) : '-';
+                        return ($mulai !== '-' && $selesai !== '-') ? "{$mulai} - {$selesai}" : ($record->kelompok?->jadwal_hari ?? '15:30 - 17:00 WIB');
+                    })
+                    ->icon('heroicon-m-clock')
+                    ->color('gray'),
 
                 TextColumn::make('status_sesi')
                     ->label('Status')
@@ -116,9 +122,18 @@ class JadwalKelompokResource extends Resource
             ->actions([
                 // Action interaktif: Pop-up Modal Presensi Siswa
                 Action::make('presensi')
-                    ->label('Presensi')
+                    ->iconButton()
                     ->icon('heroicon-o-clipboard-document-check')
                     ->color('success')
+                    ->tooltip(fn (JadwalKelompok $record) => (!auth()->user()?->isAdmin() && $record->status_sesi === 'SELESAI') ? 'Sesi Sudah Dipresensi' : 'Isi Presensi')
+                    ->disabled(function (JadwalKelompok $record): bool {
+                        $user = auth()->user();
+                        if ($user?->isAdmin()) {
+                            return false;
+                        }
+                        // Khusus Tentor: Gabisa presensi lagi kalau sudah SELESAI
+                        return $record->status_sesi === 'SELESAI';
+                    })
                     ->modalHeading(fn (JadwalKelompok $record) => 'Presensi Sesi: ' . $record->kelompok->nama_kelompok)
                     ->modalDescription('Tentukan status kehadiran untuk setiap siswa di kelompok ini.')
                     ->fillForm(function (JadwalKelompok $record): array {
@@ -180,8 +195,8 @@ class JadwalKelompokResource extends Resource
                             ->send();
                     }),
 
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

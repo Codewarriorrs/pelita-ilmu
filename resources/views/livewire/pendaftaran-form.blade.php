@@ -119,6 +119,42 @@
                                     </p>
                                 @enderror
                             </div>
+
+                            {{-- Field 3b: Tingkat / Kelas --}}
+                            <div>
+                                <label for="tingkat_kelas" class="block font-subtitle text-xs sm:text-sm font-bold text-primary-2 mb-1.5">
+                                    Tingkat / Kelas <span class="text-rose-500">*</span>
+                                </label>
+                                <select
+                                    id="tingkat_kelas"
+                                    wire:model.live="tingkat_kelas"
+                                    class="w-full rounded-xl border border-primary-2/20 bg-canvas px-4 py-3 font-body text-sm text-void focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                >
+                                    <option value="">-- Pilih Jenjang Kelas --</option>
+                                    <optgroup label="TK / PAUD">
+                                        <option value="TK A">TK A</option>
+                                        <option value="TK B">TK B</option>
+                                    </optgroup>
+                                    <optgroup label="Sekolah Dasar (SD)">
+                                        <option value="Kelas 1 SD">Kelas 1 SD</option>
+                                        <option value="Kelas 2 SD">Kelas 2 SD</option>
+                                        <option value="Kelas 3 SD">Kelas 3 SD</option>
+                                        <option value="Kelas 4 SD">Kelas 4 SD</option>
+                                        <option value="Kelas 5 SD">Kelas 5 SD</option>
+                                        <option value="Kelas 6 SD">Kelas 6 SD</option>
+                                    </optgroup>
+                                    <optgroup label="SMP">
+                                        <option value="Kelas 7 SMP">Kelas 7 (SMP Kelas 1)</option>
+                                        <option value="Kelas 8 SMP">Kelas 8 (SMP Kelas 2)</option>
+                                        <option value="Kelas 9 SMP">Kelas 9 (SMP Kelas 3)</option>
+                                    </optgroup>
+                                    <optgroup label="SMA / UTBK">
+                                        <option value="Kelas 10 SMA">Kelas 10 (SMA Kelas 1)</option>
+                                        <option value="Kelas 11 SMA">Kelas 11 (SMA Kelas 2)</option>
+                                        <option value="Kelas 12 SMA / UTBK">Kelas 12 SMA / Persiapan UTBK</option>
+                                    </optgroup>
+                                </select>
+                            </div>
                         </div>
                     </div>
 

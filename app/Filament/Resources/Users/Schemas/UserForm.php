@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Users\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -20,11 +21,18 @@ class UserForm
                     ->required(),
                 TextInput::make('password')
                     ->password()
-                    ->required(),
-                TextInput::make('role')
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->required(fn (string $operation): bool => $operation === 'create')
+                    ->placeholder(fn (string $operation): string => $operation === 'edit' ? 'Kosongkan jika tidak ingin mengubah password' : 'Masukkan password baru'),
+                Select::make('role')
+                    ->options([
+                        'ADMIN' => 'Administrator',
+                        'TENTOR' => 'Tentor / Pengajar',
+                    ])
                     ->required()
                     ->default('TENTOR'),
                 DateTimePicker::make('tanggal_daftar')
+                    ->default(now())
                     ->required(),
             ]);
     }

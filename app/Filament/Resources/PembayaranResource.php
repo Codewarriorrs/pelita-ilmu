@@ -229,9 +229,9 @@ class PembayaranResource extends Resource
                             ->send();
                     }),
 
-                ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                ViewAction::make()->iconButton(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

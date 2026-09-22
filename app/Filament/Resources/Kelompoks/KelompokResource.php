@@ -113,9 +113,9 @@ class KelompokResource extends Resource
                 //
             ])
             ->actions([
-                ViewAction::make(),
-                EditAction::make()->visible(fn () => auth()->user()?->isAdmin() ?? true),
-                DeleteAction::make()->visible(fn () => auth()->user()?->isAdmin() ?? true),
+                ViewAction::make()->iconButton(),
+                EditAction::make()->iconButton()->visible(fn () => auth()->user()?->isAdmin() ?? true),
+                DeleteAction::make()->iconButton()->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

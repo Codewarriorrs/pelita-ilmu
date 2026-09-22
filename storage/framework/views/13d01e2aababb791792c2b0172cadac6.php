@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
         
         <!-- Primary SEO Meta Tags -->
-        <title>@yield('title', 'Bimbel Pelita Ilmu Semarang - Bimbingan Belajar Berprestasi TK, SD, SMP, SMA & UTBK')</title>
+        <title><?php echo $__env->yieldContent('title', 'Bimbel Pelita Ilmu Semarang - Bimbingan Belajar Berprestasi TK, SD, SMP, SMA & UTBK'); ?></title>
         <meta name="title" content="Bimbel Pelita Ilmu Semarang - Bimbingan Belajar Berprestasi TK, SD, SMP, SMA & UTBK">
         <meta name="description" content="Bimbel Pelita Ilmu Semarang menyediakan bimbingan belajar berkualitas intensif (4-6 siswa/kelompok) untuk jenjang TK, SD, SMP, SMA & Persiapan UTBK dengan tentor lulusan S1/S2 berpengalaman.">
         <meta name="keywords" content="bimbel semarang, bimbingan belajar semarang, pelita ilmu, les privat semarang, les sma semarang, bimbel utbk semarang, les smp semarang, bimbel tk sd semarang">
@@ -14,34 +14,34 @@
         <meta name="robots" content="index, follow">
 
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="{{ asset('images/logo-bimbel-removebg.png') }}">
-        <link rel="apple-touch-icon" href="{{ asset('images/logo-bimbel-removebg.png') }}">
+        <link rel="icon" type="image/png" href="<?php echo e(asset('images/logo-bimbel-removebg.png')); ?>">
+        <link rel="apple-touch-icon" href="<?php echo e(asset('images/logo-bimbel-removebg.png')); ?>">
 
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:url" content="<?php echo e(url()->current()); ?>">
         <meta property="og:title" content="Bimbel Pelita Ilmu Semarang - Raih Prestasimu">
         <meta property="og:description" content="Bimbingan belajar intensif 4-6 siswa per kelompok dengan pengajar S1/S2 berdedikasi tinggi di Semarang.">
-        <meta property="og:image" content="{{ asset('images/logo-bimbel.png') }}">
+        <meta property="og:image" content="<?php echo e(asset('images/logo-bimbel.png')); ?>">
 
         <!-- Twitter Card -->
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="{{ url()->current() }}">
+        <meta property="twitter:url" content="<?php echo e(url()->current()); ?>">
         <meta property="twitter:title" content="Bimbel Pelita Ilmu Semarang - Raih Prestasimu">
         <meta property="twitter:description" content="Bimbingan belajar intensif 4-6 siswa per kelompok dengan pengajar S1/S2 berdedikasi tinggi di Semarang.">
-        <meta property="twitter:image" content="{{ asset('images/logo-bimbel.png') }}">
+        <meta property="twitter:image" content="<?php echo e(asset('images/logo-bimbel.png')); ?>">
 
         <!-- JSON-LD Structured Data Schema -->
         <script type="application/ld+json">
         {
-          "@@context": "https://schema.org",
-          "@@type": "EducationalOrganization",
+          "@context": "https://schema.org",
+          "@type": "EducationalOrganization",
           "name": "Bimbel Pelita Ilmu Semarang",
-          "url": "{{ url('/') }}",
-          "logo": "{{ asset('images/logo-bimbel-removebg.png') }}",
+          "url": "<?php echo e(url('/')); ?>",
+          "logo": "<?php echo e(asset('images/logo-bimbel-removebg.png')); ?>",
           "description": "Bimbingan belajar intensif berprestasi di Semarang untuk TK, SD, SMP, SMA & Persiapan UTBK.",
           "address": {
-            "@@type": "PostalAddress",
+            "@type": "PostalAddress",
             "addressLocality": "Semarang",
             "addressRegion": "Jawa Tengah",
             "addressCountry": "ID"
@@ -131,56 +131,57 @@
             }
         </style>
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @livewireStyles
+        <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
+        <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
+
     </head>
     <body class="bg-canvas text-void min-h-screen flex flex-col antialiased selection:bg-primary selection:text-white pb-20 md:pb-0">
 
-        @if (! View::hasSection('hide_navbar'))
-            @include('partials.navbar')
-        @endif
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(! View::hasSection('hide_navbar')): ?>
+            <?php echo $__env->make('partials.navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-        <main class="flex-1 {{ View::hasSection('hide_navbar') ? '' : 'pt-20' }}">
-            @yield('content')
+        <main class="flex-1 <?php echo e(View::hasSection('hide_navbar') ? '' : 'pt-20'); ?>">
+            <?php echo $__env->yieldContent('content'); ?>
         </main>
 
-        @include('partials.footer')
+        <?php echo $__env->make('partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
         <!-- MOBILE FLOATING BOTTOM NAVBAR (Neo-Brutalist Anti-Metallic Theme) -->
-        @php
+        <?php
             $navActive = match(true) {
                 request()->routeIs('pendaftaran') => 2,
                 request()->routeIs('home') && request()->is('/') => 0,
                 default => 0,
             };
-        @endphp
+        ?>
         <div class="fixed inset-x-0 bottom-4 z-40 mx-auto w-[94vw] max-w-sm h-14 bg-[#193836] border-2 border-black rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-around px-2 md:hidden">
             <!-- Item 1: Beranda -->
-            <a href="{{ route('home') }}" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 {{ $navActive === 0 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white' }}">
+            <a href="<?php echo e(route('home')); ?>" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 <?php echo e($navActive === 0 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white'); ?>">
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                @if($navActive === 0)
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($navActive === 0): ?>
                     <span class="text-xs font-headline font-extrabold whitespace-nowrap">Home</span>
-                @endif
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </a>
 
             <!-- Item 2: Program -->
-            <a href="{{ route('home') }}#program" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 {{ $navActive === 1 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white' }}">
+            <a href="<?php echo e(route('home')); ?>#program" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 <?php echo e($navActive === 1 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white'); ?>">
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                @if($navActive === 1)
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($navActive === 1): ?>
                     <span class="text-xs font-headline font-extrabold whitespace-nowrap">Program</span>
-                @endif
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </a>
 
             <!-- Item 3: Pendaftaran -->
-            <a href="{{ route('pendaftaran') }}" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 {{ $navActive === 2 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white' }}">
+            <a href="<?php echo e(route('pendaftaran')); ?>" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 <?php echo e($navActive === 2 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white'); ?>">
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                @if($navActive === 2)
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($navActive === 2): ?>
                     <span class="text-xs font-headline font-extrabold whitespace-nowrap">Daftar</span>
-                @endif
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </a>
 
             <!-- Item 4: Kontak Section -->
-            <a href="{{ route('home') }}#kontak" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 text-white/80 hover:text-white">
+            <a href="<?php echo e(route('home')); ?>#kontak" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 text-white/80 hover:text-white">
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
             </a>
         </div>
@@ -228,7 +229,8 @@
             </div>
         </div>
 
-        @livewireScripts
+        <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(); ?>
+
 
         <script>
             function toggleMobileMenu() {
@@ -314,7 +316,7 @@
             }
 
             let rocketImg = new Image();
-            rocketImg.src = "{{ asset('images/roket.png') }}";
+            rocketImg.src = "<?php echo e(asset('images/roket.png')); ?>";
 
             function drawRocket(x, y) {
                 if (rocketImg.complete && rocketImg.naturalWidth !== 0) {
@@ -462,3 +464,4 @@
         </script>
     </body>
 </html>
+<?php /**PATH C:\Users\DELL\Downloads\Kuliah\Projek-Bimbel\pelita-ilmu\resources\views/layouts/app.blade.php ENDPATH**/ ?>

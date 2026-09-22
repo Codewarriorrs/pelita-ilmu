@@ -142,14 +142,15 @@ class SiswaResource extends Resource
             ])
             ->actions([
                 \Filament\Actions\Action::make('bayar_spp')
-                    ->label('Bayar SPP')
+                    ->iconButton()
                     ->icon('heroicon-o-banknotes')
+                    ->tooltip('Bayar SPP')
                     ->color('success')
                     ->visible(fn () => auth()->user()?->isAdmin() ?? true)
                     ->url(fn (Siswa $record): string => \App\Filament\Resources\PembayaranResource::getUrl('create', ['siswa_id' => $record->id])),
-                ViewAction::make(),
-                EditAction::make()->visible(fn () => auth()->user()?->isAdmin() ?? true),
-                DeleteAction::make()->visible(fn () => auth()->user()?->isAdmin() ?? true),
+                ViewAction::make()->iconButton(),
+                EditAction::make()->iconButton()->visible(fn () => auth()->user()?->isAdmin() ?? true),
+                DeleteAction::make()->iconButton()->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

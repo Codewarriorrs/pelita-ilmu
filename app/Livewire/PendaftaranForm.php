@@ -9,6 +9,7 @@ class PendaftaranForm extends Component
     // Form Properties (Pure Client State)
     public string $nama_lengkap = '';
     public string $asal_sekolah = '';
+    public string $tingkat_kelas = '';
     public string $kategori_kelas = 'Reguler'; // Default: Reguler
     public string $minat_program = '';
     public string $nama_wali = '';
