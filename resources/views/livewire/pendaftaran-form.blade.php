@@ -128,7 +128,7 @@
                                 <select
                                     id="tingkat_kelas"
                                     wire:model.live="tingkat_kelas"
-                                    class="w-full rounded-xl border border-primary-2/20 bg-canvas px-4 py-3 font-body text-sm text-void focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                    class="w-full rounded-xl border @error('tingkat_kelas') border-rose-500 bg-rose-50/30 @else border-primary-2/20 bg-canvas @enderror px-4 py-3 font-body text-sm text-void focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 >
                                     <option value="">-- Pilih Jenjang Kelas --</option>
                                     <optgroup label="TK / PAUD">
@@ -154,6 +154,14 @@
                                         <option value="Kelas 12 SMA / UTBK">Kelas 12 SMA / Persiapan UTBK</option>
                                     </optgroup>
                                 </select>
+                                @error('tingkat_kelas')
+                                    <p class="mt-1.5 font-body text-xs text-rose-600 flex items-center gap-1">
+                                        <svg class="h-3.5 w-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                        </svg>
+                                        {{ $message }}
+                                    </p>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -204,9 +212,46 @@
                                     class="w-full rounded-xl border @error('minat_program') border-rose-500 bg-rose-50/30 @else border-primary-2/20 bg-canvas @enderror px-4 py-3 font-body text-sm text-void focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 >
                                     <option value="">-- Pilih Jenjang &amp; Paket Program --</option>
-                                    @foreach ($daftarProgram as $code => $name)
-                                        <option value="{{ $code }}">{{ $name }}</option>
-                                    @endforeach
+                                    <optgroup label="TK / PAUD">
+                                        <option value="TK">TK &mdash; Calistung, Mengaji, Bahasa Inggris</option>
+                                    </optgroup>
+                                    <optgroup label="SD (Sekolah Dasar)">
+                                        <option value="SD Kelas 1-5">SD Kelas 1&ndash;5 &mdash; Semua Mapel Pokok &amp; Tematik</option>
+                                        <option value="SD Kelas 6">SD Kelas 6 &mdash; Persiapan US + Intensif</option>
+                                        <option value="SD Kelas 6 TKA">SD Kelas 6 &mdash; Hanya TKA / Persiapan SMP</option>
+                                    </optgroup>
+                                    <optgroup label="SMP &mdash; Reguler + TKA">
+                                        <option value="SMP 1 Mapel">SMP &mdash; 1 Mata Pelajaran</option>
+                                        <option value="SMP 2 Mapel">SMP &mdash; 2 Mata Pelajaran</option>
+                                        <option value="SMP 3 Mapel">SMP &mdash; 3 Mata Pelajaran</option>
+                                        <option value="SMP 4 Mapel">SMP &mdash; 4 Mata Pelajaran</option>
+                                        <option value="SMP 5 Mapel">SMP &mdash; 5 Mata Pelajaran</option>
+                                        <option value="SMP 6 Mapel">SMP &mdash; 6 Mata Pelajaran</option>
+                                    </optgroup>
+                                    <optgroup label="SMP &mdash; TKA Saja">
+                                        <option value="SMP TKA 1 Mapel">SMP &mdash; 1 TKA</option>
+                                        <option value="SMP TKA 2 Mapel">SMP &mdash; 2 TKA</option>
+                                    </optgroup>
+                                    <optgroup label="SMA &mdash; Reguler">
+                                        <option value="SMA 1 Mapel">SMA &mdash; 1 Mata Pelajaran</option>
+                                        <option value="SMA 2 Mapel">SMA &mdash; 2 Mata Pelajaran</option>
+                                        <option value="SMA 3 Mapel">SMA &mdash; 3 Mata Pelajaran</option>
+                                        <option value="SMA 4 Mapel">SMA &mdash; 4 Mata Pelajaran</option>
+                                        <option value="SMA 5 Mapel">SMA &mdash; 5 Mata Pelajaran</option>
+                                        <option value="SMA 6 Mapel">SMA &mdash; 6 Mata Pelajaran</option>
+                                    </optgroup>
+                                    <optgroup label="SMA &mdash; UTBK / SNBT">
+                                        <option value="SMA UTBK 1">SMA &mdash; 1 Mapel UTBK</option>
+                                        <option value="SMA UTBK 2">SMA &mdash; 2 Mapel UTBK</option>
+                                        <option value="SMA UTBK 3">SMA &mdash; 3 Mapel UTBK</option>
+                                        <option value="SMA UTBK 4">SMA &mdash; 4 Mapel UTBK</option>
+                                    </optgroup>
+                                    <optgroup label="SMA &mdash; UTBK + Reguler">
+                                        <option value="SMA UTBK+Reg 1">SMA &mdash; 1 Mapel UTBK + Reguler</option>
+                                        <option value="SMA UTBK+Reg 2">SMA &mdash; 2 Mapel UTBK + Reguler</option>
+                                        <option value="SMA UTBK+Reg 3">SMA &mdash; 3 Mapel UTBK + Reguler</option>
+                                        <option value="SMA UTBK+Reg 4">SMA &mdash; 4 Mapel UTBK + Reguler</option>
+                                    </optgroup>
                                 </select>
                                 @error('minat_program')
                                     <p class="mt-1.5 font-body text-xs text-rose-600 flex items-center gap-1">
@@ -431,6 +476,10 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 p-4 gap-1">
                             <span class="font-subtitle font-bold text-void/60">Asal Sekolah</span>
                             <span class="sm:col-span-2 text-void">{{ $submittedData['asal_sekolah'] }}</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 p-4 gap-1">
+                            <span class="font-subtitle font-bold text-void/60">Tingkat / Kelas</span>
+                            <span class="sm:col-span-2 font-subtitle font-bold text-void">{{ $submittedData['tingkat_kelas'] }}</span>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 p-4 gap-1">
                             <span class="font-subtitle font-bold text-void/60">Program Belajar</span>

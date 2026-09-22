@@ -13,9 +13,11 @@ use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class DetailPresensiResource extends Resource
 {
@@ -65,12 +67,18 @@ class DetailPresensiResource extends Resource
     {
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['jadwal.kelompok.mapel', 'jadwal.kelompok.tentor', 'siswa']))
-            ->defaultSort('created_at', 'desc')
+            ->defaultSort('jadwal.tanggal_sesi', 'desc')
             ->columns([
                 TextColumn::make('jadwal.tanggal_sesi')
-                    ->label('Tanggal Sesi')
+                    ->label('Tanggal')
                     ->date('d M Y')
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('semibold'),
+
+                TextColumn::make('jadwal.tanggal_sesi')
+                    ->label('Hari')
+                    ->formatStateUsing(fn ($state) => $state ? \Carbon\Carbon::parse($state)->locale('id')->isoFormat('dddd') : '-')
+                    ->color('gray'),
 
                 TextColumn::make('jadwal.kelompok.nama_kelompok')
                     ->label('Kelompok Belajar')
@@ -89,7 +97,7 @@ class DetailPresensiResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('status_kehadiran')
-                    ->label('Status Presensi')
+                    ->label('Kehadiran')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'HADIR' => 'success',
@@ -100,11 +108,40 @@ class DetailPresensiResource extends Resource
                     }),
 
                 TextColumn::make('jadwal.kelompok.tentor.name')
-                    ->label('Tentor Pengampu')
+                    ->label('Tentor')
                     ->color('gray')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                SelectFilter::make('bulan')
+                    ->label('Bulan')
+                    ->options([
+                        '1'  => 'Januari',  '2'  => 'Februari', '3'  => 'Maret',
+                        '4'  => 'April',    '5'  => 'Mei',       '6'  => 'Juni',
+                        '7'  => 'Juli',     '8'  => 'Agustus',  '9'  => 'September',
+                        '10' => 'Oktober',  '11' => 'November',  '12' => 'Desember',
+                    ])
+                    ->default((string) now()->month)
+                    ->query(fn (Builder $query, array $data) =>
+                        $query->when($data['value'], fn ($q, $val) =>
+                            $q->whereHas('jadwal', fn ($j) =>
+                                $j->whereMonth('tanggal_sesi', $val)
+                            )
+                        )
+                    ),
+
+                SelectFilter::make('tahun')
+                    ->label('Tahun')
+                    ->options(collect(range(now()->year, now()->year - 2))->mapWithKeys(fn ($y) => [(string) $y => (string) $y])->all())
+                    ->default((string) now()->year)
+                    ->query(fn (Builder $query, array $data) =>
+                        $query->when($data['value'], fn ($q, $val) =>
+                            $q->whereHas('jadwal', fn ($j) =>
+                                $j->whereYear('tanggal_sesi', $val)
+                            )
+                        )
+                    ),
+
                 SelectFilter::make('status_kehadiran')
                     ->label('Status Kehadiran')
                     ->options([
@@ -114,6 +151,7 @@ class DetailPresensiResource extends Resource
                         'ALPA'  => 'Alpa',
                     ]),
             ])
+            ->filtersFormColumns(3)
             ->actions([
                 EditAction::make()->iconButton(),
                 DeleteAction::make()->iconButton(),

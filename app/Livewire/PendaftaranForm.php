@@ -22,16 +22,41 @@ class PendaftaranForm extends Component
     public bool $isSubmitted = false;
     public array $submittedData = [];
 
-    // Daftar Pilihan Program (Sinkron dengan Landing Page)
+    // Daftar Pilihan Program (Sinkron dengan Tabel Harga Bimbel)
     public array $daftarProgram = [
-        'TK' => 'Jenjang TK (Calistung, Mengaji, B. Inggris)',
-        'SD' => 'Jenjang SD (Semua Mapel Pokok & Tematik)',
-        'SMP 3 Mapel' => 'Jenjang SMP - Paket 3 Mapel',
-        'SMP 4 Mapel' => 'Jenjang SMP - Paket 4 Mapel',
-        'SMP 5 Mapel' => 'Jenjang SMP - Paket 5 Mapel',
-        'SMA 4 Mapel' => 'Jenjang SMA - Paket 4 Mapel',
-        'SMA 5 Mapel' => 'Jenjang SMA - Paket 5 Mapel',
-        'Kelas UTBK' => 'Jenjang SMA - Intensif UTBK / SNBT',
+        // TK
+        'TK' => 'TK — Calistung, Mengaji, Bahasa Inggris',
+        // SD
+        'SD Kelas 1-5' => 'SD Kelas 1–5 — Semua Mapel Pokok & Tematik',
+        'SD Kelas 6' => 'SD Kelas 6 — Persiapan US + Intensif',
+        'SD Kelas 6 TKA' => 'SD Kelas 6 — Hanya TKA / Persiapan SMP',
+        // SMP Reguler + TKA
+        'SMP 1 Mapel' => 'SMP — 1 Mata Pelajaran (Reguler + TKA)',
+        'SMP 2 Mapel' => 'SMP — 2 Mata Pelajaran (Reguler + TKA)',
+        'SMP 3 Mapel' => 'SMP — 3 Mata Pelajaran (Reguler + TKA)',
+        'SMP 4 Mapel' => 'SMP — 4 Mata Pelajaran (Reguler + TKA)',
+        'SMP 5 Mapel' => 'SMP — 5 Mata Pelajaran (Reguler + TKA)',
+        'SMP 6 Mapel' => 'SMP — 6 Mata Pelajaran (Reguler + TKA)',
+        // SMP TKA Only
+        'SMP TKA 1 Mapel' => 'SMP — 1 TKA (Khusus TKA Saja)',
+        'SMP TKA 2 Mapel' => 'SMP — 2 TKA (Khusus TKA Saja)',
+        // SMA Reguler
+        'SMA 1 Mapel' => 'SMA — 1 Mata Pelajaran (Reguler)',
+        'SMA 2 Mapel' => 'SMA — 2 Mata Pelajaran (Reguler)',
+        'SMA 3 Mapel' => 'SMA — 3 Mata Pelajaran (Reguler)',
+        'SMA 4 Mapel' => 'SMA — 4 Mata Pelajaran (Reguler)',
+        'SMA 5 Mapel' => 'SMA — 5 Mata Pelajaran (Reguler)',
+        'SMA 6 Mapel' => 'SMA — 6 Mata Pelajaran (Reguler)',
+        // SMA UTBK
+        'SMA UTBK 1' => 'SMA — 1 Mapel UTBK / SNBT',
+        'SMA UTBK 2' => 'SMA — 2 Mapel UTBK / SNBT',
+        'SMA UTBK 3' => 'SMA — 3 Mapel UTBK / SNBT',
+        'SMA UTBK 4' => 'SMA — 4 Mapel UTBK / SNBT',
+        // SMA UTBK + Reguler
+        'SMA UTBK+Reg 1' => 'SMA — 1 Mapel UTBK + Reguler',
+        'SMA UTBK+Reg 2' => 'SMA — 2 Mapel UTBK + Reguler',
+        'SMA UTBK+Reg 3' => 'SMA — 3 Mapel UTBK + Reguler',
+        'SMA UTBK+Reg 4' => 'SMA — 4 Mapel UTBK + Reguler',
     ];
 
     // Daftar Kategori Kelas
@@ -58,7 +83,8 @@ class PendaftaranForm extends Component
             ],
 
             'kategori_kelas' => ['required', 'in:Reguler,Privat'],
-            'minat_program' => ['required', 'in:TK,SD,SMP 3 Mapel,SMP 4 Mapel,SMP 5 Mapel,SMA 4 Mapel,SMA 5 Mapel,Kelas UTBK'],
+            'tingkat_kelas' => ['required', 'string'],
+            'minat_program' => ['required', 'in:TK,SD Kelas 1-5,SD Kelas 6,SD Kelas 6 TKA,SMP 1 Mapel,SMP 2 Mapel,SMP 3 Mapel,SMP 4 Mapel,SMP 5 Mapel,SMP 6 Mapel,SMP TKA 1 Mapel,SMP TKA 2 Mapel,SMA 1 Mapel,SMA 2 Mapel,SMA 3 Mapel,SMA 4 Mapel,SMA 5 Mapel,SMA 6 Mapel,SMA UTBK 1,SMA UTBK 2,SMA UTBK 3,SMA UTBK 4,SMA UTBK+Reg 1,SMA UTBK+Reg 2,SMA UTBK+Reg 3,SMA UTBK+Reg 4'],
 
             // 4. Nama wali: hanya huruf dan spasi (tidak boleh angka dan simbol)
             'nama_wali' => ['required', 'string', 'min:3', 'max:100', 'regex:/^[a-zA-Z\s\'.]+$/'],
@@ -114,6 +140,8 @@ class PendaftaranForm extends Component
             'kategori_kelas.required' => 'Silakan pilih kategori kelas.',
             'kategori_kelas.in' => 'Pilihan kategori kelas tidak valid.',
 
+            'tingkat_kelas.required' => 'Silakan pilih tingkat / kelas siswa.',
+
             'minat_program.required' => 'Silakan pilih program belajar yang diminati.',
             'minat_program.in' => 'Program belajar yang dipilih tidak valid.',
 
@@ -162,6 +190,7 @@ class PendaftaranForm extends Component
             'tanggal_daftar' => now()->translatedFormat('d F Y, H:i') . ' WIB',
             'nama_lengkap' => $validated['nama_lengkap'],
             'asal_sekolah' => $validated['asal_sekolah'],
+            'tingkat_kelas' => $validated['tingkat_kelas'],
             'kategori_kelas' => $validated['kategori_kelas'],
             'minat_program' => $validated['minat_program'],
             'label_program' => $this->daftarProgram[$validated['minat_program']] ?? $validated['minat_program'],
@@ -182,6 +211,7 @@ class PendaftaranForm extends Component
         $this->reset([
             'nama_lengkap',
             'asal_sekolah',
+            'tingkat_kelas',
             'kategori_kelas',
             'minat_program',
             'nama_wali',
