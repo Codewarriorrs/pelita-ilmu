@@ -14,7 +14,7 @@ class StatsOverviewWidget extends BaseWidget
     protected static ?int $sort = 1;
 
     // Poll setiap 60 detik, bukan default 5 detik — kurangi query ke DB
-    protected static ?string $pollingInterval = '60s';
+    protected ?string $pollingInterval = '60s';
 
     /**
      * Otorisasi: Hanya role ADMIN yang diizinkan melihat widget finansial & statistik ringkasan.
