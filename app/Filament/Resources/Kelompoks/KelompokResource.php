@@ -92,7 +92,8 @@ class KelompokResource extends Resource
 
                 TextColumn::make('tentor.name')
                     ->label('Tentor')
-                    ->sortable(),
+                    ->sortable()
+                    ->visible(fn () => auth()->user()?->isAdmin() ?? true),
 
                 TextColumn::make('jadwal_hari')
                     ->label('Hari'),
@@ -113,8 +114,8 @@ class KelompokResource extends Resource
             ])
             ->actions([
                 ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->visible(fn () => auth()->user()?->isAdmin() ?? true),
+                DeleteAction::make()->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

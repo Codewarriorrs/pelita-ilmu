@@ -102,23 +102,22 @@ class SiswaResource extends Resource
                     ->label('Kelas')
                     ->sortable(),
                 TextColumn::make('tipe_belajar')
-                    ->label('Tipe')
-                    ->badge()
-                    ->color('info'),
+                    ->label('Tipe'),
                 TextColumn::make('status_siswa')
                     ->label('Status')
-                    ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        'AKTIF' => 'success',
-                        'CALON' => 'warning',
-                        'NONAKTIF' => 'danger',
-                        default => 'gray',
-                    }),
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'AKTIF' => '🟢 AKTIF',
+                        'CALON' => '🟡 CALON',
+                        'NONAKTIF' => '🔴 NONAKTIF',
+                        default => $state,
+                    })
+                    ->weight('extrabold'),
                 TextColumn::make('no_telp_siswa')
                     ->label('No. WhatsApp'),
                 TextColumn::make('biaya_bulanan')
                     ->label('Biaya/Bln')
-                    ->money('IDR', locale: 'id'),
+                    ->money('IDR', locale: 'id')
+                    ->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('status_siswa')
@@ -137,8 +136,8 @@ class SiswaResource extends Resource
                 \Filament\Tables\Filters\SelectFilter::make('tipe_jatuh_tempo')
                     ->label('Tipe Jatuh Tempo')
                     ->options([
-                        'AWAL_BULAN' => 'Awal Bulan',
-                        'AKHIR_BULAN' => 'Akhir Bulan',
+                        'AWAL BULAN' => 'Awal Bulan',
+                        'AKHIR BULAN' => 'Akhir Bulan',
                     ]),
             ])
             ->actions([
@@ -146,10 +145,11 @@ class SiswaResource extends Resource
                     ->label('Bayar SPP')
                     ->icon('heroicon-o-banknotes')
                     ->color('success')
+                    ->visible(fn () => auth()->user()?->isAdmin() ?? true)
                     ->url(fn (Siswa $record): string => \App\Filament\Resources\PembayaranResource::getUrl('create', ['siswa_id' => $record->id])),
                 ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->visible(fn () => auth()->user()?->isAdmin() ?? true),
+                DeleteAction::make()->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

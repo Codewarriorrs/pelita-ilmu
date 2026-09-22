@@ -33,8 +33,30 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Pelita Ilmu Bimbel')
             ->brandLogo(asset('images/logo-bimbel.png'))
             ->brandLogoHeight('2.5rem')
+            ->homeUrl('/')
+            ->favicon(asset('images/logo-bimbel-removebg.png'))
             ->darkMode(false)
             ->font('Plus Jakarta Sans')
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::HEAD_START,
+                fn () => new \Illuminate\Support\HtmlString('
+                    <link rel="icon" type="image/png" href="' . asset('images/logo-bimbel-removebg.png') . '">
+                    <style>
+                        /* Align table header title & search input inline on 1 horizontal row */
+                        .fi-ta-header {
+                            display: flex !important;
+                            flex-direction: row !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                            flex-wrap: wrap !important;
+                            gap: 1rem !important;
+                        }
+                        .fi-ta-header-toolbar {
+                            margin-top: 0 !important;
+                        }
+                    </style>
+                ')
+            )
             ->colors([
                 'primary' => [
                     50 => '#e6f4f3',

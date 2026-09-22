@@ -25,6 +25,14 @@ class MataPelajaranResource extends Resource
     protected static ?string $modelLabel = 'Mata Pelajaran';
     protected static ?string $pluralModelLabel = 'Mata Pelajaran';
 
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
+        return $user?->isAdmin() ?? true;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema

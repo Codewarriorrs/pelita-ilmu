@@ -4,8 +4,52 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-        <title>@yield('title', 'Pelita Ilmu Bimbel')</title>
         
+        <!-- Primary SEO Meta Tags -->
+        <title>@yield('title', 'Bimbel Pelita Ilmu Semarang - Bimbingan Belajar Berprestasi TK, SD, SMP, SMA & UTBK')</title>
+        <meta name="title" content="Bimbel Pelita Ilmu Semarang - Bimbingan Belajar Berprestasi TK, SD, SMP, SMA & UTBK">
+        <meta name="description" content="Bimbel Pelita Ilmu Semarang menyediakan bimbingan belajar berkualitas intensif (4-6 siswa/kelompok) untuk jenjang TK, SD, SMP, SMA & Persiapan UTBK dengan tentor lulusan S1/S2 berpengalaman.">
+        <meta name="keywords" content="bimbel semarang, bimbingan belajar semarang, pelita ilmu, les privat semarang, les sma semarang, bimbel utbk semarang, les smp semarang, bimbel tk sd semarang">
+        <meta name="author" content="Bimbel Pelita Ilmu">
+        <meta name="robots" content="index, follow">
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{{ asset('images/logo-bimbel-removebg.png') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/logo-bimbel-removebg.png') }}">
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:title" content="Bimbel Pelita Ilmu Semarang - Raih Prestasimu">
+        <meta property="og:description" content="Bimbingan belajar intensif 4-6 siswa per kelompok dengan pengajar S1/S2 berdedikasi tinggi di Semarang.">
+        <meta property="og:image" content="{{ asset('images/logo-bimbel.png') }}">
+
+        <!-- Twitter Card -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="{{ url()->current() }}">
+        <meta property="twitter:title" content="Bimbel Pelita Ilmu Semarang - Raih Prestasimu">
+        <meta property="twitter:description" content="Bimbingan belajar intensif 4-6 siswa per kelompok dengan pengajar S1/S2 berdedikasi tinggi di Semarang.">
+        <meta property="twitter:image" content="{{ asset('images/logo-bimbel.png') }}">
+
+        <!-- JSON-LD Structured Data Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "EducationalOrganization",
+          "name": "Bimbel Pelita Ilmu Semarang",
+          "url": "{{ url('/') }}",
+          "logo": "{{ asset('images/logo-bimbel-removebg.png') }}",
+          "description": "Bimbingan belajar intensif berprestasi di Semarang untuk TK, SD, SMP, SMA & Persiapan UTBK.",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Semarang",
+            "addressRegion": "Jawa Tengah",
+            "addressCountry": "ID"
+          },
+          "telephone": "+6289624601717"
+        }
+        </script>
+
         <!-- Google Fonts: Fredoka, Instrument Sans, Nunito, Poppins -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -269,12 +313,16 @@
                 drawRocket(rocket.x, rocket.y);
             }
 
+            let rocketImg = new Image();
+            rocketImg.src = "{{ asset('images/roket.png') }}";
+
             function drawRocket(x, y) {
-                // Rocket Bulb Head 💡🚀
-                ctx.font = '28px sans-serif';
-                ctx.fillText('💡', x, y + 24);
-                ctx.font = '16px sans-serif';
-                ctx.fillText('🔥', x - 12, y + 24);
+                if (rocketImg.complete && rocketImg.naturalWidth !== 0) {
+                    ctx.drawImage(rocketImg, x, y - 5, 34, 34);
+                } else {
+                    ctx.font = '28px sans-serif';
+                    ctx.fillText('🚀', x, y + 24);
+                }
             }
 
             function drawObstacle(obs) {

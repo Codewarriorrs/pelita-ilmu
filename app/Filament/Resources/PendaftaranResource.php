@@ -99,9 +99,7 @@ class PendaftaranResource extends Resource
                     ->searchable(),
 
                 TextColumn::make('minat_program')
-                    ->label('Minat Program')
-                    ->badge()
-                    ->color('primary'),
+                    ->label('Minat Program'),
 
                 TextColumn::make('nomor_wa')
                     ->label('Nomor WA')
@@ -110,13 +108,13 @@ class PendaftaranResource extends Resource
 
                 TextColumn::make('status_tindak_lanjut')
                     ->label('Status')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'BARU' => 'warning',
-                        'DIHUBUNGI' => 'info',
-                        'DITERIMA' => 'success',
-                        default => 'gray',
-                    }),
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'BARU' => '🟡 BARU MASUK',
+                        'DIHUBUNGI' => '🔵 DIHUBUNGI',
+                        'DITERIMA' => '🟢 DITERIMA',
+                        default => $state,
+                    })
+                    ->weight('extrabold'),
 
                 TextColumn::make('tanggal_masuk')
                     ->label('Tgl Masuk')
@@ -154,6 +152,7 @@ class PendaftaranResource extends Resource
                     ->label('Terima Jadi Siswa')
                     ->icon('heroicon-o-user-plus')
                     ->color('primary')
+                    ->visible(fn (Pendaftaran $record): bool => $record->status_tindak_lanjut !== 'DITERIMA')
                     ->requiresConfirmation()
                     ->modalHeading('Konfirmasi Penerimaan Siswa Baru')
                     ->modalDescription('Data calon siswa ini akan otomatis ditambahkan ke tabel Data Siswa dengan status AKTIF.')
