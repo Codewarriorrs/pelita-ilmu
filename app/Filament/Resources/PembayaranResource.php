@@ -31,10 +31,18 @@ class PembayaranResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-banknotes';
 
     protected static \UnitEnum|string|null $navigationGroup = 'Keuangan';
-    protected static ?string $navigationLabel = 'Pembayaran SPP';
-    protected static ?string $modelLabel = 'Pembayaran SPP';
-    protected static ?string $pluralModelLabel = 'Pembayaran SPP';
+    protected static ?string $navigationLabel = 'Rekap Pembayaran';
+    protected static ?string $modelLabel = 'Rekap Pembayaran';
+    protected static ?string $pluralModelLabel = 'Rekap Pembayaran';
     protected static ?int $navigationSort = 1;
+
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
+        return $user?->isAdmin() ?? true;
+    }
 
     public static function form(Schema $schema): Schema
     {

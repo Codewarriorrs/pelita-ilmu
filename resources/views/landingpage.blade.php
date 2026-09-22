@@ -19,13 +19,10 @@
         </div>
 
         <div class="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-            <!-- Clean Header Text (Teks Biasa Tanpa Frame Pill/Badge) -->
-            <p class="text-highlight font-headline font-extrabold text-xs sm:text-sm uppercase tracking-widest mb-4">
-                🌟 BIMBEL KELOMPOK PRESTASI SEMARANG BARAT
-            </p>
+            
 
             <h1 class="font-headline text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white uppercase tracking-tight drop-shadow-md">
-                DAFTAR SEKARANG KE
+                DAFTAR SEKARANG 
             </h1>
 
             <div class="my-6 flex justify-center hover:scale-105 transition-transform duration-300">
@@ -42,7 +39,7 @@
             </h2>
 
             <p class="mt-4 font-body text-white/90 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-                Bimbingan belajar intensif 4–6 siswa per kelompok dengan tentor S1/S2 berdedikasi.
+                Bimbingan belajar intensif  dengan tentor terbaik di Semarang.
             </p>
 
             <!-- Anti-Metal Hero CTA Button -->

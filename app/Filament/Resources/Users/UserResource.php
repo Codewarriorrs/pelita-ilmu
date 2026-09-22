@@ -26,6 +26,14 @@ class UserResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
+        return $user?->isAdmin() ?? true;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return UserForm::configure($schema);

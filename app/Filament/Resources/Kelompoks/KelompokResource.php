@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Kelompoks;
 
 use App\Filament\Resources\Kelompoks\Pages;
+use App\Filament\Resources\Kelompoks\RelationManagers\SiswaRelationManager;
 use App\Models\Kelompok;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -135,8 +136,22 @@ class KelompokResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            SiswaRelationManager::class,
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
+        if ($user && $user->isTentor()) {
+            $query->where('tentor_id', $user->id);
+        }
+
+        return $query;
     }
 
     public static function getPages(): array

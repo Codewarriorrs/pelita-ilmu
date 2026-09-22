@@ -34,6 +34,14 @@ class PendaftaranResource extends Resource
     protected static ?string $pluralModelLabel = 'Pendaftaran Online';
     protected static ?int $navigationSort = 2;
 
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
+        return $user?->isAdmin() ?? true;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -155,7 +163,7 @@ class PendaftaranResource extends Resource
                             'asal_sekolah' => $record->asal_sekolah,
                             'kategori_kelas' => $record->minat_program ?? 'Belum Diatur',
                             'tipe_belajar' => 'KELOMPOK',
-                            'tipe_jatuh_tempo' => 'AWAL_BULAN',
+                            'tipe_jatuh_tempo' => 'AWAL BULAN',
                             'status_siswa' => 'AKTIF',
                             'tanggal_daftar' => now(),
                             'no_telp_siswa' => $record->nomor_wa,

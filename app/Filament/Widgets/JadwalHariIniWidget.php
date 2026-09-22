@@ -31,17 +31,26 @@ class JadwalHariIniWidget extends BaseWidget
     {
         $hariIni = Carbon::today()->toDateString();
 
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
+        $query = JadwalKelompok::query()
+            // 1. Filter hanya sesi bimbingan hari ini
+            ->whereDate('tanggal_sesi', $hariIni)
+            // 2. Eager Loading relasi untuk menghindari N+1 Query Problem
+            ->with([
+                'kelompok.tentor',
+                'kelompok.mapel',
+            ]);
+
+        if ($user && $user->isTentor()) {
+            $query->whereHas('kelompok', function ($q) use ($user) {
+                $q->where('tentor_id', $user->id);
+            });
+        }
+
         return $table
-            ->query(
-                JadwalKelompok::query()
-                    // 1. Filter hanya sesi bimbingan hari ini
-                    ->whereDate('tanggal_sesi', $hariIni)
-                    // 2. Eager Loading relasi untuk menghindari N+1 Query Problem
-                    ->with([
-                        'kelompok.tentor',
-                        'kelompok.mapel',
-                    ])
-            )
+            ->query($query)
             ->columns([
                 TextColumn::make('kelompok.nama_kelompok')
                     ->label('Nama Kelompok')
