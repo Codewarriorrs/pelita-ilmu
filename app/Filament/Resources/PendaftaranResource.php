@@ -144,7 +144,7 @@ class PendaftaranResource extends Resource
 
                 Action::make('terima_siswa')
                     ->label('Terima Jadi Siswa')
-                    ->icon('heroicon-o-user-check')
+                    ->icon('heroicon-o-user-plus')
                     ->color('primary')
                     ->requiresConfirmation()
                     ->modalHeading('Konfirmasi Penerimaan Siswa Baru')

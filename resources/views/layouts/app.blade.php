@@ -103,29 +103,41 @@
         @include('partials.footer')
 
         <!-- MOBILE FLOATING BOTTOM NAVBAR (Neo-Brutalist Anti-Metallic Theme) -->
-        <div x-data="{ activeIndex: 0 }" class="fixed inset-x-0 bottom-4 z-40 mx-auto w-[94vw] max-w-sm h-14 bg-[#193836] border-2 border-black rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-around px-2 md:hidden">
+        @php
+            $navActive = match(true) {
+                request()->routeIs('pendaftaran') => 2,
+                request()->routeIs('home') && request()->is('/') => 0,
+                default => 0,
+            };
+        @endphp
+        <div class="fixed inset-x-0 bottom-4 z-40 mx-auto w-[94vw] max-w-sm h-14 bg-[#193836] border-2 border-black rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-around px-2 md:hidden">
             <!-- Item 1: Beranda -->
-            <a href="{{ route('home') }}" @click="activeIndex = 0" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300" :class="activeIndex === 0 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white'">
+            <a href="{{ route('home') }}" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 {{ $navActive === 0 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                <span x-show="activeIndex === 0" x-transition class="text-xs font-headline font-extrabold whitespace-nowrap">Home</span>
+                @if($navActive === 0)
+                    <span class="text-xs font-headline font-extrabold whitespace-nowrap">Home</span>
+                @endif
             </a>
 
             <!-- Item 2: Program -->
-            <a href="{{ route('home') }}#program" @click="activeIndex = 1" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300" :class="activeIndex === 1 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white'">
+            <a href="{{ route('home') }}#program" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 {{ $navActive === 1 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                <span x-show="activeIndex === 1" x-transition class="text-xs font-headline font-extrabold whitespace-nowrap">Program</span>
+                @if($navActive === 1)
+                    <span class="text-xs font-headline font-extrabold whitespace-nowrap">Program</span>
+                @endif
             </a>
 
             <!-- Item 3: Pendaftaran -->
-            <a href="{{ route('pendaftaran') }}" @click="activeIndex = 2" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300" :class="activeIndex === 2 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white'">
+            <a href="{{ route('pendaftaran') }}" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 {{ $navActive === 2 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                <span x-show="activeIndex === 2" x-transition class="text-xs font-headline font-extrabold whitespace-nowrap">Daftar</span>
+                @if($navActive === 2)
+                    <span class="text-xs font-headline font-extrabold whitespace-nowrap">Daftar</span>
+                @endif
             </a>
 
-            <!-- Item 4: Admin / Login -->
-            <a href="{{ route('filament.admin.auth.login') }}" @click="activeIndex = 3" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300" :class="activeIndex === 3 ? 'bg-highlight text-void font-bold border border-black shadow-sm' : 'text-white/80 hover:text-white'">
-                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                <span x-show="activeIndex === 3" x-transition class="text-xs font-headline font-extrabold whitespace-nowrap">Masuk</span>
+            <!-- Item 4: Kontak WhatsApp -->
+            <a href="https://wa.me/6289624601717?text=Halo%20Admin%20Pelita%20Ilmu,%20saya%20ingin%20bertanya%20mengenai%20bimbingan%20belajar" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 text-white/80 hover:text-white">
+                <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
             </a>
         </div>
 

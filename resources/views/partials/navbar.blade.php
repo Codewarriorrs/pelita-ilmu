@@ -43,12 +43,12 @@
             </a>
         </div>
 
-        <!-- Mobile Hamburger Toggle -->
+        <!-- Mobile Hamburger Toggle — only on tablet (md), hidden on mobile since bottom nav handles it -->
         <button
             type="button"
             id="nav-toggle"
             onclick="toggleMobileMenu()"
-            class="inline-flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-white text-void shadow-sm hover:bg-stone-50 transition-all lg:hidden"
+            class="hidden md:inline-flex lg:hidden h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-white text-void shadow-sm hover:bg-stone-50 transition-all"
             aria-controls="nav-menu"
             aria-expanded="false"
             aria-label="Buka menu"
