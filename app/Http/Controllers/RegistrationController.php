@@ -37,7 +37,8 @@ class RegistrationController extends Controller
             : '';
 
         $kategori = $validated['kategori_kelas'] ?? 'Reguler';
-        $programDetail = $kategori . ' - ' . $validated['minat_program'] . $mapelList;
+        $kelas = $validated['kelas'] ?? $validated['tingkat_kelas'] ?? '';
+        $programDetail = ($kelas ? '[' . $kelas . '] ' : '') . $kategori . ' - ' . $validated['minat_program'] . $mapelList;
 
         Pendaftaran::create([
             'nama_lengkap' => $validated['nama_lengkap'],

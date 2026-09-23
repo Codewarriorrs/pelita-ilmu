@@ -9,7 +9,7 @@ class PendaftaranForm extends Component
     // Form Properties (Pure Client State)
     public string $nama_lengkap = '';
     public string $asal_sekolah = '';
-    public string $tingkat_kelas = '';
+    public string $kelas = '';
     public string $kategori_kelas = 'Reguler'; // Default: Reguler
     public string $minat_program = '';
     public string $nama_wali = '';
@@ -83,7 +83,7 @@ class PendaftaranForm extends Component
             ],
 
             'kategori_kelas' => ['required', 'in:Reguler,Privat'],
-            'tingkat_kelas' => ['required', 'string'],
+            'kelas' => ['required', 'string', 'max:50'],
             'minat_program' => ['required', 'in:TK,SD Kelas 1-5,SD Kelas 6,SD Kelas 6 TKA,SMP 1 Mapel,SMP 2 Mapel,SMP 3 Mapel,SMP 4 Mapel,SMP 5 Mapel,SMP 6 Mapel,SMP TKA 1 Mapel,SMP TKA 2 Mapel,SMA 1 Mapel,SMA 2 Mapel,SMA 3 Mapel,SMA 4 Mapel,SMA 5 Mapel,SMA 6 Mapel,SMA UTBK 1,SMA UTBK 2,SMA UTBK 3,SMA UTBK 4,SMA UTBK+Reg 1,SMA UTBK+Reg 2,SMA UTBK+Reg 3,SMA UTBK+Reg 4'],
 
             // 4. Nama wali: hanya huruf dan spasi (tidak boleh angka dan simbol)
@@ -140,7 +140,7 @@ class PendaftaranForm extends Component
             'kategori_kelas.required' => 'Silakan pilih kategori kelas.',
             'kategori_kelas.in' => 'Pilihan kategori kelas tidak valid.',
 
-            'tingkat_kelas.required' => 'Silakan pilih tingkat / kelas siswa.',
+            'kelas.required' => 'Kelas siswa wajib diisi.',
 
             'minat_program.required' => 'Silakan pilih program belajar yang diminati.',
             'minat_program.in' => 'Program belajar yang dipilih tidak valid.',
@@ -190,7 +190,8 @@ class PendaftaranForm extends Component
             'tanggal_daftar' => now()->translatedFormat('d F Y, H:i') . ' WIB',
             'nama_lengkap' => $validated['nama_lengkap'],
             'asal_sekolah' => $validated['asal_sekolah'],
-            'tingkat_kelas' => $validated['tingkat_kelas'],
+            'kelas' => $validated['kelas'],
+            'tingkat_kelas' => $validated['kelas'],
             'kategori_kelas' => $validated['kategori_kelas'],
             'minat_program' => $validated['minat_program'],
             'label_program' => $this->daftarProgram[$validated['minat_program']] ?? $validated['minat_program'],
@@ -211,6 +212,7 @@ class PendaftaranForm extends Component
         $this->reset([
             'nama_lengkap',
             'asal_sekolah',
+            'kelas',
             'tingkat_kelas',
             'kategori_kelas',
             'minat_program',

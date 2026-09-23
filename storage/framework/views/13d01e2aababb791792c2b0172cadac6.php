@@ -188,7 +188,7 @@
 
         <!-- EASTER EGG GAME MODAL (Neo-Brutalist Program Card Style + Lightbulb Rocket Dino Game) -->
         <div id="easter-egg-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in">
-            <div class="relative w-full max-w-2xl sm:max-w-3xl bg-white border-4 border-black rounded-[32px] p-6 sm:p-10 text-void shadow-[12px_12px_0px_0px_rgba(255,229,0,1)] text-center overflow-hidden transition-all transform scale-100">
+            <div class="relative w-full max-w-3xl sm:max-w-4xl bg-white border-4 border-black rounded-[32px] p-6 sm:p-10 text-void shadow-[12px_12px_0px_0px_rgba(255,229,0,1)] text-center overflow-hidden transition-all transform scale-100">
                 
                 <!-- Close Button -->
                 <button type="button" onclick="closeEasterEgg()" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-stone-100 hover:bg-stone-200 border-2 border-black flex items-center justify-center text-black font-bold text-base shadow-sm">
@@ -209,7 +209,7 @@
 
                 <!-- Canvas Game Screen -->
                 <div class="relative rounded-3xl overflow-hidden border-4 border-black bg-gradient-to-b from-[#193836] to-primary p-2 mb-5 shadow-2xl">
-                    <canvas id="rocketGameCanvas" width="600" height="220" class="w-full h-auto cursor-pointer block rounded-2xl"></canvas>
+                    <canvas id="rocketGameCanvas" width="700" height="260" class="w-full h-auto cursor-pointer block rounded-2xl"></canvas>
                     <div id="gameOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/60 text-white p-6 backdrop-blur-xs">
                         <span class="font-headline text-2xl sm:text-3xl font-black text-highlight mb-3 drop-shadow-md">SIAP MELUNCUR? 🚀</span>
                         <button type="button" onclick="startRocketGame()" class="px-8 py-3.5 bg-highlight hover:bg-yellow-400 text-void font-headline font-black text-sm uppercase tracking-wider rounded-2xl border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 transition-all">
@@ -307,9 +307,9 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 // Draw Ground
                 ctx.fillStyle = '#FFE500';
-                ctx.fillRect(0, 155, canvas.width, 25);
+                ctx.fillRect(0, 192, canvas.width, 30);
                 ctx.fillStyle = '#000000';
-                ctx.fillRect(0, 153, canvas.width, 2);
+                ctx.fillRect(0, 190, canvas.width, 2);
 
                 // Draw Lightbulb Rocket
                 drawRocket(rocket.x, rocket.y);
@@ -345,7 +345,7 @@
                 score = 0;
                 frameCount = 0;
                 obstacles = [];
-                rocket.y = 120;
+                rocket.y = 155;
                 rocket.vy = 0;
                 rocket.isGrounded = true;
                 document.getElementById('gameScore').innerText = 0;
@@ -362,15 +362,15 @@
                 // Rocket Physics
                 rocket.vy += rocket.gravity;
                 rocket.y += rocket.vy;
-                if (rocket.y >= 120) {
-                    rocket.y = 120;
+                if (rocket.y >= 155) {
+                    rocket.y = 155;
                     rocket.vy = 0;
                     rocket.isGrounded = true;
                 }
 
                 // Spawn Obstacles
-                if (frameCount % 90 === 0) {
-                    obstacles.push({ x: canvas.width, y: 125, width: 20, height: 24 });
+                if (frameCount % 85 === 0) {
+                    obstacles.push({ x: canvas.width, y: 160, width: 24, height: 28 });
                 }
 
                 // Move & Draw Obstacles

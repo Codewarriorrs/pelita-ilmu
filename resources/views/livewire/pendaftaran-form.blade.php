@@ -120,41 +120,19 @@
                                 @enderror
                             </div>
 
-                            {{-- Field 3b: Tingkat / Kelas --}}
+                            {{-- Field 3b: Kelas --}}
                             <div>
-                                <label for="tingkat_kelas" class="block font-subtitle text-xs sm:text-sm font-bold text-primary-2 mb-1.5">
-                                    Tingkat / Kelas <span class="text-rose-500">*</span>
+                                <label for="kelas" class="block font-subtitle text-xs sm:text-sm font-bold text-primary-2 mb-1.5">
+                                    Kelas <span class="text-rose-500">*</span>
                                 </label>
-                                <select
-                                    id="tingkat_kelas"
-                                    wire:model.live="tingkat_kelas"
-                                    class="w-full rounded-xl border @error('tingkat_kelas') border-rose-500 bg-rose-50/30 @else border-primary-2/20 bg-canvas @enderror px-4 py-3 font-body text-sm text-void focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                <input
+                                    type="text"
+                                    id="kelas"
+                                    wire:model.live.debounce.300ms="kelas"
+                                    placeholder="Contoh: Kelas 8 / 5 SD / 10"
+                                    class="w-full rounded-xl border @error('kelas') border-rose-500 bg-rose-50/30 @else border-primary-2/20 bg-canvas @enderror px-4 py-3 font-body text-sm text-void placeholder:text-void/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 >
-                                    <option value="">-- Pilih Jenjang Kelas --</option>
-                                    <optgroup label="TK / PAUD">
-                                        <option value="TK A">TK A</option>
-                                        <option value="TK B">TK B</option>
-                                    </optgroup>
-                                    <optgroup label="Sekolah Dasar (SD)">
-                                        <option value="Kelas 1 SD">Kelas 1 SD</option>
-                                        <option value="Kelas 2 SD">Kelas 2 SD</option>
-                                        <option value="Kelas 3 SD">Kelas 3 SD</option>
-                                        <option value="Kelas 4 SD">Kelas 4 SD</option>
-                                        <option value="Kelas 5 SD">Kelas 5 SD</option>
-                                        <option value="Kelas 6 SD">Kelas 6 SD</option>
-                                    </optgroup>
-                                    <optgroup label="SMP">
-                                        <option value="Kelas 7 SMP">Kelas 7 (SMP Kelas 1)</option>
-                                        <option value="Kelas 8 SMP">Kelas 8 (SMP Kelas 2)</option>
-                                        <option value="Kelas 9 SMP">Kelas 9 (SMP Kelas 3)</option>
-                                    </optgroup>
-                                    <optgroup label="SMA / UTBK">
-                                        <option value="Kelas 10 SMA">Kelas 10 (SMA Kelas 1)</option>
-                                        <option value="Kelas 11 SMA">Kelas 11 (SMA Kelas 2)</option>
-                                        <option value="Kelas 12 SMA / UTBK">Kelas 12 SMA / Persiapan UTBK</option>
-                                    </optgroup>
-                                </select>
-                                @error('tingkat_kelas')
+                                @error('kelas')
                                     <p class="mt-1.5 font-body text-xs text-rose-600 flex items-center gap-1">
                                         <svg class="h-3.5 w-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>

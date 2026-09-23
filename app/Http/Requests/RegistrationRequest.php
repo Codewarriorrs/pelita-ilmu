@@ -19,6 +19,13 @@ class RegistrationRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        if ($this->filled('kelas') && !$this->filled('tingkat_kelas')) {
+            $this->merge(['tingkat_kelas' => $this->input('kelas')]);
+        }
+        if ($this->filled('tingkat_kelas') && !$this->filled('kelas')) {
+            $this->merge(['kelas' => $this->input('tingkat_kelas')]);
+        }
+
         if ($this->filled('nomor_wali') && !$this->filled('no_telp_ortu')) {
             $this->merge(['no_telp_ortu' => $this->input('nomor_wali')]);
         }
@@ -51,6 +58,8 @@ class RegistrationRequest extends FormRequest
             'nama_lengkap' => ['required', 'string', 'max:100'],
             'tanggal_lahir' => ['required', 'date', 'before_or_equal:today'],
             'asal_sekolah' => ['required', 'string', 'max:100'],
+            'kelas' => ['required', 'string', 'max:50'],
+            'tingkat_kelas' => ['nullable', 'string', 'max:50'],
             'kategori_kelas' => ['nullable', 'string', 'in:Reguler,Privat,KELOMPOK,PRIVAT'],
             'minat_program' => ['required', 'string'],
             'mata_pelajaran' => ['nullable', 'array'],
@@ -72,6 +81,7 @@ class RegistrationRequest extends FormRequest
             'tanggal_lahir.required' => 'Tanggal lahir calon siswa wajib diisi.',
             'tanggal_lahir.before_or_equal' => 'Tanggal lahir tidak boleh melebihi hari ini.',
             'asal_sekolah.required' => 'Asal sekolah calon siswa wajib diisi.',
+            'kelas.required' => 'Kelas calon siswa wajib diisi.',
             'minat_program.required' => 'Silakan pilih program bimbingan belajar.',
             'alamat_rumah.required' => 'Alamat rumah tempat tinggal wajib diisi.',
             'nama_ortu.required' => 'Nama orang tua / wali wajib diisi.',

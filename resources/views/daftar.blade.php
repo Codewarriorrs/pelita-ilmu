@@ -242,6 +242,22 @@
                                     class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-[#009688] focus:bg-white focus:outline-none transition-all shadow-sm"
                                 >
                             </div>
+
+                            <!-- Kelas -->
+                            <div>
+                                <label for="kelas" class="block text-xs sm:text-sm font-bold text-stone-700 mb-1.5">
+                                    Kelas <span class="text-rose-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="kelas"
+                                    name="kelas"
+                                    value="{{ old('kelas', old('tingkat_kelas')) }}"
+                                    placeholder="Contoh: Kelas 8 / 5 SD / 10"
+                                    required
+                                    class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-[#009688] focus:bg-white focus:outline-none transition-all shadow-sm"
+                                >
+                            </div>
                         </div>
                     </div>
 
@@ -543,21 +559,41 @@
 
     <!-- JAVASCRIPT DINAMIS CHECKBOX MATA PELAJARAN & EASTER EGG -->
     <script>
+        const smpMapelList = ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'IPA Fisika', 'IPA Biologi', 'IPS'];
+        const smaMapelList = ['Matematika Wajib / Lanjut', 'Fisika / Ekonomi', 'Kimia / Geografi', 'Biologi / Sosiologi', 'Bahasa Inggris', 'Informatika / Sejarah'];
+
         const mapelData = {
             'TK': ['Membaca & Calistung', 'Mengaji / Iqro', 'Bahasa Inggris Dasar', 'Kreativitas & Seni'],
-            'SD': ['Matematika', 'Bahasa Indonesia', 'IPA (Ilmu Pengetahuan Alam)', 'IPS (Ilmu Pengetahuan Sosial)', 'Bahasa Inggris', 'Pendidikan Agama / Mengaji'],
-            'SMP 3 Mapel': ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'IPA (Fisika & Biologi)', 'IPS'],
-            'SMP 4 Mapel': ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'IPA (Fisika & Biologi)', 'IPS'],
-            'SMP 5 Mapel': ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'IPA (Fisika & Biologi)', 'IPS'],
-            'SMA 4 Mapel': ['Matematika Wajib / Lanjut', 'Fisika / Ekonomi', 'Kimia / Geografi', 'Biologi / Sosiologi', 'Bahasa Inggris'],
-            'SMA 5 Mapel': ['Matematika Wajib / Lanjut', 'Fisika / Ekonomi', 'Kimia / Geografi', 'Biologi / Sosiologi', 'Bahasa Inggris'],
-            'Kelas UTBK': ['TPS (Tes Potensi Skolastik)', 'Penalaran Matematika', 'Literasi B. Indonesia', 'Literasi B. Inggris', 'Pengetahuan Kuantitatif']
+            'SD Kelas 1-5': ['Matematika', 'Bahasa Indonesia', 'IPA', 'IPS', 'Bahasa Inggris', 'Pendidikan Agama / Mengaji'],
+            'SD Kelas 6': ['Matematika', 'Bahasa Indonesia', 'IPA', 'Bahasa Inggris', 'Persiapan Ujian Sekolah'],
+            'SD Kelas 6 TKA': ['TKA Matematika SD', 'TKA Bahasa Indonesia SD', 'TKA Sains SD'],
+            'SMP 1 Mapel': smpMapelList,
+            'SMP 2 Mapel': smpMapelList,
+            'SMP 3 Mapel': smpMapelList,
+            'SMP 4 Mapel': smpMapelList,
+            'SMP 5 Mapel': smpMapelList,
+            'SMP 6 Mapel': smpMapelList,
+            'SMP TKA 1 Mapel': ['TKA Matematika SMP', 'TKA Bahasa Indonesia SMP', 'TKA Bahasa Inggris SMP', 'TKA IPA SMP'],
+            'SMP TKA 2 Mapel': ['TKA Matematika SMP', 'TKA Bahasa Indonesia SMP', 'TKA Bahasa Inggris SMP', 'TKA IPA SMP'],
+            'SMA 1 Mapel': smaMapelList,
+            'SMA 2 Mapel': smaMapelList,
+            'SMA 3 Mapel': smaMapelList,
+            'SMA 4 Mapel': smaMapelList,
+            'SMA 5 Mapel': smaMapelList,
+            'SMA 6 Mapel': smaMapelList,
+            'SMA UTBK 1': ['TPS (Tes Potensi Skolastik)', 'Penalaran Matematika', 'Literasi B. Indonesia', 'Literasi B. Inggris', 'Pengetahuan Kuantitatif'],
+            'SMA UTBK 2': ['TPS (Tes Potensi Skolastik)', 'Penalaran Matematika', 'Literasi B. Indonesia', 'Literasi B. Inggris', 'Pengetahuan Kuantitatif'],
+            'SMA UTBK 3': ['TPS (Tes Potensi Skolastik)', 'Penalaran Matematika', 'Literasi B. Indonesia', 'Literasi B. Inggris', 'Pengetahuan Kuantitatif'],
+            'SMA UTBK 4': ['TPS (Tes Potensi Skolastik)', 'Penalaran Matematika', 'Literasi B. Indonesia', 'Literasi B. Inggris', 'Pengetahuan Kuantitatif'],
+            'SMA UTBK+Reg 1': smaMapelList.concat(['Penalaran UTBK']),
+            'SMA UTBK+Reg 2': smaMapelList.concat(['Penalaran UTBK']),
+            'SMA UTBK+Reg 3': smaMapelList.concat(['Penalaran UTBK']),
+            'SMA UTBK+Reg 4': smaMapelList.concat(['Penalaran UTBK']),
         };
 
         function getMapelLimit(program) {
-            if (program === 'SMP 3 Mapel') return 3;
-            if (program === 'SMP 4 Mapel' || program === 'SMA 4 Mapel') return 4;
-            if (program === 'SMP 5 Mapel' || program === 'SMA 5 Mapel') return 5;
+            const match = program.match(/(\d+)\s*Mapel/i) || program.match(/UTBK\s*(\d+)/i);
+            if (match) return parseInt(match[1]);
             return 99;
         }
 

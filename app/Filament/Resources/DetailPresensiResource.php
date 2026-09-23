@@ -26,10 +26,11 @@ class DetailPresensiResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-check';
 
     protected static \UnitEnum|string|null $navigationGroup = 'Akademik';
-    protected static ?string $navigationLabel = 'Rekap Presensi';
+    protected static ?string $navigationLabel = 'Log Presensi';
     protected static ?string $modelLabel = 'Presensi Siswa';
     protected static ?string $pluralModelLabel = 'Rekap Presensi Siswa';
     protected static ?int $navigationSort = 2;
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Schema $schema): Schema
     {
@@ -66,35 +67,41 @@ class DetailPresensiResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->with(['jadwal.kelompok.mapel', 'jadwal.kelompok.tentor', 'siswa']))
-            ->defaultSort('jadwal.tanggal_sesi', 'desc')
+            ->modifyQueryUsing(fn (Builder $query) => $query
+                ->select('detail_presensi.*')
+                ->leftJoin('jadwal_kelompok', 'detail_presensi.jadwal_id', '=', 'jadwal_kelompok.id')
+                ->leftJoin('kelompok', 'jadwal_kelompok.kelompok_id', '=', 'kelompok.id')
+                ->leftJoin('siswa', 'detail_presensi.siswa_id', '=', 'siswa.id')
+                ->with(['jadwal.kelompok.mapel', 'jadwal.kelompok.tentor', 'siswa'])
+            )
+            ->defaultSort('jadwal_kelompok.tanggal_sesi', 'desc')
             ->columns([
                 TextColumn::make('jadwal.tanggal_sesi')
                     ->label('Tanggal')
                     ->date('d M Y')
-                    ->sortable()
+                    ->sortable(query: fn (Builder $query, string $direction) => $query->orderBy('jadwal_kelompok.tanggal_sesi', $direction))
                     ->weight('semibold'),
 
-                TextColumn::make('jadwal.tanggal_sesi')
+                TextColumn::make('hari_sesi')
                     ->label('Hari')
-                    ->formatStateUsing(fn ($state) => $state ? \Carbon\Carbon::parse($state)->locale('id')->isoFormat('dddd') : '-')
+                    ->state(fn ($record) => $record->jadwal?->tanggal_sesi ? \Carbon\Carbon::parse($record->jadwal->tanggal_sesi)->locale('id')->isoFormat('dddd') : '-')
                     ->color('gray'),
+
+                TextColumn::make('siswa.nama_lengkap')
+                    ->label('Nama Siswa')
+                    ->searchable()
+                    ->sortable(query: fn (Builder $query, string $direction) => $query->orderBy('siswa.nama_lengkap', $direction))
+                    ->weight('bold'),
 
                 TextColumn::make('jadwal.kelompok.nama_kelompok')
                     ->label('Kelompok Belajar')
                     ->searchable()
-                    ->sortable()
-                    ->weight('bold'),
+                    ->sortable(query: fn (Builder $query, string $direction) => $query->orderBy('kelompok.nama_kelompok', $direction)),
 
                 TextColumn::make('jadwal.kelompok.mapel.nama_mapel')
                     ->label('Mata Pelajaran')
                     ->badge()
                     ->color('primary'),
-
-                TextColumn::make('siswa.nama_lengkap')
-                    ->label('Nama Siswa')
-                    ->searchable()
-                    ->sortable(),
 
                 TextColumn::make('status_kehadiran')
                     ->label('Kehadiran')
@@ -108,9 +115,9 @@ class DetailPresensiResource extends Resource
                     }),
 
                 TextColumn::make('jadwal.kelompok.tentor.name')
-                    ->label('Tentor')
+                    ->label('Tentor Pengajar')
                     ->color('gray')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: false),
             ])
             ->filters([
                 SelectFilter::make('bulan')
@@ -124,9 +131,7 @@ class DetailPresensiResource extends Resource
                     ->default((string) now()->month)
                     ->query(fn (Builder $query, array $data) =>
                         $query->when($data['value'], fn ($q, $val) =>
-                            $q->whereHas('jadwal', fn ($j) =>
-                                $j->whereMonth('tanggal_sesi', $val)
-                            )
+                            $q->whereRaw('extract(month from jadwal_kelompok.tanggal_sesi) = ?', [(int)$val])
                         )
                     ),
 
@@ -136,9 +141,7 @@ class DetailPresensiResource extends Resource
                     ->default((string) now()->year)
                     ->query(fn (Builder $query, array $data) =>
                         $query->when($data['value'], fn ($q, $val) =>
-                            $q->whereHas('jadwal', fn ($j) =>
-                                $j->whereYear('tanggal_sesi', $val)
-                            )
+                            $q->whereRaw('extract(year from jadwal_kelompok.tanggal_sesi) = ?', [(int)$val])
                         )
                     ),
 

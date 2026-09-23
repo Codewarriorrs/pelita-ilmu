@@ -133,10 +133,15 @@
                 </div>
             </div>
 
-            <!-- Feature Icons Grid (6 Keunggulan Utama) -->
+            <!-- Feature Icons Grid (6 Keunggulan Utama Minimalis SVG) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
                 <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void font-bold">🎓</div>
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void">
+                        <svg class="h-6 w-6 text-void" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                        </svg>
+                    </div>
                     <div>
                         <h3 class="font-subtitle text-base font-bold text-white">Pengajar Berpengalaman</h3>
                         <p class="font-body text-xs text-white/80 mt-1">Lulusan S1 & S2 PTN ternama berdedikasi tinggi.</p>
@@ -144,7 +149,11 @@
                 </div>
 
                 <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void font-bold">💡</div>
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void">
+                        <svg class="h-6 w-6 text-void" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                    </div>
                     <div>
                         <h3 class="font-subtitle text-base font-bold text-white">Active & Fun Learning</h3>
                         <p class="font-body text-xs text-white/80 mt-1">Metode interaktif dua arah tanpa rasa jenuh.</p>
@@ -152,7 +161,11 @@
                 </div>
 
                 <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void font-bold">⭐</div>
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void">
+                        <svg class="h-6 w-6 text-void" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                        </svg>
+                    </div>
                     <div>
                         <h3 class="font-subtitle text-base font-bold text-white">Pendidikan Berkarakter</h3>
                         <p class="font-body text-xs text-white/80 mt-1">Menanamkan kedisiplinan dan moral baik.</p>
@@ -160,7 +173,11 @@
                 </div>
 
                 <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void font-bold">💬</div>
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void">
+                        <svg class="h-6 w-6 text-void" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                    </div>
                     <div>
                         <h3 class="font-subtitle text-base font-bold text-white">Komunikatif & Terbuka</h3>
                         <p class="font-body text-xs text-white/80 mt-1">Laporan perkembangan rutin kepada orang tua.</p>
@@ -168,7 +185,11 @@
                 </div>
 
                 <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void font-bold">📶</div>
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void">
+                        <svg class="h-6 w-6 text-void" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
+                        </svg>
+                    </div>
                     <div>
                         <h3 class="font-subtitle text-base font-bold text-white">Fasilitas Lengkap & Wi-Fi</h3>
                         <p class="font-body text-xs text-white/80 mt-1">Ruang ber-AC & akses internet cepat untuk tugas.</p>
@@ -176,7 +197,11 @@
                 </div>
 
                 <div class="flex items-start gap-4 p-5 rounded-2xl bg-[#122A28] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void font-bold">🏷️</div>
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-highlight text-void">
+                        <svg class="h-6 w-6 text-void" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                    </div>
                     <div>
                         <h3 class="font-subtitle text-base font-bold text-white">Harga Terjangkau</h3>
                         <p class="font-body text-xs text-white/80 mt-1">Mulai Rp 195.000/bulan dengan kualitas terjamin.</p>
@@ -256,7 +281,7 @@
                             <ul class="space-y-2 font-body text-xs text-void/85">
                                 <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> 3x Seminggu @90 menit</li>
                                 <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Bimbingan PR Sekolah</li>
-                                <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Persiapan PTS / PAS</li>
+                                <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Persiapan PTS / PAS / TKA</li>
                             </ul>
                         </div>
                         <div class="pt-6">
@@ -280,13 +305,15 @@
                     <div class="p-6 flex-1 flex flex-col justify-between">
                         <div class="space-y-4">
                             <div class="pb-3 border-b border-stone-200">
-                                <p class="font-subtitle text-xs font-bold text-[#193836] mb-1">Mapel Pilihan:</p>
+                                <p class="font-subtitle text-xs font-bold text-[#193836] mb-1">Pilihan Paket (1–6 Mapel & TKA):</p>
                                 <p class="font-body text-xs text-void/80 leading-relaxed">Matematika, IPA, B. Inggris, B. Indo, IPS</p>
                             </div>
-                            <div class="space-y-2">
-                                <div class="flex items-center justify-between text-xs"><span class="font-subtitle font-bold">Paket 3 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black">Rp 240k/bln</span></div>
-                                <div class="flex items-center justify-between text-xs"><span class="font-subtitle font-bold">Paket 4 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black">Rp 290k/bln</span></div>
-                                <div class="flex items-center justify-between text-xs"><span class="font-subtitle font-bold">Paket 5 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black">Rp 340k/bln</span></div>
+                            <div class="space-y-1.5 font-body">
+                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">1–2 Mapel / TKA</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Mulai Rp 150k</span></div>
+                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 3 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 240k/bln</span></div>
+                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 4 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 290k/bln</span></div>
+                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 5 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 340k/bln</span></div>
+                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 6 Mapel Lengkap</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 390k/bln</span></div>
                             </div>
                         </div>
                         <div class="pt-6">
@@ -299,7 +326,7 @@
                 <div class="flex flex-col rounded-[32px] overflow-hidden border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white hover:-translate-y-1 transition-transform">
                     <div class="bg-primary p-6 text-white flex items-center justify-between min-h-[108px] border-b-2 border-black">
                         <div>
-                            <span class="text-[10px] font-subtitle font-bold text-highlight uppercase tracking-wider block mb-1">MENENGAH ATAS</span>
+                            <span class="text-[10px] font-subtitle font-bold text-highlight uppercase tracking-wider block mb-1">MENENGAH ATAS & UTBK</span>
                             <h3 class="font-headline text-2xl font-bold text-white">SMA & UTBK</h3>
                         </div>
                         <div class="h-10 w-10 rounded-full bg-highlight text-void font-headline font-black text-xs flex items-center justify-center border-2 border-black shrink-0">
@@ -309,12 +336,15 @@
                     <div class="p-6 flex-1 flex flex-col justify-between">
                         <div class="space-y-4">
                             <div class="pb-3 border-b border-stone-200">
-                                <p class="font-subtitle text-xs font-bold text-[#193836] mb-1">Mapel Pilihan:</p>
-                                <p class="font-body text-xs text-void/80 leading-relaxed">Matematika Wajib/Lanjut, Fisika, Kimia, Biologi, B. Indo, B. Ing, Ekonomi</p>
+                                <p class="font-subtitle text-xs font-bold text-[#193836] mb-1">Pilihan Paket (1–6 Mapel & UTBK):</p>
+                                <p class="font-body text-xs text-void/80 leading-relaxed">MTK Wajib/Lanjut, Fisika, Kimia, Biologi, B. Indo, B. Ing, UTBK</p>
                             </div>
-                            <div class="space-y-2">
-                                <div class="flex items-center justify-between text-xs"><span class="font-subtitle font-bold">Paket 4 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black">Rp 350k/bln</span></div>
-                                <div class="flex items-center justify-between text-xs"><span class="font-subtitle font-bold">Paket 5 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black">Rp 400k/bln</span></div>
+                            <div class="space-y-1.5 font-body">
+                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">1–3 Mapel Reguler</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Mulai Rp 200k</span></div>
+                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 4 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 350k/bln</span></div>
+                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 5 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 400k/bln</span></div>
+                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 6 Mapel Lengkap</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 450k/bln</span></div>
+                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Intensif UTBK / SNBT</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">1–4 Mapel</span></div>
                             </div>
                         </div>
                         <div class="pt-6">

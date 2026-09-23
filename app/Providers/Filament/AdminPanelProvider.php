@@ -42,7 +42,7 @@ class AdminPanelProvider extends PanelProvider
                 fn () => new \Illuminate\Support\HtmlString('
                     <link rel="icon" type="image/png" href="' . asset('images/logo-bimbel-removebg.png') . '">
                     <style>
-                        /* ===== TABLE HEADER: Search + Title di satu baris ===== */
+                        /* ===== TABLE HEADER: Search + Title + Buttons di 1 Baris Sejajar ===== */
                         .fi-ta-header {
                             display: flex !important;
                             flex-direction: row !important;
@@ -64,21 +64,30 @@ class AdminPanelProvider extends PanelProvider
                             margin: 0 !important;
                             white-space: nowrap !important;
                         }
-                        .fi-ta-header-toolbar {
+                        .fi-ta-header-toolbar, .fi-ta-actions {
                             margin-top: 0 !important;
                             margin-left: auto !important;
                             display: flex !important;
                             align-items: center !important;
+                            justify-content: flex-end !important;
                             gap: 0.5rem !important;
                             flex-wrap: nowrap !important;
                         }
-                        /* Search field styling */
+                        /* Search field & Button perfect height & vertical centering */
                         .fi-ta-search-field {
-                            border-radius: 0.75rem !important;
+                            margin: 0 !important;
+                            align-self: center !important;
                         }
                         .fi-ta-search-field input {
                             border-radius: 0.75rem !important;
                             font-size: 0.8rem !important;
+                            height: 2.25rem !important;
+                            padding-top: 0 !important;
+                            padding-bottom: 0 !important;
+                        }
+                        .fi-ta-header-toolbar button, .fi-ta-header-toolbar a, .fi-ta-header-toolbar .fi-icon-btn {
+                            align-self: center !important;
+                            margin: 0 !important;
                         }
 
                         /* ===== SOLID & BOLD STATUS BADGES ===== */
@@ -153,11 +162,38 @@ class AdminPanelProvider extends PanelProvider
                             box-shadow: 0 2px 12px -2px rgba(0,0,0,0.07) !important;
                         }
 
-                        /* ===== MOBILE RESPONSIVE ===== */
+                        /* ===== MOBILE RESPONSIVE CARDS FOR DASHBOARD TABLES ===== */
                         @media (max-width: 768px) {
                             .fi-ta-header { flex-direction: column !important; align-items: stretch !important; }
                             .fi-ta-header-toolbar { margin-left: 0 !important; width: 100% !important; justify-content: space-between !important; }
-                            .fi-ta-content { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+                            
+                            /* Transform Filament Table Rows to Mobile Cards */
+                            .fi-ta-table { display: block !important; width: 100% !important; }
+                            .fi-ta-table > thead { display: none !important; }
+                            .fi-ta-table > tbody { display: flex !important; flex-direction: column !important; gap: 0.85rem !important; padding: 0.75rem 0.5rem !important; }
+                            .fi-ta-table > tbody > tr {
+                                display: flex !important;
+                                flex-direction: column !important;
+                                background: #ffffff !important;
+                                border: 1.5px solid #cbd5e1 !important;
+                                border-radius: 1rem !important;
+                                padding: 1rem !important;
+                                box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.06) !important;
+                            }
+                            .fi-ta-table > tbody > tr > td {
+                                display: flex !important;
+                                align-items: center !important;
+                                justify-content: space-between !important;
+                                padding: 0.45rem 0 !important;
+                                border-bottom: 1px dashed #e2e8f0 !important;
+                                font-size: 0.85rem !important;
+                            }
+                            .fi-ta-table > tbody > tr > td:last-child {
+                                border-bottom: none !important;
+                                padding-top: 0.75rem !important;
+                                justify-content: flex-end !important;
+                                gap: 0.5rem !important;
+                            }
                         }
                     </style>
                 ')
