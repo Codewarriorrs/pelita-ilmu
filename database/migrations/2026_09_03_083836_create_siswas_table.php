@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    public $withinTransaction = false;
     /**
      * Run the migrations.
      */
@@ -15,10 +16,12 @@ return new class extends Migration
             $table->id();
             $table->string('nama_lengkap');
             $table->string('asal_sekolah')->nullable();
+            $table->string('kelas')->nullable();
             $table->string('kategori_kelas')->nullable(); // contoh: SD, SMP, SMA
-            $table->enum('tipe_belajar', ['PRIVAT', 'KELOMPOK'])->default('KELOMPOK');
-            $table->enum('tipe_jatuh_tempo', ['AWAL BULAN', 'AKHIR BULAN'])->default('AWAL BULAN');
-            $table->enum('status_siswa', ['CALON', 'AKTIF', 'NONAKTIF'])->default('CALON');
+            $table->json('pilihan_mapel')->nullable();
+            $table->string('tipe_belajar', 20)->default('KELOMPOK');
+            $table->string('tipe_jatuh_tempo', 20)->default('AWAL BULAN');
+            $table->string('status_siswa', 20)->default('CALON');
             $table->dateTime('tanggal_daftar')->useCurrent();
             $table->date('tanggal_lahir')->nullable();
             $table->text('alamat_rumah')->nullable();

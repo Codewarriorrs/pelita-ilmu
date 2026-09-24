@@ -291,7 +291,7 @@
                         <div>
                             <div class="flex items-center justify-between mb-1.5">
                                 <label for="nomor_telepon_siswa" class="block text-xs sm:text-sm font-bold text-void font-subtitle">
-                                    Nomor Telepon Siswa
+                                    Nomor WhatsApp / HP Siswa
                                 </label>
                                 <span class="text-[11px] text-stone-500 bg-stone-100 px-2 py-0.5 rounded-md border border-black font-body">Opsional</span>
                             </div>
@@ -344,6 +344,7 @@
                         <!-- ANTI-METAL STYLED SUBMIT BUTTON -->
                         <button
                             type="submit"
+                            id="btn-submit-pendaftaran"
                             class="group/btn relative inline-flex h-12 min-w-[280px] items-center justify-center overflow-hidden rounded-xl bg-[#193836] active:scale-[0.98] transition-transform cursor-pointer border-2 border-black shadow-md"
                         >
                             <span class="relative z-20 flex items-center justify-center font-headline font-extrabold text-sm text-white group-hover/btn:text-[#193836] pl-14 pr-6 transition-colors duration-300">
@@ -377,7 +378,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT DINAMIS CHECKBOX MATA PELAJARAN -->
+    <!-- JAVASCRIPT DINAMIS CHECKBOX MATA PELAJARAN DENGAN EXACT VALIDATION -->
     <script>
         const smpMapelList = ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'IPA Fisika', 'IPA Biologi', 'IPS'];
         const smaMapelList = ['Matematika Wajib / Lanjut', 'Fisika / Ekonomi', 'Kimia / Geografi', 'Biologi / Sosiologi', 'Bahasa Inggris', 'Informatika / Sejarah'];
@@ -411,10 +412,10 @@
             'SMA UTBK+Reg 4': smaMapelList.concat(['Penalaran UTBK']),
         };
 
-        function getMapelLimit(program) {
-            const match = program.match(/(\d+)\s*Mapel/i) || program.match(/UTBK\s*(\d+)/i);
+        function getExactMapelRequired(program) {
+            const match = program.match(/(\d+)\s*Mapel/i) || program.match(/UTBK\s*(\d+)/i) || program.match(/TKA\s*(\d+)/i);
             if (match) return parseInt(match[1]);
-            return 99;
+            return null; // Otomatis/bebas untuk TK/SD
         }
 
         function updateMapelOptions() {
@@ -434,53 +435,76 @@
             container.classList.remove('hidden');
             checkboxesDiv.innerHTML = '';
 
-            const list = mapelData[selectedProgram] || mapelData['SD'];
-            const maxLimit = getMapelLimit(selectedProgram);
+            const list = mapelData[selectedProgram] || mapelData['SD Kelas 1-5'];
+            const exactCount = getExactMapelRequired(selectedProgram);
 
-            if (maxLimit < 99) {
-                infoText.textContent = `Pilih maksimal ${maxLimit} mata pelajaran favorit sesuai paket ${selectedProgram}:`;
+            if (exactCount !== null) {
+                infoText.innerHTML = `Anda memilih <strong>${selectedProgram}</strong>. Wajib mencentang <span class="text-rose-600 font-bold underline">tepat ${exactCount} mata pelajaran</span>:`;
             } else {
-                infoText.textContent = `Pilih mata pelajaran yang ingin difokuskan:`;
+                infoText.textContent = `Pilihan mata pelajaran fokus untuk program ${selectedProgram}:`;
             }
 
             list.forEach((mapel) => {
                 const label = document.createElement('label');
                 label.className = 'flex items-center gap-2.5 p-3.5 rounded-xl border-2 border-black bg-stone-50 hover:bg-white hover:border-primary cursor-pointer text-xs font-semibold text-void transition-all shadow-sm font-body';
                 label.innerHTML = `
-                    <input type="checkbox" name="mata_pelajaran[]" value="${mapel}" onchange="handleMapelCheck(this, ${maxLimit})" class="mapel-cb h-4 w-4 text-primary rounded border-black focus:ring-0">
+                    <input type="checkbox" name="mata_pelajaran[]" value="${mapel}" onchange="handleMapelCheck(this, ${exactCount})" class="mapel-cb h-4 w-4 text-primary rounded border-black focus:ring-0">
                     <span>${mapel}</span>
                 `;
                 checkboxesDiv.appendChild(label);
             });
 
-            updateMapelBadge(maxLimit);
+            updateMapelBadge(exactCount);
         }
 
-        function handleMapelCheck(checkbox, maxLimit) {
+        function handleMapelCheck(checkbox, exactCount) {
             const checkedCount = document.querySelectorAll('.mapel-cb:checked').length;
-            if (maxLimit < 99 && checkedCount > maxLimit) {
+            if (exactCount !== null && checkedCount > exactCount) {
                 checkbox.checked = false;
-                alert(`Batas maksimal untuk ${document.getElementById('minat_program').value} adalah ${maxLimit} mata pelajaran.`);
+                alert(`Perhatian: Anda memilih paket ${document.getElementById('minat_program').value}, kuota maksimal hanya ${exactCount} mata pelajaran. Hapus centang mapel lain terlebih dahulu jika ingin mengganti pilihan.`);
             }
-            updateMapelBadge(maxLimit);
+            updateMapelBadge(exactCount);
         }
 
-        function updateMapelBadge(maxLimit) {
+        function updateMapelBadge(exactCount) {
             const checkedCount = document.querySelectorAll('.mapel-cb:checked').length;
             const badge = document.getElementById('mapel-limit-badge');
             if (!badge) return;
 
-            if (maxLimit < 99) {
-                badge.textContent = `Terpilih: ${checkedCount} / ${maxLimit}`;
-                if (checkedCount === maxLimit) {
-                    badge.className = 'bg-primary text-white text-[11px] font-bold px-3 py-1 rounded-full border border-black shadow-sm font-body';
+            if (exactCount !== null) {
+                if (checkedCount === exactCount) {
+                    badge.textContent = `Terpilih: ${checkedCount} / ${exactCount} (Sesuai Kuota Paket ✓)`;
+                    badge.className = 'bg-emerald-600 text-white text-[11px] font-bold px-3.5 py-1 rounded-full border border-black shadow-sm font-body animate-pulse';
                 } else {
-                    badge.className = 'bg-amber-500 text-white text-[11px] font-bold px-3 py-1 rounded-full border border-black shadow-sm font-body';
+                    const sisa = exactCount - checkedCount;
+                    badge.textContent = `Terpilih: ${checkedCount} / ${exactCount} (Kurang ${sisa} Mapel)`;
+                    badge.className = 'bg-amber-500 text-white text-[11px] font-bold px-3.5 py-1 rounded-full border border-black shadow-sm font-body';
                 }
             } else {
                 badge.textContent = `Terpilih: ${checkedCount} Mapel`;
-                badge.className = 'bg-primary text-white text-[11px] font-bold px-3 py-1 rounded-full border border-black shadow-sm font-body';
+                badge.className = 'bg-primary text-white text-[11px] font-bold px-3.5 py-1 rounded-full border border-black shadow-sm font-body';
             }
         }
+
+        // Form Submit Exact Match Guard
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[action*="daftar"]');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const programSelect = document.getElementById('minat_program');
+                    if (!programSelect) return;
+
+                    const exactCount = getExactMapelRequired(programSelect.value);
+                    if (exactCount !== null) {
+                        const checkedCount = document.querySelectorAll('.mapel-cb:checked').length;
+                        if (checkedCount !== exactCount) {
+                            e.preventDefault();
+                            alert(`Pendaftaran belum dapat dikirim:\nUntuk paket "${programSelect.value}", Anda wajib memilih tepat ${exactCount} mata pelajaran.\n\nSaat ini baru terpilih: ${checkedCount} mapel. Mohon lengkapi pilihan mapel terlebih dahulu.`);
+                            document.getElementById('mapel-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                });
+            }
+        });
     </script>
 @endsection

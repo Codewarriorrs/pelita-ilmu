@@ -90,11 +90,13 @@
                 font-family: 'Instrument Sans', sans-serif;
                 background-color: #F8FAFC;
                 color: #1E293B;
+                letter-spacing: 0.025em; /* Merenggangkan jarak antar huruf secara global */
+                line-height: 1.65;       /* Merenggangkan jarak antar baris kalimat */
             }
 
-            .font-headline, .font-heading { font-family: 'Fredoka', sans-serif; }
-            .font-subtitle { font-family: 'Nunito', sans-serif; font-weight: 700; }
-            .font-body     { font-family: 'Poppins', sans-serif; }
+            .font-headline, .font-heading { font-family: 'Fredoka', sans-serif; letter-spacing: 0.03em; }
+            .font-subtitle { font-family: 'Nunito', sans-serif; font-weight: 700; letter-spacing: 0.02em; }
+            .font-body     { font-family: 'Poppins', sans-serif; letter-spacing: 0.025em; }
 
             /* Keyframe Animations */
             @keyframes bd-dot-wave {
@@ -129,12 +131,55 @@
                 transform: translateY(0) scale(1);
                 pointer-events: auto;
             }
+
+            /* Lightweight Pure CSS Preloader */
+            #page-preloader {
+                position: fixed;
+                inset: 0;
+                z-index: 99999;
+                background-color: #193836;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+            }
+            #page-preloader.fade-out {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+            }
+            .loader-spinner {
+                width: 54px;
+                height: 54px;
+                border: 3.5px solid rgba(255, 229, 0, 0.2);
+                border-top-color: #FFE500;
+                border-radius: 50%;
+                animation: loader-spin 0.8s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+            }
+            @keyframes loader-spin {
+                to { transform: rotate(360deg); }
+            }
         </style>
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
     </head>
-    <body class="bg-canvas text-void min-h-screen flex flex-col antialiased selection:bg-primary selection:text-white pb-20 md:pb-0">
+    <body class="bg-canvas text-void min-h-screen flex flex-col antialiased selection:bg-primary selection:text-white">
+
+        <!-- LIGHTWEIGHT PRELOADER -->
+        <div id="page-preloader">
+            <div class="relative flex items-center justify-center mb-4">
+                <div class="loader-spinner"></div>
+                <div class="absolute inset-0 flex items-center justify-center animate-pulse text-2xl">
+                    💡
+                </div>
+            </div>
+            <div class="text-center">
+                <p class="font-headline font-black text-highlight text-sm tracking-wider uppercase">Pelita Ilmu</p>
+                <p class="font-subtitle text-[11px] text-white/70 font-medium">Bimbingan Belajar</p>
+            </div>
+        </div>
 
         @if (! View::hasSection('hide_navbar'))
             @include('partials.navbar')
@@ -437,6 +482,21 @@
             }
 
             (function() {
+                // Preloader dismiss
+                function hidePreloader() {
+                    const preloader = document.getElementById('page-preloader');
+                    if (preloader && !preloader.classList.contains('fade-out')) {
+                        preloader.classList.add('fade-out');
+                        setTimeout(() => { preloader.style.display = 'none'; }, 450);
+                    }
+                }
+                if (document.readyState === 'complete') {
+                    hidePreloader();
+                } else {
+                    window.addEventListener('load', hidePreloader);
+                }
+                setTimeout(hidePreloader, 1000); // safety fallback
+
                 const navbarCta = document.getElementById('navbar-cta');
                 const heroCta   = document.getElementById('hero-cta');
 

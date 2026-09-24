@@ -94,8 +94,8 @@ class RekapPresensiMatrix extends Page
             }
         }
 
-        // Fetch students
-        $siswaQuery = Siswa::query();
+        // Fetch active students only
+        $siswaQuery = Siswa::query()->where('status_siswa', 'AKTIF');
         if ($this->kelompokId) {
             $siswaQuery->whereHas('kelompok', function ($q) {
                 $q->where('kelompok.id', $this->kelompokId);

@@ -32,24 +32,35 @@ class RegistrationController extends Controller
     {
         $validated = $request->validated();
 
-        $mapelList = isset($validated['mata_pelajaran']) && is_array($validated['mata_pelajaran']) 
-            ? ' (Mapel: ' . implode(', ', $validated['mata_pelajaran']) . ')' 
+        $mapels = $validated['mata_pelajaran'] ?? [];
+        $mapelList = !empty($mapels) && is_array($mapels) 
+            ? ' (Mapel: ' . implode(', ', $mapels) . ')' 
             : '';
 
         $kategori = $validated['kategori_kelas'] ?? 'Reguler';
         $kelas = $validated['kelas'] ?? $validated['tingkat_kelas'] ?? '';
-        $programDetail = ($kelas ? '[' . $kelas . '] ' : '') . $kategori . ' - ' . $validated['minat_program'] . $mapelList;
+        $program = $validated['minat_program'] ?? '';
+        $programDetail = ($kelas ? '[' . $kelas . '] ' : '') . $kategori . ' - ' . $program . $mapelList;
 
         Pendaftaran::create([
             'nama_lengkap' => $validated['nama_lengkap'],
-            'asal_sekolah' => $validated['asal_sekolah'],
+            'asal_sekolah' => $validated['asal_sekolah'] ?? null,
+            'kelas' => $kelas,
+            'kategori_kelas' => $kategori,
+            'program_belajar' => $program,
+            'pilihan_mapel' => $mapels,
+            'tanggal_lahir' => $validated['tanggal_lahir'] ?? null,
+            'nama_ortu' => $validated['nama_ortu'] ?? null,
+            'no_telp_ortu' => $validated['no_telp_ortu'] ?? null,
+            'no_telp_siswa' => $validated['no_telp_siswa'] ?? null,
+            'alamat_rumah' => $validated['alamat_rumah'] ?? null,
             'minat_program' => $programDetail,
-            'nomor_wa' => $validated['no_telp_ortu'],
+            'nomor_wa' => $validated['no_telp_ortu'] ?? null,
             'status_tindak_lanjut' => 'BARU',
             'tanggal_masuk' => now(),
         ]);
 
         return redirect()->route('pendaftaran')
-            ->with('success', 'Terima kasih! Data pendaftaran ananda ' . e($validated['nama_lengkap']) . ' telah berhasil diterima. Tim Bimbel Pelita Ilmu akan menghubungi WhatsApp orang tua (' . e($validated['no_telp_ortu']) . ') untuk konfirmasi jadwal dan rincian biaya.');
+            ->with('success', 'Terima kasih! Data pendaftaran ananda ' . e($validated['nama_lengkap']) . ' telah berhasil diterima. Tim Bimbel Pelita Ilmu akan segera menghubungi WhatsApp orang tua (' . e($validated['no_telp_ortu']) . ') untuk konfirmasi jadwal dan rincian biaya.');
     }
 }

@@ -14,6 +14,15 @@ class Pendaftaran extends Model
     protected $fillable = [
         'nama_lengkap',
         'asal_sekolah',
+        'kelas',
+        'kategori_kelas',
+        'program_belajar',
+        'pilihan_mapel',
+        'tanggal_lahir',
+        'nama_ortu',
+        'no_telp_ortu',
+        'no_telp_siswa',
+        'alamat_rumah',
         'minat_program',
         'nomor_wa',
         'status_tindak_lanjut',
@@ -21,6 +30,8 @@ class Pendaftaran extends Model
     ];
 
     protected $casts = [
+        'tanggal_lahir' => 'date',
         'tanggal_masuk' => 'datetime',
+        'pilihan_mapel' => 'array',
     ];
 }

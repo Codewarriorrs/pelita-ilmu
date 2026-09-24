@@ -16,7 +16,9 @@ class Siswa extends Model
     protected $fillable = [
         'nama_lengkap',
         'asal_sekolah',
+        'kelas',
         'kategori_kelas',
+        'pilihan_mapel',
         'tipe_belajar',
         'tipe_jatuh_tempo',
         'status_siswa',
@@ -32,6 +34,7 @@ class Siswa extends Model
     protected $casts = [
         'tanggal_daftar' => 'date',
         'tanggal_lahir' => 'date',
+        'pilihan_mapel' => 'array',
         'biaya_bulanan' => 'decimal:2',
     ];
 

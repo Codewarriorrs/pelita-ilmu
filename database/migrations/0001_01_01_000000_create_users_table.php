@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    public $withinTransaction = false;
+
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
@@ -14,7 +16,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['ADMIN', 'TENTOR'])->default('TENTOR');
+            $table->string('role', 20)->default('TENTOR');
             $table->dateTime('tanggal_daftar')->useCurrent();
             $table->rememberToken();
             $table->timestamps();

@@ -72,6 +72,29 @@ class RegistrationRequest extends FormRequest
     }
 
     /**
+     * Custom validation hook untuk memastikan jumlah mapel PERSIS sesuai paket.
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $program = $this->input('minat_program', '');
+            $mapels = $this->input('mata_pelajaran', []);
+
+            if (preg_match('/(\d+)\s*Mapel/i', $program, $match) || preg_match('/UTBK\s*(\d+)/i', $program, $match)) {
+                $requiredCount = (int) $match[1];
+                $actualCount = is_array($mapels) ? count($mapels) : 0;
+
+                if ($actualCount !== $requiredCount) {
+                    $validator->errors()->add(
+                        'mata_pelajaran',
+                        "Untuk pilihan paket {$program}, Anda wajib memilih tepat {$requiredCount} mata pelajaran (saat ini terpilih: {$actualCount})."
+                    );
+                }
+            }
+        });
+    }
+
+    /**
      * Pesan validasi dalam bahasa Indonesia.
      */
     public function messages(): array

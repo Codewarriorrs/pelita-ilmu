@@ -37,11 +37,14 @@ class SiswaResource extends Resource
                     ->label('Nama Lengkap')
                     ->required()
                     ->maxLength(255),
+                TextInput::make('kelas')
+                    ->label('Kelas Siswa')
+                    ->placeholder('Contoh: 8 SMP / 5 SD / 10'),
                 TextInput::make('asal_sekolah')
                     ->label('Asal Sekolah'),
                 TextInput::make('kategori_kelas')
-                    ->label('Kategori Kelas')
-                    ->placeholder('Contoh: 10 SMA / 9 SMP'),
+                    ->label('Program / Jenjang')
+                    ->placeholder('Contoh: Reguler / SMP 3 Mapel'),
                 Select::make('tipe_belajar')
                     ->label('Tipe Belajar')
                     ->options([
@@ -65,20 +68,20 @@ class SiswaResource extends Resource
                         'AKTIF' => 'Aktif',
                         'NONAKTIF' => 'Nonaktif',
                     ])
-                    ->default('CALON')
+                    ->default('AKTIF')
                     ->required(),
                 DatePicker::make('tanggal_lahir')
                     ->label('Tanggal Lahir'),
-                TextInput::make('no_telp_siswa')
-                    ->label('No. Telepon Siswa')
-                    ->tel(),
                 TextInput::make('nama_ortu')
                     ->label('Nama Orang Tua'),
                 TextInput::make('no_telp_ortu')
-                    ->label('No. Telepon Orang Tua')
+                    ->label('Nomor WhatsApp Orang Tua')
+                    ->tel(),
+                TextInput::make('no_telp_siswa')
+                    ->label('Nomor WhatsApp / HP Siswa')
                     ->tel(),
                 TextInput::make('biaya_bulanan')
-                    ->label('Biaya Bulanan')
+                    ->label('Biaya Bulanan (SPP)')
                     ->numeric()
                     ->prefix('Rp')
                     ->default(0),
@@ -91,16 +94,22 @@ class SiswaResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultSort('nama_lengkap', 'asc')
+            ->defaultSort('tanggal_daftar', 'desc')
             ->columns([
                 TextColumn::make('nama_lengkap')
-                    ->label('Nama')
+                    ->label('Nama Siswa')
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
-                TextColumn::make('kategori_kelas')
+                TextColumn::make('kelas')
                     ->label('Kelas')
+                    ->badge()
+                    ->color('primary')
                     ->sortable(),
+                TextColumn::make('kategori_kelas')
+                    ->label('Program')
+                    ->sortable()
+                    ->limit(25),
                 TextColumn::make('tipe_belajar')
                     ->label('Tipe'),
                 TextColumn::make('status_siswa')
@@ -112,8 +121,9 @@ class SiswaResource extends Resource
                         default => $state,
                     })
                     ->weight('extrabold'),
-                TextColumn::make('no_telp_siswa')
-                    ->label('No. WhatsApp'),
+                TextColumn::make('no_telp_ortu')
+                    ->label('WhatsApp Ortu')
+                    ->icon('heroicon-m-phone'),
                 TextColumn::make('biaya_bulanan')
                     ->label('Biaya/Bln')
                     ->money('IDR', locale: 'id')
