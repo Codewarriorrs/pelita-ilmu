@@ -13,14 +13,22 @@ RUN sed -i 's|try_files \$uri \$uri/ =404;|try_files \$uri \$uri/ /index.php?\$q
 RUN sed -i 's|root /var/www/html;|root /var/www/html/public;|g' /etc/nginx/sites-enabled/default.conf 2>/dev/null || true
 RUN sed -i 's|expires           5d;|try_files $uri /index.php?$query_string;\n                expires           5d;|g' /etc/nginx/sites-enabled/default.conf 2>/dev/null || true
 
-COPY . .
+WORKDIR /var/www/html
 
-# Make startup scripts executable (richarvey/nginx-php-fpm picks these up via RUN_SCRIPTS=1)
-COPY scripts/ /var/www/html/scripts/
-RUN chmod +x /var/www/html/scripts/*.sh
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+COPY . .
 
 # Salin hasil build asset dari tahap 1 ke folder public
 COPY --from=build-assets /app/public/build /var/www/html/public/build
+
+# Install PHP dependencies saat build agar vendor/autoload.php sudah tersedia di dalam image
+RUN composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+
+# Make startup scripts executable & fix CRLF
+COPY scripts/ /var/www/html/scripts/
+RUN sed -i 's/\r$//' /var/www/html/scripts/*.sh && chmod +x /var/www/html/scripts/*.sh
+RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache || true
 
 EXPOSE 80
 
@@ -31,5 +39,6 @@ ENV REAL_IP_HEADER=1
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 ENV LOG_CHANNEL=stderr
+ENV SKIP_COMPOSER=1
 
 CMD ["/start.sh"]
