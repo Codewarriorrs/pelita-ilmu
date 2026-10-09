@@ -157,16 +157,32 @@ class DetailPresensiResource extends Resource
             ->filtersFormColumns(3)
             ->actions([
                 EditAction::make()->iconButton(),
-                DeleteAction::make()->iconButton(),
+                DeleteAction::make()->iconButton()->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->visible(fn () => auth()->user()?->isAdmin() ?? true),
                 ]),
             ])
             ->emptyStateHeading('Belum Ada Rekapitulasi Presensi')
             ->emptyStateDescription('Presensi yang diisi tentor atau admin akan tercatat otomatis di sini.')
             ->emptyStateIcon('heroicon-o-clipboard-document-check');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
+        if ($user && $user->isTentor()) {
+            $query->whereHas('jadwal.kelompok', function (Builder $q) use ($user) {
+                $q->where('tentor_id', $user->id);
+            });
+        }
+
+        return $query;
     }
 
     public static function getRelations(): array

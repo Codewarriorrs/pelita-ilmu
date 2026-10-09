@@ -5,7 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Widgets\JadwalHariIniWidget;
 use App\Filament\Widgets\SiswaJatuhTempoWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
-use Filament\Http\Middleware\Authenticate;
+use App\Http\Middleware\FilamentAuthenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -29,7 +29,6 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
             ->brandName('Pelita Ilmu Bimbel')
             ->brandLogo(asset('images/logo-bimbel.png'))
             ->brandLogoHeight('2.5rem')
@@ -270,7 +269,7 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
-                Authenticate::class,
+                FilamentAuthenticate::class,
             ])
             ->plugin(FilamentSpatieRolesPermissionsPlugin::make());
     }

@@ -10,6 +10,7 @@ Route::get('/daftar', [RegistrationController::class, 'create'])->name('pendafta
 Route::post('/daftar', [RegistrationController::class, 'store'])->name('daftar.store');
 
 // Auth Login Routes (Custom Pelita Ilmu Style)
+Route::redirect('/admin/login', '/login');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

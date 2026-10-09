@@ -55,10 +55,14 @@ class Siswa extends Model
             ->withTimestamps();
     }
 
+    /**
+     * Alias relasi ke Kelompok belajar (plural).
+     */
     public function kelompoks(): BelongsToMany
     {
         return $this->kelompok();
     }
+
     public function detailPresensi(): HasMany
     {
         return $this->hasMany(DetailPresensi::class, 'siswa_id');

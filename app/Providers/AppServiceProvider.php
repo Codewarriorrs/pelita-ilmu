@@ -34,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(\App\Models\Pendaftaran::class, \App\Policies\PendaftaranPolicy::class);
         Gate::policy(\App\Models\MataPelajaran::class, \App\Policies\MataPelajaranPolicy::class);
         Gate::policy(\App\Models\User::class, \App\Policies\UserPolicy::class);
+        Gate::policy(\App\Models\JadwalKelompok::class, \App\Policies\JadwalKelompokPolicy::class);
+        Gate::policy(\App\Models\DetailPresensi::class, \App\Policies\DetailPresensiPolicy::class);
 
         if (app()->environment('production')) {
             URL::forceScheme('https');

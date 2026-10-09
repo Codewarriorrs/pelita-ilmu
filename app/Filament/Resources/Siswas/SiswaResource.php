@@ -171,9 +171,25 @@ class SiswaResource extends Resource
             ])
             ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->visible(fn () => auth()->user()?->isAdmin() ?? true),
                 ]),
             ])->emptyStateHeading('Belum Ada Data Siswa');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
+        if ($user && $user->isTentor()) {
+            $query->whereHas('kelompok', function (Builder $q) use ($user) {
+                $q->where('tentor_id', $user->id);
+            });
+        }
+
+        return $query;
     }
 
     public static function getRelations(): array

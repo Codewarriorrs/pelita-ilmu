@@ -203,11 +203,11 @@ class JadwalKelompokResource extends Resource
                     }),
 
                 EditAction::make()->iconButton(),
-                DeleteAction::make()->iconButton(),
+                DeleteAction::make()->iconButton()->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->visible(fn () => auth()->user()?->isAdmin() ?? true),
                 ]),
             ]);
     }
