@@ -8,8 +8,8 @@ use App\Models\Kelompok;
 use App\Models\MataPelajaran;
 use App\Models\Siswa;
 use Filament\Pages\Page;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class RekapPresensiMatrix extends Page
@@ -22,8 +22,26 @@ class RekapPresensiMatrix extends Page
 
     public int $bulan;
     public int $tahun;
+    public ?string $jenjang = 'ALL';
     public ?int $kelompokId = null;
     public string $searchSiswa = '';
+
+    public array $jenjangOptions = [
+        'ALL'  => 'Semua Jenjang',
+        'TK'   => 'TK / PAUD',
+        'SD'   => 'SD (Kelas 1–6)',
+        'SMP'  => 'SMP (Kelas 7–9)',
+        'SMA'  => 'SMA / SMK (Kelas 10–12)',
+        'UTBK' => 'Intensif UTBK / SNBT',
+    ];
+
+    public static function canAccess(): bool
+    {
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
+        return $user && ($user->isAdmin() || $user->isTentor());
+    }
 
     public function mount(): void
     {
@@ -31,15 +49,100 @@ class RekapPresensiMatrix extends Page
         $this->tahun = (int) date('Y');
     }
 
+    public function updatedJenjang(): void
+    {
+        $this->kelompokId = null;
+    }
+
+    protected function filterKelompokByJenjang(Builder $query, string $jenjang): void
+    {
+        if ($jenjang === 'TK') {
+            $query->where(function ($q) {
+                $q->where('nama_kelompok', 'ILIKE', '%TK%')
+                  ->orWhere('nama_kelompok', 'ILIKE', '%PAUD%');
+            });
+        } elseif ($jenjang === 'SD') {
+            $query->where('nama_kelompok', 'ILIKE', '%SD%');
+        } elseif ($jenjang === 'SMP') {
+            $query->where('nama_kelompok', 'ILIKE', '%SMP%');
+        } elseif ($jenjang === 'SMA') {
+            $query->where(function ($q) {
+                $q->where('nama_kelompok', 'ILIKE', '%SMA%')
+                  ->orWhere('nama_kelompok', 'ILIKE', '%SMK%');
+            });
+        } elseif ($jenjang === 'UTBK') {
+            $query->where(function ($q) {
+                $q->where('nama_kelompok', 'ILIKE', '%UTBK%')
+                  ->orWhere('nama_kelompok', 'ILIKE', '%SNBT%')
+                  ->orWhere('nama_kelompok', 'ILIKE', '%TPA%');
+            });
+        }
+    }
+
+    protected function filterSiswaByJenjang(Builder $query, string $jenjang): void
+    {
+        $query->where(function ($q) use ($jenjang) {
+            if ($jenjang === 'TK') {
+                $q->where('kelas', 'ILIKE', '%TK%')
+                  ->orWhere('kategori_kelas', 'ILIKE', '%TK%')
+                  ->orWhere('kategori_kelas', 'ILIKE', '%PAUD%');
+            } elseif ($jenjang === 'SD') {
+                $q->where('kelas', 'ILIKE', '%SD%')
+                  ->orWhere('kategori_kelas', 'ILIKE', '%SD%');
+            } elseif ($jenjang === 'SMP') {
+                $q->where('kelas', 'ILIKE', '%SMP%')
+                  ->orWhere('kategori_kelas', 'ILIKE', '%SMP%');
+            } elseif ($jenjang === 'SMA') {
+                $q->where('kelas', 'ILIKE', '%SMA%')
+                  ->orWhere('kategori_kelas', 'ILIKE', '%SMA%')
+                  ->orWhere('kelas', 'ILIKE', '%SMK%')
+                  ->orWhere('kategori_kelas', 'ILIKE', '%SMK%');
+            } elseif ($jenjang === 'UTBK') {
+                $q->where('kelas', 'ILIKE', '%UTBK%')
+                  ->orWhere('kategori_kelas', 'ILIKE', '%UTBK%')
+                  ->orWhere('kategori_kelas', 'ILIKE', '%SNBT%')
+                  ->orWhere('kategori_kelas', 'ILIKE', '%TPA%');
+            }
+
+            $q->orWhereHas('kelompok', function ($kq) use ($jenjang) {
+                $this->filterKelompokByJenjang($kq, $jenjang);
+            });
+        });
+    }
+
     public function getMatrixData(): array
     {
         $bulan = $this->bulan;
         $tahun = $this->tahun;
 
-        // Fetch subjects
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+        $isTentor = $user && $user->isTentor();
+
+        // 1. Dropdown kelompoks (dependent pada Jenjang dan hak akses Tentor)
+        $allKelompoksQuery = Kelompok::query();
+        if ($isTentor) {
+            $allKelompoksQuery->where('tentor_id', $user->id);
+        }
+        if ($this->jenjang && $this->jenjang !== 'ALL') {
+            $this->filterKelompokByJenjang($allKelompoksQuery, $this->jenjang);
+        }
+        $allKelompoks = $allKelompoksQuery->orderBy('nama_kelompok')->get();
+
+        // Validasi jika kelompokId terpilih bukan anggota kelompok yang tersedia
+        if ($this->kelompokId && !$allKelompoks->pluck('id')->contains($this->kelompokId)) {
+            $this->kelompokId = null;
+        }
+
+        // 2. Fetch kelompoks untuk matriks kolom
         $kelompokQuery = Kelompok::with('mapel');
+        if ($isTentor) {
+            $kelompokQuery->where('tentor_id', $user->id);
+        }
         if ($this->kelompokId) {
             $kelompokQuery->where('id', $this->kelompokId);
+        } elseif ($this->jenjang && $this->jenjang !== 'ALL') {
+            $this->filterKelompokByJenjang($kelompokQuery, $this->jenjang);
         }
         $kelompoks = $kelompokQuery->get();
 
@@ -56,8 +159,8 @@ class RekapPresensiMatrix extends Page
             }
         }
 
-        // Fallback: if no mapels in kelompoks, get all mapels
-        if (empty($mapelList)) {
+        // Fallback: if no mapels in kelompoks (hanya untuk Admin bila belum ada filter)
+        if (empty($mapelList) && !$isTentor && ($this->jenjang === 'ALL' || empty($this->jenjang))) {
             $allMapels = MataPelajaran::all();
             foreach ($allMapels as $m) {
                 $mapelList[$m->id] = [
@@ -68,18 +171,28 @@ class RekapPresensiMatrix extends Page
             }
         }
 
-        // Fetch sessions (JadwalKelompok) in selected month & year
+        // 3. Fetch sessions (JadwalKelompok) in selected month & year
         $jadwalQuery = JadwalKelompok::with('kelompok')
             ->whereRaw('EXTRACT(MONTH FROM tanggal_sesi) = ?', [$bulan])
             ->whereRaw('EXTRACT(YEAR FROM tanggal_sesi) = ?', [$tahun]);
 
+        if ($isTentor) {
+            $jadwalQuery->whereHas('kelompok', function ($q) use ($user) {
+                $q->where('tentor_id', $user->id);
+            });
+        }
+
         if ($this->kelompokId) {
             $jadwalQuery->where('kelompok_id', $this->kelompokId);
+        } elseif ($this->jenjang && $this->jenjang !== 'ALL') {
+            $jadwalQuery->whereHas('kelompok', function ($q) {
+                $this->filterKelompokByJenjang($q, $this->jenjang);
+            });
         }
 
         $jadwals = $jadwalQuery->orderBy('tanggal_sesi', 'asc')->get();
 
-        // Group sessions by mapel_id (or kelompok_id)
+        // Group sessions by mapel_id (up to 4 sessions per mapel)
         $sessionsByMapel = [];
         foreach ($mapelList as $mapelId => $mInfo) {
             $sessionsByMapel[$mapelId] = [];
@@ -94,19 +207,29 @@ class RekapPresensiMatrix extends Page
             }
         }
 
-        // Fetch active students only
+        // 4. Fetch active students only
         $siswaQuery = Siswa::query()->where('status_siswa', 'AKTIF');
+
+        if ($isTentor) {
+            $siswaQuery->whereHas('kelompok', function ($q) use ($user) {
+                $q->where('tentor_id', $user->id);
+            });
+        }
+
         if ($this->kelompokId) {
             $siswaQuery->whereHas('kelompok', function ($q) {
                 $q->where('kelompok.id', $this->kelompokId);
             });
+        } elseif ($this->jenjang && $this->jenjang !== 'ALL') {
+            $this->filterSiswaByJenjang($siswaQuery, $this->jenjang);
         }
+
         if (!empty(trim($this->searchSiswa))) {
             $siswaQuery->where('nama_lengkap', 'ILIKE', '%' . trim($this->searchSiswa) . '%');
         }
         $siswas = $siswaQuery->orderBy('nama_lengkap', 'asc')->get();
 
-        // Get all DetailPresensi for fetched jadwals
+        // 5. Get all DetailPresensi for fetched jadwals
         $allJadwalIds = $jadwals->pluck('id')->toArray();
         $presensis = [];
         if (!empty($allJadwalIds)) {
@@ -121,11 +244,11 @@ class RekapPresensiMatrix extends Page
             'sessionsByMapel' => $sessionsByMapel,
             'siswas' => $siswas,
             'presensis' => $presensis,
-            'allKelompoks' => Kelompok::all(),
+            'allKelompoks' => $allKelompoks,
         ];
     }
 
-    public function exportExcel()
+    public function exportExcel(): StreamedResponse
     {
         $matrix = $this->getMatrixData();
         $bulanNama = Carbon::createFromDate($this->tahun, $this->bulan, 1)->translatedFormat('F Y');
@@ -141,75 +264,102 @@ class RekapPresensiMatrix extends Page
         ];
 
         $callback = function () use ($matrix, $bulanNama) {
-            echo '<html><head><meta charset="UTF-8"></head><body>';
-            echo '<table border="1" style="border-collapse:collapse; text-align:center;">';
+            echo '<html><head><meta charset="UTF-8"><style>';
+            echo 'table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; font-size: 11px; }';
+            echo 'th, td { border: 1px solid #cbd5e1; padding: 6px; text-align: center; }';
+            echo 'th { background: #193836; color: #ffffff; }';
+            echo '.th-sub { background: #0f766e; color: #ffffff; font-size: 10px; }';
+            echo '.th-rekap { background: #fef08a; color: #713f12; font-weight: bold; }';
+            echo '.text-left { text-align: left; }';
+            echo '.hadir { background: #16a34a; color: #ffffff; font-weight: bold; }';
+            echo '.sakit { background: #d97706; color: #ffffff; font-weight: bold; }';
+            echo '.izin  { background: #2563eb; color: #ffffff; font-weight: bold; }';
+            echo '.alpa  { background: #dc2626; color: #ffffff; font-weight: bold; }';
+            echo '.rekap-cell { font-weight: bold; font-size: 12px; }';
+            echo '</style></head><body>';
             
-            // Row 1: Title & Month
+            echo '<table border="1">';
+            
+            // Header Row 1: Title, Mapels, and Rekapitulasi
             echo '<tr>';
-            echo '<th style="background:#f3f4f6;">NO</th>';
-            echo '<th style="background:#f3f4f6; text-align:left;">NAMA</th>';
-            echo '<th colspan="' . (count($matrix['mapelList']) * 4) . '" style="background:#dbeafe;">DROPDOWN BULAN: ' . strtoupper($bulanNama) . '</th>';
-            echo '</tr>';
-
-            // Row 2: Mapels (spanning 4 columns each)
-            echo '<tr>';
-            echo '<th style="background:#f3f4f6;"></th>';
-            echo '<th style="background:#f3f4f6;"></th>';
+            echo '<th rowspan="2" style="width: 35px;">NO</th>';
+            echo '<th rowspan="2" style="width: 180px; text-align:left;">NAMA SISWA</th>';
+            echo '<th rowspan="2" style="width: 85px;">KELAS</th>';
+            
             foreach ($matrix['mapelList'] as $m) {
-                echo '<th colspan="4" style="background:#e0e7ff;">' . strtoupper($m['nama']) . '</th>';
+                echo '<th colspan="4" class="th-sub">' . htmlspecialchars(strtoupper($m['nama'])) . '</th>';
             }
+            
+            echo '<th colspan="4" class="th-rekap">REKAPITULASI (' . strtoupper($bulanNama) . ')</th>';
             echo '</tr>';
 
-            // Row 3: Pertemuan 1, 2, 3, 4
+            // Header Row 2: Pertemuan 1..4 per Mapel, and H/I/S/A
             echo '<tr>';
-            echo '<th style="background:#f3f4f6;"></th>';
-            echo '<th style="background:#f3f4f6;"></th>';
-            foreach ($matrix['mapelList'] as $m) {
-                for ($p = 1; $p <= 4; $p++) {
-                    echo '<th style="background:#f1f5f9; width:60px;">' . $p . '</th>';
+            foreach ($matrix['mapelList'] as $mId => $m) {
+                $sessions = $matrix['sessionsByMapel'][$mId] ?? [];
+                for ($p = 0; $p < 4; $p++) {
+                    $jadwal = $sessions[$p] ?? null;
+                    $tglLabel = $jadwal ? Carbon::parse($jadwal->tanggal_sesi)->format('d/m') : '';
+                    echo '<th style="background:#f1f5f9; color:#334155; font-size:10px; width:55px;">P' . ($p + 1) . ($tglLabel ? '<br><span style="font-weight:normal; font-size:9px;">' . $tglLabel . '</span>' : '') . '</th>';
                 }
             }
+            
+            echo '<th style="background:#dcfce7; color:#15803d; width:40px;">H</th>';
+            echo '<th style="background:#dbeafe; color:#1d4ed8; width:40px;">I</th>';
+            echo '<th style="background:#fef3c7; color:#b45309; width:40px;">S</th>';
+            echo '<th style="background:#fee2e2; color:#b91c1c; width:40px;">A</th>';
             echo '</tr>';
 
-            // Rows: Siswa data
+            // Rows: Siswa Data
             $no = 1;
             foreach ($matrix['siswas'] as $s) {
+                $countH = 0;
+                $countI = 0;
+                $countS = 0;
+                $countA = 0;
+
                 echo '<tr>';
                 echo '<td>' . $no++ . '</td>';
-                echo '<td style="text-align:left; padding:0 8px;">' . htmlspecialchars($s->nama_lengkap) . '</td>';
+                echo '<td class="text-left">' . htmlspecialchars($s->nama_lengkap) . '</td>';
+                echo '<td>' . htmlspecialchars($s->kelas ?: ($s->kategori_kelas ?: '-')) . '</td>';
 
                 foreach ($matrix['mapelList'] as $mId => $m) {
                     $sessions = $matrix['sessionsByMapel'][$mId] ?? [];
                     for ($p = 0; $p < 4; $p++) {
                         $jadwal = $sessions[$p] ?? null;
-                        $status = '-';
-                        $bgColor = '#ffffff';
-                        $textColor = '#374151';
+                        $statusText = '-';
+                        $cssClass = '';
 
                         if ($jadwal) {
                             $st = strtolower($matrix['presensis'][$s->id][$jadwal->id] ?? '');
                             if ($st === 'hadir') {
-                                $status = 'Hadir';
-                                $bgColor = '#16a34a'; // Green solid
-                                $textColor = '#ffffff';
+                                $statusText = 'H';
+                                $cssClass = 'class="hadir"';
+                                $countH++;
                             } elseif ($st === 'sakit') {
-                                $status = 'Sakit';
-                                $bgColor = '#d97706'; // Orange solid
-                                $textColor = '#ffffff';
+                                $statusText = 'S';
+                                $cssClass = 'class="sakit"';
+                                $countS++;
                             } elseif ($st === 'izin') {
-                                $status = 'Izin';
-                                $bgColor = '#2563eb'; // Blue solid
-                                $textColor = '#ffffff';
+                                $statusText = 'I';
+                                $cssClass = 'class="izin"';
+                                $countI++;
                             } elseif ($st === 'alpa') {
-                                $status = 'Alpa';
-                                $bgColor = '#dc2626'; // Red solid
-                                $textColor = '#ffffff';
+                                $statusText = 'A';
+                                $cssClass = 'class="alpa"';
+                                $countA++;
                             }
                         }
 
-                        echo '<td style="background:' . $bgColor . '; color:' . $textColor . '; font-weight:bold;">' . $status . '</td>';
+                        echo '<td ' . $cssClass . '>' . $statusText . '</td>';
                     }
                 }
+
+                // Rekapitulasi cells (H, I, S, A)
+                echo '<td class="rekap-cell" style="color:#15803d;">' . $countH . '</td>';
+                echo '<td class="rekap-cell" style="color:#1d4ed8;">' . $countI . '</td>';
+                echo '<td class="rekap-cell" style="color:#b45309;">' . $countS . '</td>';
+                echo '<td class="rekap-cell" style="color:#b91c1c;">' . $countA . '</td>';
                 echo '</tr>';
             }
 

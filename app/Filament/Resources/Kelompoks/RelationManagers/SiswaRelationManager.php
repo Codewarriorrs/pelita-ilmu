@@ -56,11 +56,13 @@ class SiswaRelationManager extends RelationManager
             ->headerActions([
                 AttachAction::make()
                     ->label('Tambah Siswa ke Kelompok Ini')
-                    ->preloadRecordSelect(),
+                    ->preloadRecordSelect()
+                    ->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->actions([
                 DetachAction::make()
-                    ->label('Keluarkan dari Kelompok'),
+                    ->label('Keluarkan dari Kelompok')
+                    ->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->emptyStateHeading('Belum Ada Siswa di Kelompok Ini')
             ->emptyStateDescription('Klik "Tambah Siswa ke Kelompok Ini" untuk mendaftarkan siswa.')

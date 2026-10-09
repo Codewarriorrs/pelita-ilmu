@@ -14,7 +14,15 @@ class SiswaPolicy
 
     public function view(User $user, Siswa $siswa): bool
     {
-        return $user->isAdmin() || $user->isTentor();
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if ($user->isTentor()) {
+            return $siswa->kelompok()->where('tentor_id', $user->id)->exists();
+        }
+
+        return false;
     }
 
     public function create(User $user): bool
