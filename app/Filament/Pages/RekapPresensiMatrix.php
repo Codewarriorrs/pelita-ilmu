@@ -74,10 +74,12 @@ class RekapPresensiMatrix extends Page
             }
         }
 
-        // Fetch sessions (JadwalKelompok) in selected month & year
+        // Fetch sessions (JadwalKelompok) in selected month & year (index-friendly query)
+        $startDate = Carbon::createFromDate($tahun, $bulan, 1)->startOfMonth()->toDateString();
+        $endDate = Carbon::createFromDate($tahun, $bulan, 1)->endOfMonth()->toDateString();
+
         $jadwalQuery = JadwalKelompok::with('kelompok')
-            ->whereRaw('EXTRACT(MONTH FROM tanggal_sesi) = ?', [$bulan])
-            ->whereRaw('EXTRACT(YEAR FROM tanggal_sesi) = ?', [$tahun]);
+            ->whereBetween('tanggal_sesi', [$startDate, $endDate]);
 
         if ($isTentor) {
             $jadwalQuery->whereHas('kelompok', fn ($q) => $q->where('tentor_id', $user->id));

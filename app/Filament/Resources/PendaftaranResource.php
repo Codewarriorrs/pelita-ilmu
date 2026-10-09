@@ -87,6 +87,7 @@ class PendaftaranResource extends Resource
     {
         return $table
             ->defaultSort('tanggal_masuk', 'desc')
+            ->defaultPaginationPageOption(10)
             ->columns([
                 TextColumn::make('nama_lengkap')
                     ->label('Nama Calon Siswa')

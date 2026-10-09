@@ -25,19 +25,22 @@ class ListPembayarans extends ListRecords
     {
         $bulan = $bulan ?? (int) date('m');
         $tahun = $tahun ?? (int) date('Y');
-        $adminId = auth()->id() ?? User::where('role', 'ADMIN')->first()?->id ?? 1;
+        $adminId = auth()->id() ?? User::where('role', 'ADMIN')->value('id') ?? 1;
 
-        $activeSiswa = Siswa::where('status_siswa', 'AKTIF')->get();
-        $createdCount = 0;
+        // Ambil ID siswa yang sudah memiliki data pembayaran di bulan ini dalam 1 query
+        $existingSiswaIds = Pembayaran::where('untuk_bulan', $bulan)
+            ->where('untuk_tahun', $tahun)
+            ->pluck('siswa_id')
+            ->flip()
+            ->all();
+
+        $activeSiswa = Siswa::where('status_siswa', 'AKTIF')->get(['id']);
+        $toInsert = [];
+        $now = now();
 
         foreach ($activeSiswa as $siswa) {
-            $exists = Pembayaran::where('siswa_id', $siswa->id)
-                ->where('untuk_bulan', $bulan)
-                ->where('untuk_tahun', $tahun)
-                ->exists();
-
-            if (!$exists) {
-                Pembayaran::create([
+            if (! isset($existingSiswaIds[$siswa->id])) {
+                $toInsert[] = [
                     'siswa_id' => $siswa->id,
                     'admin_pencatat_id' => $adminId,
                     'biaya_dibayar' => 0,
@@ -46,12 +49,17 @@ class ListPembayarans extends ListRecords
                     'tanggal_bayar' => null,
                     'untuk_bulan' => $bulan,
                     'untuk_tahun' => $tahun,
-                ]);
-                $createdCount++;
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
             }
         }
 
-        return $createdCount;
+        if (! empty($toInsert)) {
+            Pembayaran::insert($toInsert);
+        }
+
+        return count($toInsert);
     }
 
     protected function getHeaderActions(): array

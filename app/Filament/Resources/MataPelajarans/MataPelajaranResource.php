@@ -47,7 +47,7 @@ class MataPelajaranResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            
+            ->defaultPaginationPageOption(10)
             ->columns([
                 TextColumn::make('nama_mapel')
                     ->label('Nama Mata Pelajaran')

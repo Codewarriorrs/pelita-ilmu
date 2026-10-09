@@ -147,6 +147,7 @@ class PembayaranResource extends Resource
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['siswa', 'adminPencatat']))
             ->defaultSort('created_at', 'desc')
+            ->defaultPaginationPageOption(10)
             ->columns([
                 TextColumn::make('siswa.nama_lengkap')
                     ->label('Nama Siswa')
@@ -235,12 +236,12 @@ class PembayaranResource extends Resource
                     ->visible(fn (Pembayaran $record): bool => $record->status_bayar !== 'LUNAS')
                     ->modalHeading(fn (Pembayaran $record): string => 'Konfirmasi Pembayaran: ' . ($record->siswa?->nama_lengkap ?? 'Siswa'))
                     ->modalDescription('Masukkan nominal dan metode pembayaran untuk menyelesaikan tagihan siswa ini.')
-                    ->form([
+                    ->form(fn (Pembayaran $record) => [
                         TextInput::make('biaya_dibayar')
                             ->label('Jumlah SPP Dibayar')
                             ->numeric()
                             ->prefix('Rp')
-                            ->default(fn (Pembayaran $record) => $record->siswa?->biaya_bulanan > 0 ? $record->siswa->biaya_bulanan : 0)
+                            ->default(fn () => $record->siswa?->biaya_bulanan > 0 ? $record->siswa->biaya_bulanan : 0)
                             ->required(),
                         Select::make('metode_bayar')
                             ->label('Metode Pembayaran')

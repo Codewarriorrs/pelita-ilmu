@@ -85,6 +85,7 @@ class KelompokResource extends Resource
     {
         return $table
             ->modifyQueryUsing(fn($query) => $query->with(['mapel', 'tentor']))
+            ->defaultPaginationPageOption(10)
             ->columns([
                 TextColumn::make('nama_kelompok')
                     ->label('Kelompok')
