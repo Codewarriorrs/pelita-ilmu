@@ -12,6 +12,7 @@ FROM richarvey/nginx-php-fpm:3.1.6
 RUN sed -i 's|try_files \$uri \$uri/ =404;|try_files \$uri \$uri/ /index.php?\$query_string;|g' /etc/nginx/sites-enabled/default.conf 2>/dev/null || true
 RUN sed -i 's|root /var/www/html;|root /var/www/html/public;|g' /etc/nginx/sites-enabled/default.conf 2>/dev/null || true
 RUN sed -i 's|expires           5d;|try_files $uri /index.php?$query_string;\n                expires           5d;|g' /etc/nginx/sites-enabled/default.conf 2>/dev/null || true
+RUN echo "gzip on; gzip_vary on; gzip_min_length 1024; gzip_proxied any; gzip_comp_level 6; gzip_types text/plain text/css text/xml application/json application/javascript application/rss+xml application/atom+xml image/svg+xml;" > /etc/nginx/conf.d/gzip.conf
 
 WORKDIR /var/www/html
 

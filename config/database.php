@@ -114,6 +114,9 @@ return [
                 'prefix_indexes' => true,
                 'search_path'    => 'public',
                 'sslmode'        => $sslmode,
+                'options'        => [
+                    \PDO::ATTR_PERSISTENT => env('DB_PERSISTENT', true),
+                ],
             ];
         })(),
 
