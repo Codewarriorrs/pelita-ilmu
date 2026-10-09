@@ -50,8 +50,8 @@ class SiswaJatuhTempoWidget extends BaseWidget
                     })
                     // 2. Filter Dinamis: Hanya ambil yang tanggal jatuh temponya sudah lewat
                     ->where(function (Builder $query) use ($hariIni) {
-                        // AWAL BULAN jatuh tempo setiap tanggal 10
-                        if ($hariIni >= 10) {
+                        // AWAL BULAN jatuh tempo setiap tanggal 7
+                        if ($hariIni >= 7) {
                             $query->orWhere('tipe_jatuh_tempo', 'AWAL BULAN');
                         }
 
@@ -60,8 +60,8 @@ class SiswaJatuhTempoWidget extends BaseWidget
                             $query->orWhere('tipe_jatuh_tempo', 'AKHIR BULAN');
                         }
 
-                        // Jika belum tanggal 10, tampilkan kosong (belum ada yang jatuh tempo bulan ini)
-                        if ($hariIni < 10) {
+                        // Jika belum tanggal 7, tampilkan kosong (belum ada yang jatuh tempo bulan ini)
+                        if ($hariIni < 7) {
                             $query->whereRaw('1 = 0');
                         }
                     })
@@ -84,7 +84,7 @@ class SiswaJatuhTempoWidget extends BaseWidget
                 TextColumn::make('tipe_jatuh_tempo')
                     ->label('Batas Jatuh Tempo')
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'AWAL BULAN' => 'Tgl 10 (Awal Bulan)',
+                        'AWAL BULAN' => 'Tgl 7 (Awal Bulan)',
                         'AKHIR BULAN' => 'Tgl 25 (Akhir Bulan)',
                         default => $state,
                     })

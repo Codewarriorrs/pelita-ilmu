@@ -54,6 +54,11 @@ class Siswa extends Model
         return $this->belongsToMany(Kelompok::class, 'pemetaan_kelompok', 'siswa_id', 'kelompok_id')
             ->withTimestamps();
     }
+
+    public function kelompoks(): BelongsToMany
+    {
+        return $this->kelompok();
+    }
     public function detailPresensi(): HasMany
     {
         return $this->hasMany(DetailPresensi::class, 'siswa_id');

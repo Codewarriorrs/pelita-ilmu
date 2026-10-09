@@ -18,10 +18,16 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class SiswaResource extends Resource
 {
     protected static ?string $model = Siswa::class;
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->isAdmin() ?? true;
+    }
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-academic-cap';
 
@@ -56,8 +62,8 @@ class SiswaResource extends Resource
                 Select::make('tipe_jatuh_tempo')
                     ->label('Tipe Jatuh Tempo')
                     ->options([
-                        'AWAL BULAN' => 'Awal Bulan',
-                        'AKHIR BULAN' => 'Akhir Bulan',
+                        'AWAL BULAN' => 'Awal Bulan (Tgl 7)',
+                        'AKHIR BULAN' => 'Akhir Bulan (Tgl 25)',
                     ])
                     ->default('AWAL BULAN')
                     ->required(),
@@ -146,8 +152,8 @@ class SiswaResource extends Resource
                 \Filament\Tables\Filters\SelectFilter::make('tipe_jatuh_tempo')
                     ->label('Tipe Jatuh Tempo')
                     ->options([
-                        'AWAL BULAN' => 'Awal Bulan',
-                        'AKHIR BULAN' => 'Akhir Bulan',
+                        'AWAL BULAN' => 'Awal Bulan (Tgl 7)',
+                        'AKHIR BULAN' => 'Akhir Bulan (Tgl 25)',
                     ]),
             ])
             ->actions([
@@ -174,6 +180,22 @@ class SiswaResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+
+        if ($user && $user->isTentor()) {
+            $query->whereHas('kelompok', function (Builder $q) use ($user) {
+                $q->where('tentor_id', $user->id);
+            });
+        }
+
+        return $query;
     }
 
     public static function getPages(): array

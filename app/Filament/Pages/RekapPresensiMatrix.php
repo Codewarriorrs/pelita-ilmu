@@ -23,6 +23,7 @@ class RekapPresensiMatrix extends Page
     public int $bulan;
     public int $tahun;
     public ?int $kelompokId = null;
+    public ?string $jenjangKelas = null;
     public string $searchSiswa = '';
 
     public function mount(): void
@@ -35,9 +36,14 @@ class RekapPresensiMatrix extends Page
     {
         $bulan = $this->bulan;
         $tahun = $this->tahun;
+        $user = auth()->user();
+        $isTentor = $user?->isTentor();
 
         // Fetch subjects
         $kelompokQuery = Kelompok::with('mapel');
+        if ($isTentor) {
+            $kelompokQuery->where('tentor_id', $user->id);
+        }
         if ($this->kelompokId) {
             $kelompokQuery->where('id', $this->kelompokId);
         }
@@ -56,7 +62,7 @@ class RekapPresensiMatrix extends Page
             }
         }
 
-        // Fallback: if no mapels in kelompoks, get all mapels
+        // Fallback: if no mapels in kelompoks, get all mapels (only for admin or if empty)
         if (empty($mapelList)) {
             $allMapels = MataPelajaran::all();
             foreach ($allMapels as $m) {
@@ -72,6 +78,10 @@ class RekapPresensiMatrix extends Page
         $jadwalQuery = JadwalKelompok::with('kelompok')
             ->whereRaw('EXTRACT(MONTH FROM tanggal_sesi) = ?', [$bulan])
             ->whereRaw('EXTRACT(YEAR FROM tanggal_sesi) = ?', [$tahun]);
+
+        if ($isTentor) {
+            $jadwalQuery->whereHas('kelompok', fn ($q) => $q->where('tentor_id', $user->id));
+        }
 
         if ($this->kelompokId) {
             $jadwalQuery->where('kelompok_id', $this->kelompokId);
@@ -96,11 +106,27 @@ class RekapPresensiMatrix extends Page
 
         // Fetch active students only
         $siswaQuery = Siswa::query()->where('status_siswa', 'AKTIF');
+
+        if ($isTentor) {
+            $siswaQuery->whereHas('kelompok', function ($q) use ($user) {
+                $q->where('tentor_id', $user->id);
+            });
+        }
+
         if ($this->kelompokId) {
             $siswaQuery->whereHas('kelompok', function ($q) {
                 $q->where('kelompok.id', $this->kelompokId);
             });
         }
+
+        if (!empty($this->jenjangKelas)) {
+            $val = trim($this->jenjangKelas);
+            $siswaQuery->where(function ($q) use ($val) {
+                $q->where('kelas', 'ILIKE', "%{$val}%")
+                  ->orWhere('kategori_kelas', 'ILIKE', "%{$val}%");
+            });
+        }
+
         if (!empty(trim($this->searchSiswa))) {
             $siswaQuery->where('nama_lengkap', 'ILIKE', '%' . trim($this->searchSiswa) . '%');
         }
@@ -116,12 +142,18 @@ class RekapPresensiMatrix extends Page
             }
         }
 
+        $allKelompoksQuery = Kelompok::query();
+        if ($isTentor) {
+            $allKelompoksQuery->where('tentor_id', $user->id);
+        }
+        $allKelompoks = $allKelompoksQuery->orderBy('nama_kelompok')->get();
+
         return [
             'mapelList' => $mapelList,
             'sessionsByMapel' => $sessionsByMapel,
             'siswas' => $siswas,
             'presensis' => $presensis,
-            'allKelompoks' => Kelompok::all(),
+            'allKelompoks' => $allKelompoks,
         ];
     }
 

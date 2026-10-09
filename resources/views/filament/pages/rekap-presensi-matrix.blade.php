@@ -239,6 +239,34 @@
                         @endforeach
                     </select>
                 </div>
+
+                <!-- Filter Jenjang / Tingkat Kelas -->
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">Jenjang/Kelas:</label>
+                    <select wire:model.live="jenjangKelas" class="matrix-select-field" style="max-width: 175px;">
+                        <option value="">Semua Jenjang</option>
+                        <optgroup label="Tingkat Jenjang">
+                            <option value="SD">Jenjang SD</option>
+                            <option value="SMP">Jenjang SMP</option>
+                            <option value="SMA">Jenjang SMA</option>
+                            <option value="UTBK">UTBK / SNBT</option>
+                        </optgroup>
+                        <optgroup label="Kelas (1 - 12)">
+                            <option value="1">Kelas 1</option>
+                            <option value="2">Kelas 2</option>
+                            <option value="3">Kelas 3</option>
+                            <option value="4">Kelas 4</option>
+                            <option value="5">Kelas 5</option>
+                            <option value="6">Kelas 6</option>
+                            <option value="7">Kelas 7</option>
+                            <option value="8">Kelas 8</option>
+                            <option value="9">Kelas 9</option>
+                            <option value="10">Kelas 10</option>
+                            <option value="11">Kelas 11</option>
+                            <option value="12">Kelas 12</option>
+                        </optgroup>
+                    </select>
+                </div>
             </div>
 
             <!-- Export Excel Button -->

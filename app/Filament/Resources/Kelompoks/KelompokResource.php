@@ -24,6 +24,11 @@ class KelompokResource extends Resource
 {
     protected static ?string $model = Kelompok::class;
 
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->isAdmin() ?? true;
+    }
+
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-user-group';
 
     protected static ?string $navigationLabel = 'Kelompok Belajar';

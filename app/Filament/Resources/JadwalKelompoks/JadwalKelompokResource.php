@@ -40,7 +40,13 @@ class JadwalKelompokResource extends Resource
             ->components([
                 Select::make('kelompok_id')
                     ->label('Kelompok Belajar')
-                    ->relationship('kelompok', 'nama_kelompok')
+                    ->relationship(
+                        name: 'kelompok',
+                        titleAttribute: 'nama_kelompok',
+                        modifyQueryUsing: fn (Builder $query) => auth()->user()?->isTentor()
+                            ? $query->where('tentor_id', auth()->id())
+                            : $query
+                    )
                     ->searchable()
                     ->preload()
                     ->required(),

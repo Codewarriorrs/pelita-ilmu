@@ -155,8 +155,8 @@ class PembayaranResource extends Resource
                     ->weight('bold'),
 
                 TextColumn::make('biaya_dibayar')
-                    ->label('Biaya SPP')
-                    ->money('IDR', locale: 'id')
+                    ->label('Jumlah SPP')
+                    ->state(fn (Pembayaran $record): string => $record->status_bayar === 'LUNAS' ? 'Rp ' . number_format($record->biaya_dibayar, 0, ',', '.') : '-')
                     ->sortable()
                     ->weight('semibold'),
 
@@ -167,9 +167,10 @@ class PembayaranResource extends Resource
                     ->color('primary'),
 
                 TextColumn::make('metode_bayar')
-                    ->label('Metode')
+                    ->label('Metode Bayar')
+                    ->state(fn (Pembayaran $record): string => $record->status_bayar === 'LUNAS' ? $record->metode_bayar : '-')
                     ->badge()
-                    ->color('info'),
+                    ->color(fn (Pembayaran $record): string => $record->status_bayar === 'LUNAS' ? 'info' : 'gray'),
 
                 TextColumn::make('status_bayar')
                     ->label('Status')
@@ -178,11 +179,16 @@ class PembayaranResource extends Resource
                         'LUNAS' => 'success',
                         'BELUM' => 'danger',
                         default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'LUNAS' => 'LUNAS',
+                        'BELUM' => 'BELUM LUNAS',
+                        default => $state,
                     }),
 
                 TextColumn::make('tanggal_bayar')
                     ->label('Tgl Bayar')
-                    ->date('d M Y')
+                    ->state(fn (Pembayaran $record): string => ($record->status_bayar === 'LUNAS' && $record->tanggal_bayar) ? \Carbon\Carbon::parse($record->tanggal_bayar)->translatedFormat('d M Y') : '-')
                     ->sortable(),
 
                 TextColumn::make('adminPencatat.name')
@@ -200,7 +206,18 @@ class PembayaranResource extends Resource
 
                 SelectFilter::make('untuk_bulan')
                     ->label('Bulan')
-                    ->options($bulanOptions),
+                    ->options($bulanOptions)
+                    ->default((int) date('m')),
+
+                SelectFilter::make('untuk_tahun')
+                    ->label('Tahun')
+                    ->options([
+                        2024 => '2024',
+                        2025 => '2025',
+                        2026 => '2026',
+                        2027 => '2027',
+                    ])
+                    ->default((int) date('Y')),
 
                 SelectFilter::make('metode_bayar')
                     ->label('Metode Bayar')
@@ -212,14 +229,39 @@ class PembayaranResource extends Resource
             ])
             ->actions([
                 Action::make('tandai_lunas')
-                    ->label('Tandai Lunas')
+                    ->label('Bayar / Lunas')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
                     ->visible(fn (Pembayaran $record): bool => $record->status_bayar !== 'LUNAS')
-                    ->action(function (Pembayaran $record): void {
+                    ->modalHeading(fn (Pembayaran $record): string => 'Konfirmasi Pembayaran: ' . ($record->siswa?->nama_lengkap ?? 'Siswa'))
+                    ->modalDescription('Masukkan nominal dan metode pembayaran untuk menyelesaikan tagihan siswa ini.')
+                    ->form([
+                        TextInput::make('biaya_dibayar')
+                            ->label('Jumlah SPP Dibayar')
+                            ->numeric()
+                            ->prefix('Rp')
+                            ->default(fn (Pembayaran $record) => $record->siswa?->biaya_bulanan > 0 ? $record->siswa->biaya_bulanan : 0)
+                            ->required(),
+                        Select::make('metode_bayar')
+                            ->label('Metode Pembayaran')
+                            ->options([
+                                'TUNAI' => 'Tunai',
+                                'TRANSFER' => 'Transfer Bank',
+                                'QRIS' => 'QRIS',
+                            ])
+                            ->default('TUNAI')
+                            ->required(),
+                        DatePicker::make('tanggal_bayar')
+                            ->label('Tanggal Pembayaran')
+                            ->default(now())
+                            ->required(),
+                    ])
+                    ->action(function (array $data, Pembayaran $record): void {
                         $record->update([
                             'status_bayar' => 'LUNAS',
-                            'tanggal_bayar' => now(),
+                            'biaya_dibayar' => $data['biaya_dibayar'],
+                            'metode_bayar' => $data['metode_bayar'],
+                            'tanggal_bayar' => $data['tanggal_bayar'],
                             'admin_pencatat_id' => auth()->id(),
                         ]);
 

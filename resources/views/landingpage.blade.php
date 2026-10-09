@@ -305,7 +305,7 @@
                     <div class="p-6 flex-1 flex flex-col justify-between">
                         <div class="space-y-4">
                             <div class="pb-3 border-b border-stone-200">
-                                <p class="font-subtitle text-xs font-bold text-[#193836] mb-1">Pilihan Paket (1–6 Mapel & TKA):</p>
+                                <p class="font-subtitle text-xs font-bold text-[#193836] mb-1">Pilihan Paket (Reguler & TKA):</p>
                                 <p class="font-body text-xs text-void/80 leading-relaxed">Matematika, IPA, B. Inggris, B. Indo, IPS</p>
                             </div>
                             <div class="space-y-1.5 font-body">
@@ -336,7 +336,7 @@
                     <div class="p-6 flex-1 flex flex-col justify-between">
                         <div class="space-y-4">
                             <div class="pb-3 border-b border-stone-200">
-                                <p class="font-subtitle text-xs font-bold text-[#193836] mb-1">Pilihan Paket (1–6 Mapel & UTBK):</p>
+                                <p class="font-subtitle text-xs font-bold text-[#193836] mb-1">Pilihan Paket (Reguler, TKA & UTBK):</p>
                                 <p class="font-body text-xs text-void/80 leading-relaxed">MTK Wajib/Lanjut, Fisika, Kimia, Biologi, B. Indo, B. Ing, UTBK</p>
                             </div>
                             <div class="space-y-1.5 font-body">

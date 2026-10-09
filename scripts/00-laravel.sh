@@ -7,37 +7,27 @@
 #   3. Jalankan migrate (safe dengan --force)
 #   4. Jalankan queue worker di background
 
-set -e
-
 cd /var/www/html
 
-# ── 1. Clear semua cache lama ────────────────────────────────────────────────
+# ── 1. Clear semua cache lama agar ENV Railway terbaca fresh ──────────────────
 echo "[deploy] Clearing old caches..."
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-php artisan event:clear
+php artisan config:clear || true
+php artisan route:clear || true
+php artisan view:clear || true
+php artisan event:clear || true
 
 # ── 2. Cache ulang untuk performa production ─────────────────────────────────
-# config:cache HARUS dijalankan setelah environment variable Railway tersedia
-echo "[deploy] Caching config, routes, views, events..."
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-php artisan event:cache
+echo "[deploy] Caching config, routes, views..."
+php artisan config:cache || echo "[deploy] Warning: config:cache failed"
+php artisan route:cache || echo "[deploy] Warning: route:cache failed"
+php artisan view:cache || echo "[deploy] Warning: view:cache failed"
 
-# ── 3. Optimasi autoloader & package discovery ───────────────────────────────
-echo "[deploy] Running optimize..."
-php artisan optimize
-
-# ── 4. Database migrations ───────────────────────────────────────────────────
+# ── 3. Database migrations (safe, jangan biarkan crash container) ─────────────
 echo "[deploy] Running database migrations..."
-php artisan migrate --force
+php artisan migrate --force || echo "[deploy] Warning: migrate failed (database might be waking up), continuing boot..."
 
-# ── 5. Queue worker (background) ─────────────────────────────────────────────
-# Jalankan worker di background agar queue jobs tidak blocking request user.
-# Diperlukan karena QUEUE_CONNECTION=database di production.
+# ── 4. Queue worker (background) ─────────────────────────────────────────────
 echo "[deploy] Starting queue worker in background..."
 php artisan queue:work --sleep=3 --tries=3 --max-time=3600 --daemon &
 
-echo "[deploy] Done."
+echo "[deploy] Startup script completed. Nginx & PHP-FPM ready."
