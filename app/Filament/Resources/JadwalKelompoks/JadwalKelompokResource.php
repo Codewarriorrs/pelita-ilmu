@@ -81,9 +81,9 @@ class JadwalKelompokResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-
-            ->modifyQueryUsing(fn (Builder $query) => $query->with(['kelompok.siswa', 'kelompok.tentor', 'detailPresensi']))
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['kelompok']))
             ->defaultSort('tanggal_sesi', 'desc')
+            ->defaultPaginationPageOption(10)
             ->emptyStateHeading('Belum Ada Sesi Pertemuan')
             ->emptyStateDescription('Buat jadwal pertemuan baru untuk memulai pencatatan absensi.')
             ->columns([
@@ -140,11 +140,12 @@ class JadwalKelompokResource extends Resource
                         // Khusus Tentor: Gabisa presensi lagi kalau sudah SELESAI
                         return $record->status_sesi === 'SELESAI';
                     })
-                    ->modalHeading(fn (JadwalKelompok $record) => 'Presensi Sesi: ' . $record->kelompok->nama_kelompok)
+                    ->modalHeading(fn (JadwalKelompok $record) => 'Presensi Sesi: ' . ($record->kelompok?->nama_kelompok ?? '-'))
                     ->modalDescription('Tentukan status kehadiran untuk setiap siswa di kelompok ini.')
                     ->fillForm(function (JadwalKelompok $record): array {
-                        // Tarik daftar siswa yang terdaftar di kelompok ini
-                        $daftarSiswa = $record->kelompok->siswa;
+                        // Tarik daftar siswa & presensi hanya saat modal presensi dibuka
+                        $record->loadMissing(['kelompok.siswa', 'detailPresensi']);
+                        $daftarSiswa = $record->kelompok?->siswa ?? collect();
                         $presensiTersimpan = $record->detailPresensi->keyBy('siswa_id');
 
                         return [
@@ -157,7 +158,7 @@ class JadwalKelompokResource extends Resource
                             })->toArray(),
                         ];
                     })
-                    ->form([
+                    ->form(fn () => [
                         Repeater::make('daftar_kehadiran')
                             ->label('Daftar Murid')
                             ->addable(false)
