@@ -17,15 +17,17 @@ php artisan config:clear || true
 php artisan route:clear || true
 php artisan view:clear || true
 php artisan event:clear || true
+php artisan filament:clear-cached-components || true
 
 # ── 2. Discover packages & Cache ulang untuk performa production ──────────────
 echo "[deploy] Discovering packages..."
 php artisan package:discover --ansi || true
 
-echo "[deploy] Caching config, routes, views..."
+echo "[deploy] Caching config, routes, views, filament components..."
 php artisan config:cache || echo "[deploy] Warning: config:cache failed"
 php artisan route:cache || echo "[deploy] Warning: route:cache failed"
 php artisan view:cache || echo "[deploy] Warning: view:cache failed"
+php artisan filament:cache-components || echo "[deploy] Warning: filament:cache-components failed"
 
 # ── 3. Database migrations (safe, migrasikan sessions & semua tabel) ───────────
 echo "[deploy] Running database migrations..."

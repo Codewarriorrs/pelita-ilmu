@@ -199,22 +199,6 @@ class SiswaResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery(): Builder
-    {
-        $query = parent::getEloquentQuery();
-
-        /** @var \App\Models\User|null $user */
-        $user = auth()->user();
-
-        if ($user && $user->isTentor()) {
-            $query->whereHas('kelompok', function (Builder $q) use ($user) {
-                $q->where('tentor_id', $user->id);
-            });
-        }
-
-        return $query;
-    }
-
     public static function getPages(): array
     {
         return [
