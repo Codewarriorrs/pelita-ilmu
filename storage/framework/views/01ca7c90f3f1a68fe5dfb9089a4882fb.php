@@ -1,5 +1,16 @@
-<x-filament-panels::page>
-    @php
+<?php if (isset($component)) { $__componentOriginal166a02a7c5ef5a9331faf66fa665c256 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal166a02a7c5ef5a9331faf66fa665c256 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament-panels::components.page.index','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('filament-panels::page'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
+
+    <?php
         $data = $this->getMatrixData();
         $bulanNamaArray = [
             1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
@@ -8,7 +19,7 @@
         ];
         $totalSiswaCount = count($data['siswas']);
         $totalMapelCount = count($data['mapelList']);
-    @endphp
+    ?>
 
     <style>
         /* Scoped styles for Matrix Presensi */
@@ -177,7 +188,7 @@
                     </div>
                     <h2 style="font-size: 1.45rem; font-weight: 900; margin: 0; color: #ffffff; letter-spacing: -0.02em;">
                         Rekap Presensi Bulanan
-                        <span style="font-size: 1.1rem; font-weight: 500; color: #80ccc5;">({{ $bulanNamaArray[$this->bulan] ?? '' }} {{ $this->tahun }})</span>
+                        <span style="font-size: 1.1rem; font-weight: 500; color: #80ccc5;">(<?php echo e($bulanNamaArray[$this->bulan] ?? ''); ?> <?php echo e($this->tahun); ?>)</span>
                     </h2>
                     <p style="font-size: 0.8rem; color: #cbd5e1; margin: 0.35rem 0 0 0;">
                         Tampilan matriks presensi terstruktur per mata pelajaran (Pertemuan 1–4) & siswa aktif.
@@ -186,11 +197,11 @@
 
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <div class="matrix-badge-stat">
-                        <span style="display: block; font-size: 1.35rem; font-weight: 900; color: #fde047; line-height: 1.2;">{{ $totalSiswaCount }}</span>
+                        <span style="display: block; font-size: 1.35rem; font-weight: 900; color: #fde047; line-height: 1.2;"><?php echo e($totalSiswaCount); ?></span>
                         <span style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #e2e8f0;">Total Siswa</span>
                     </div>
                     <div class="matrix-badge-stat">
-                        <span style="display: block; font-size: 1.35rem; font-weight: 900; color: #80ccc5; line-height: 1.2;">{{ $totalMapelCount }}</span>
+                        <span style="display: block; font-size: 1.35rem; font-weight: 900; color: #80ccc5; line-height: 1.2;"><?php echo e($totalMapelCount); ?></span>
                         <span style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #e2e8f0;">Mata Pelajaran</span>
                     </div>
                 </div>
@@ -213,9 +224,9 @@
                 <div style="display: flex; align-items: center; gap: 0.4rem;">
                     <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">Bulan:</label>
                     <select wire:model.live="bulan" class="matrix-select-field">
-                        @foreach($bulanNamaArray as $num => $nama)
-                            <option value="{{ $num }}">{{ $nama }}</option>
-                        @endforeach
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $bulanNamaArray; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $num => $nama): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                            <option value="<?php echo e($num); ?>"><?php echo e($nama); ?></option>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     </select>
                 </div>
 
@@ -223,9 +234,9 @@
                 <div style="display: flex; align-items: center; gap: 0.4rem;">
                     <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">Tahun:</label>
                     <select wire:model.live="tahun" class="matrix-select-field">
-                        @foreach([2024, 2025, 2026, 2027] as $t)
-                            <option value="{{ $t }}">{{ $t }}</option>
-                        @endforeach
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = [2024, 2025, 2026, 2027]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                            <option value="<?php echo e($t); ?>"><?php echo e($t); ?></option>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     </select>
                 </div>
 
@@ -234,9 +245,9 @@
                     <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">Kelompok:</label>
                     <select wire:model.live="kelompokId" class="matrix-select-field" style="max-width: 190px;">
                         <option value="">Semua Kelompok</option>
-                        @foreach($data['allKelompoks'] as $k)
-                            <option value="{{ $k->id }}">{{ $k->nama_kelompok }}</option>
-                        @endforeach
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $data['allKelompoks']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                            <option value="<?php echo e($k->id); ?>"><?php echo e($k->nama_kelompok); ?></option>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     </select>
                 </div>
             </div>
@@ -280,8 +291,9 @@
                         <th class="matrix-header-sticky-2" style="font-weight: 800; padding: 0.6rem 0.75rem; text-align: left;">
                             NAMA SISWA
                         </th>
-                        <th colspan="{{ count($data['mapelList']) * 4 }}" style="background: #0f766e; color: #f0fdfa; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; padding: 0.6rem;">
-                            REKAP PRESENSI MATRIX - BULAN {{ strtoupper($bulanNamaArray[$this->bulan] ?? '') }} {{ $this->tahun }}
+                        <th colspan="<?php echo e(count($data['mapelList']) * 4); ?>" style="background: #0f766e; color: #f0fdfa; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; padding: 0.6rem;">
+                            REKAP PRESENSI MATRIX - BULAN <?php echo e(strtoupper($bulanNamaArray[$this->bulan] ?? '')); ?> <?php echo e($this->tahun); ?>
+
                         </th>
                     </tr>
 
@@ -289,49 +301,52 @@
                     <tr style="background: #0d5f58; color: #ffffff;">
                         <th class="matrix-header-sticky-1" style="border-top: none;"></th>
                         <th class="matrix-header-sticky-2" style="border-top: none;"></th>
-                        @foreach($data['mapelList'] as $m)
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $data['mapelList']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                             <th colspan="4" style="background: #134e4a; color: #ccfbf1; font-weight: 800; font-size: 0.8rem; padding: 0.4rem; border-right: 2px solid #042f2e;">
-                                {{ $m['nama'] }}
+                                <?php echo e($m['nama']); ?>
+
                             </th>
-                        @endforeach
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     </tr>
 
                     <!-- Row 3: Pertemuan 1 - 4 -->
                     <tr style="background: #f1f5f9; color: #334155; font-weight: 800; font-size: 0.72rem;">
                         <th class="matrix-sticky-col-1" style="background: #e2e8f0; border-top: none;"></th>
                         <th class="matrix-sticky-col-2" style="background: #e2e8f0; border-top: none;"></th>
-                        @foreach($data['mapelList'] as $m)
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $data['mapelList']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                             <th style="width: 48px; background: #f8fafc;">P1</th>
                             <th style="width: 48px; background: #f8fafc;">P2</th>
                             <th style="width: 48px; background: #f8fafc;">P3</th>
                             <th style="width: 48px; background: #e2e8f0; font-weight: 900; border-right: 2px solid #cbd5e1;">P4</th>
-                        @endforeach
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     </tr>
                 </thead>
 
                 <!-- BODY ROWS -->
                 <tbody>
-                    @forelse($data['siswas'] as $index => $s)
-                        <tr style="background: {{ $index % 2 === 0 ? '#ffffff' : '#f8fafc' }};">
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $data['siswas']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                        <tr style="background: <?php echo e($index % 2 === 0 ? '#ffffff' : '#f8fafc'); ?>;">
                             
                             <!-- Index -->
-                            <td class="matrix-sticky-col-1" style="font-weight: 700; color: #64748b; background: {{ $index % 2 === 0 ? '#ffffff' : '#f8fafc' }};">
-                                {{ $index + 1 }}
+                            <td class="matrix-sticky-col-1" style="font-weight: 700; color: #64748b; background: <?php echo e($index % 2 === 0 ? '#ffffff' : '#f8fafc'); ?>;">
+                                <?php echo e($index + 1); ?>
+
                             </td>
 
                             <!-- Nama Siswa -->
-                            <td class="matrix-sticky-col-2" style="font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: {{ $index % 2 === 0 ? '#ffffff' : '#f8fafc' }};" title="{{ $s->nama_lengkap }}">
-                                {{ $s->nama_lengkap }}
+                            <td class="matrix-sticky-col-2" style="font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: <?php echo e($index % 2 === 0 ? '#ffffff' : '#f8fafc'); ?>;" title="<?php echo e($s->nama_lengkap); ?>">
+                                <?php echo e($s->nama_lengkap); ?>
+
                             </td>
 
                             <!-- Presensi Pertemuan -->
-                            @foreach($data['mapelList'] as $mId => $m)
-                                @php
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $data['mapelList']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mId => $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                                <?php
                                     $sessions = $data['sessionsByMapel'][$mId] ?? [];
-                                @endphp
+                                ?>
 
-                                @for($p = 0; $p < 4; $p++)
-                                    @php
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php for($p = 0; $p < 4; $p++): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                                    <?php
                                         $jadwal = $sessions[$p] ?? null;
                                         $status = '-';
                                         $badgeClass = 'badge-none';
@@ -352,19 +367,20 @@
                                                 $badgeClass = 'badge-alpa';
                                             }
                                         }
-                                    @endphp
-                                    <td style="padding: 0.25rem; {{ $p === 3 ? 'border-right: 2px solid #cbd5e1;' : '' }}">
-                                        <span class="{{ $badgeClass }}">
-                                            {{ $status }}
+                                    ?>
+                                    <td style="padding: 0.25rem; <?php echo e($p === 3 ? 'border-right: 2px solid #cbd5e1;' : ''); ?>">
+                                        <span class="<?php echo e($badgeClass); ?>">
+                                            <?php echo e($status); ?>
+
                                         </span>
                                     </td>
-                                @endfor
-                            @endforeach
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endfor; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
 
                         </tr>
-                    @empty
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                         <tr>
-                            <td colspan="{{ 2 + (count($data['mapelList']) * 4) }}" style="padding: 3rem 1rem; text-align: center; color: #64748b;">
+                            <td colspan="<?php echo e(2 + (count($data['mapelList']) * 4)); ?>" style="padding: 3rem 1rem; text-align: center; color: #64748b;">
                                 <div style="max-width: 320px; margin: 0 auto; text-align: center;">
                                     <svg style="width: 42px; height: 42px; margin: 0 auto 0.75rem auto; color: #cbd5e1;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -374,10 +390,20 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforelse
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </tbody>
             </table>
         </div>
 
     </div>
-</x-filament-panels::page>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal166a02a7c5ef5a9331faf66fa665c256)): ?>
+<?php $attributes = $__attributesOriginal166a02a7c5ef5a9331faf66fa665c256; ?>
+<?php unset($__attributesOriginal166a02a7c5ef5a9331faf66fa665c256); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal166a02a7c5ef5a9331faf66fa665c256)): ?>
+<?php $component = $__componentOriginal166a02a7c5ef5a9331faf66fa665c256; ?>
+<?php unset($__componentOriginal166a02a7c5ef5a9331faf66fa665c256); ?>
+<?php endif; ?>
+<?php /**PATH C:\Users\DELL\Downloads\Kuliah\Projek-Bimbel\pelita-ilmu\resources\views\filament\pages\rekap-presensi-matrix.blade.php ENDPATH**/ ?>

@@ -43,14 +43,25 @@ class AdminPanelProvider extends PanelProvider
                     <link rel="icon" type="image/png" href="' . asset('images/logo-bimbel-removebg.png') . '">
                     <style>
                         /* ===== TABLE HEADER: Search + Title + Buttons di 1 Baris Sejajar ===== */
-                        .fi-ta-header {
+                        .fi-ta-header-ctn {
                             display: flex !important;
                             flex-direction: row !important;
                             align-items: center !important;
                             justify-content: space-between !important;
                             flex-wrap: wrap !important;
                             gap: 0.75rem !important;
-                            padding: 1rem 1.25rem !important;
+                            padding: 0.85rem 1.25rem !important;
+                            border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+                        }
+                        .fi-ta-header {
+                            display: flex !important;
+                            flex-direction: row !important;
+                            align-items: center !important;
+                            padding: 0 !important;
+                            margin: 0 !important;
+                            border: none !important;
+                            box-shadow: none !important;
+                            flex-grow: 1 !important;
                         }
                         .fi-ta-header-heading-group {
                             margin: 0 !important;
@@ -64,24 +75,33 @@ class AdminPanelProvider extends PanelProvider
                             margin: 0 !important;
                             white-space: nowrap !important;
                         }
-                        .fi-ta-header-toolbar, .fi-ta-actions {
-                            margin-top: 0 !important;
+                        .fi-ta-header-toolbar {
+                            margin: 0 !important;
                             margin-left: auto !important;
+                            padding: 0 !important;
+                            border: none !important;
                             display: flex !important;
                             align-items: center !important;
                             justify-content: flex-end !important;
                             gap: 0.5rem !important;
                             flex-wrap: nowrap !important;
                         }
+                        .fi-ta-actions {
+                            margin: 0 !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 0.5rem !important;
+                        }
                         /* Search field & Button perfect height & vertical centering */
                         .fi-ta-search-field {
                             margin: 0 !important;
                             align-self: center !important;
+                            min-width: 220px !important;
                         }
                         .fi-ta-search-field input {
                             border-radius: 0.75rem !important;
-                            font-size: 0.8rem !important;
-                            height: 2.25rem !important;
+                            font-size: 0.825rem !important;
+                            height: 2.35rem !important;
                             padding-top: 0 !important;
                             padding-bottom: 0 !important;
                         }
