@@ -3,12 +3,15 @@
 namespace App\Filament\Resources\Kelompoks\Pages;
 
 use App\Filament\Resources\Kelompoks\KelompokResource;
+use App\Filament\Traits\HasSmartCancelAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditKelompok extends EditRecord
 {
+    use HasSmartCancelAction;
+
     protected static string $resource = KelompokResource::class;
 
     protected function getHeaderActions(): array

@@ -3,11 +3,14 @@
 namespace App\Filament\Resources\PembayaranResource\Pages;
 
 use App\Filament\Resources\PembayaranResource;
+use App\Filament\Traits\HasSmartCancelAction;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPembayaran extends EditRecord
 {
+    use HasSmartCancelAction;
+
     protected static string $resource = PembayaranResource::class;
 
     protected function getHeaderActions(): array

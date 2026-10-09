@@ -3,10 +3,13 @@
 namespace App\Filament\Resources\PembayaranResource\Pages;
 
 use App\Filament\Resources\PembayaranResource;
+use App\Filament\Traits\HasSmartCancelAction;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreatePembayaran extends CreateRecord
 {
+    use HasSmartCancelAction;
+
     protected static string $resource = PembayaranResource::class;
 
     public function mount(): void

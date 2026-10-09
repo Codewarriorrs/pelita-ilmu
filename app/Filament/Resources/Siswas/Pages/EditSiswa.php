@@ -3,12 +3,15 @@
 namespace App\Filament\Resources\Siswas\Pages;
 
 use App\Filament\Resources\Siswas\SiswaResource;
+use App\Filament\Traits\HasSmartCancelAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditSiswa extends EditRecord
 {
+    use HasSmartCancelAction;
+
     protected static string $resource = SiswaResource::class;
 
     protected function getHeaderActions(): array
