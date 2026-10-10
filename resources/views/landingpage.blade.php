@@ -308,15 +308,14 @@
                                 <p class="font-subtitle text-xs font-bold text-[#193836] mb-1">Pilihan Paket (Reguler & TKA):</p>
                                 <p class="font-body text-xs text-void/80 leading-relaxed">Matematika, IPA, B. Inggris, B. Indo, IPS</p>
                             </div>
-                            <div class="space-y-1.5 font-body">
-                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">1–2 Mapel / TKA</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Mulai Rp 150k</span></div>
-                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 3 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 240k/bln</span></div>
-                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 4 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 290k/bln</span></div>
-                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 5 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 340k/bln</span></div>
-                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 6 Mapel Lengkap</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 390k/bln</span></div>
-                            </div>
+                            <ul class="space-y-2 font-body text-xs text-void/85">
+                                <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Reguler & Persiapan Khusus TKA</li>
+                                <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Pendampingan PR & Ulangan Harian</li>
+                                <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Kelompok Kecil Intensif (4-6 Siswa)</li>
+                            </ul>
                         </div>
                         <div class="pt-6">
+                            <p class="font-headline text-2xl font-extrabold text-void mb-3">Mulai Rp 150.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
                             <a href="{{ route('pendaftaran') }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SMP ➔</a>
                         </div>
                     </div>
@@ -339,15 +338,14 @@
                                 <p class="font-subtitle text-xs font-bold text-[#193836] mb-1">Pilihan Paket (Reguler, TKA & UTBK):</p>
                                 <p class="font-body text-xs text-void/80 leading-relaxed">MTK Wajib/Lanjut, Fisika, Kimia, Biologi, B. Indo, B. Ing, UTBK</p>
                             </div>
-                            <div class="space-y-1.5 font-body">
-                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">1–3 Mapel Reguler</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Mulai Rp 200k</span></div>
-                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 4 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 350k/bln</span></div>
-                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 5 Mapel</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 400k/bln</span></div>
-                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Paket 6 Mapel Lengkap</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">Rp 450k/bln</span></div>
-                                <div class="flex items-center justify-between text-[11px]"><span class="font-subtitle font-bold text-void/80">Intensif UTBK / SNBT</span><span class="font-headline font-bold bg-highlight px-2 py-0.5 rounded border border-black text-void">1–4 Mapel</span></div>
-                            </div>
+                            <ul class="space-y-2 font-body text-xs text-void/85">
+                                <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Reguler, TKA & Intensif UTBK / SNBT</li>
+                                <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Bimbingan Tugas & Persiapan Ujian Sekolah</li>
+                                <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Tentor S1/S2 Berpengalaman & Soal Terupdate</li>
+                            </ul>
                         </div>
                         <div class="pt-6">
+                            <p class="font-headline text-2xl font-extrabold text-void mb-3">Mulai Rp 200.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
                             <a href="{{ route('pendaftaran') }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SMA ➔</a>
                         </div>
                     </div>

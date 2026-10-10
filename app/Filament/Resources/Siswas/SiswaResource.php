@@ -62,8 +62,8 @@ class SiswaResource extends Resource
                 Select::make('tipe_jatuh_tempo')
                     ->label('Tipe Jatuh Tempo')
                     ->options([
-                        'AWAL BULAN' => 'Awal Bulan (Tgl 7)',
-                        'AKHIR BULAN' => 'Akhir Bulan (Tgl 25)',
+                        'AWAL BULAN' => 'Jatuh Tempo Awal Bulan',
+                        'AKHIR BULAN' => 'Jatuh Tempo Akhir Bulan',
                     ])
                     ->default('AWAL BULAN')
                     ->required(),
@@ -153,8 +153,8 @@ class SiswaResource extends Resource
                 \Filament\Tables\Filters\SelectFilter::make('tipe_jatuh_tempo')
                     ->label('Tipe Jatuh Tempo')
                     ->options([
-                        'AWAL BULAN' => 'Awal Bulan (Tgl 7)',
-                        'AKHIR BULAN' => 'Akhir Bulan (Tgl 25)',
+                        'AWAL BULAN' => 'Jatuh Tempo Awal Bulan',
+                        'AKHIR BULAN' => 'Jatuh Tempo Akhir Bulan',
                     ]),
             ])
             ->actions([

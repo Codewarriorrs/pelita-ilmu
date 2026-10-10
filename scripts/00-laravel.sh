@@ -26,8 +26,8 @@ php artisan package:discover --ansi || true
 echo "[deploy] Caching config, routes, views, filament components..."
 php artisan config:cache || echo "[deploy] Warning: config:cache failed"
 php artisan route:cache || echo "[deploy] Warning: route:cache failed"
-php artisan view:cache || echo "[deploy] Warning: view:cache failed"
-php artisan filament:cache-components || echo "[deploy] Warning: filament:cache-components failed"
+php artisan filament:optimize || php artisan filament:cache-components || echo "[deploy] Warning: filament optimization failed"
+php artisan icons:cache || echo "[deploy] Warning: icons:cache failed"
 
 # ── 3. Database migrations (safe, migrasikan sessions & semua tabel) ───────────
 echo "[deploy] Running database migrations..."

@@ -84,8 +84,8 @@ class SiswaJatuhTempoWidget extends BaseWidget
                 TextColumn::make('tipe_jatuh_tempo')
                     ->label('Batas Jatuh Tempo')
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'AWAL BULAN' => 'Tgl 7 (Awal Bulan)',
-                        'AKHIR BULAN' => 'Tgl 25 (Akhir Bulan)',
+                        'AWAL BULAN' => 'Jatuh Tempo Awal Bulan',
+                        'AKHIR BULAN' => 'Jatuh Tempo Akhir Bulan',
                         default => $state,
                     })
                     ->badge()

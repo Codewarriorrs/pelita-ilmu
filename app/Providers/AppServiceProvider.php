@@ -40,5 +40,18 @@ class AppServiceProvider extends ServiceProvider
         if (app()->environment('production')) {
             URL::forceScheme('https');
         }
+
+        // [TEMPORARY MEASUREMENT] Pelacak query lambat > 100ms (SQL tanpa binding)
+        \Illuminate\Support\Facades\DB::listen(function ($query) {
+            if ($query->time > 100) {
+                file_put_contents(
+                    'php://stderr',
+                    sprintf("[SLOW_QUERY] Time: %.2f ms | SQL: %s%s", $query->time, $query->sql, PHP_EOL)
+                );
+            }
+        });
+
+        // [TEMPORARY MEASUREMENT] Deteksi N+1 di non-production
+        \Illuminate\Database\Eloquent\Model::preventLazyLoading(! app()->isProduction());
     }
 }

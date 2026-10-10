@@ -34,12 +34,17 @@ class StatsOverviewWidget extends BaseWidget
         $tahunSekarang = Carbon::now()->year;
         $namaBulan     = Carbon::now()->locale('id')->translatedFormat('F Y');
 
-        // Cache stats selama 5 menit untuk menghindari query berulang setiap poll
-        $totalSiswaAktif = Cache::remember('stats.siswa_aktif', 300, function () {
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+        $role = $user?->role ?? 'ADMIN';
+        $userId = $user?->id ?? 0;
+
+        // Cache jangka pendek (60 detik) dengan scope peran & user id agar terisolasi per role
+        $totalSiswaAktif = Cache::remember("stats.{$role}.{$userId}.siswa_aktif", 60, function () {
             return Siswa::query()->where('status_siswa', 'AKTIF')->count();
         });
 
-        $totalPemasukan = Cache::remember("stats.pemasukan.{$bulanSekarang}.{$tahunSekarang}", 300, function () use ($bulanSekarang, $tahunSekarang) {
+        $totalPemasukan = Cache::remember("stats.{$role}.{$userId}.pemasukan.{$bulanSekarang}.{$tahunSekarang}", 60, function () use ($bulanSekarang, $tahunSekarang) {
             return Pembayaran::query()
                 ->where('status_bayar', 'LUNAS')
                 ->where('untuk_bulan', $bulanSekarang)
