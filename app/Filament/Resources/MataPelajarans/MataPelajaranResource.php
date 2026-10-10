@@ -19,10 +19,12 @@ class MataPelajaranResource extends Resource
 {
     protected static ?string $model = MataPelajaran::class;
 
-    protected static bool $shouldRegisterNavigation = false;
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
+    protected static \UnitEnum|string|null $navigationGroup = 'Akademik';
     protected static ?string $navigationLabel = 'Mata Pelajaran';
     protected static ?string $modelLabel = 'Mata Pelajaran';
     protected static ?string $pluralModelLabel = 'Mata Pelajaran';
+    protected static ?int $navigationSort = 2;
 
     public static function canViewAny(): bool
     {

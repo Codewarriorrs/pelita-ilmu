@@ -51,6 +51,13 @@ class KelompokResource extends Resource
                     ->relationship('mapel', 'nama_mapel')
                     ->searchable()
                     ->preload()
+                    ->createOptionForm([
+                        TextInput::make('nama_mapel')
+                            ->label('Nama Mata Pelajaran')
+                            ->placeholder('Contoh: Fisika / Kimia / Sosiologi')
+                            ->required()
+                            ->maxLength(255),
+                    ])
                     ->required(),
 
                 // 2. Relasi BelongsTo ke User (Hanya yang ber-role TENTOR)
