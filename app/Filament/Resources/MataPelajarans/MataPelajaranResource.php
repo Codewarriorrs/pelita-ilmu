@@ -19,7 +19,7 @@ class MataPelajaranResource extends Resource
 {
     protected static ?string $model = MataPelajaran::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-book-open';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-book-open';
     protected static \UnitEnum|string|null $navigationGroup = 'Akademik';
     protected static ?string $navigationLabel = 'Mata Pelajaran';
     protected static ?string $modelLabel = 'Mata Pelajaran';
