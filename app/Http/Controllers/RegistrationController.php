@@ -33,13 +33,23 @@ class RegistrationController extends Controller
         $validated = $request->validated();
 
         $mapels = $validated['mata_pelajaran'] ?? [];
+        $kategori = $validated['kategori_kelas'] ?? 'Reguler';
+        $kelas = $validated['kelas'] ?? $validated['tingkat_kelas'] ?? '';
+        $program = $validated['minat_program'] ?? '';
+        $jenjang = $validated['jenjang'] ?? '';
+
+        $isTkOrSd = ($jenjang === 'TK' || $jenjang === 'SD' || $program === 'TK' || str_starts_with($program, 'SD') || str_contains(strtoupper($kelas), 'SD') || str_contains(strtoupper($kelas), 'TK') || str_contains(strtoupper($kelas), 'PAUD'));
+
+        if (empty($mapels) && $isTkOrSd) {
+            $mapels = ($jenjang === 'TK' || $program === 'TK' || str_contains(strtoupper($kelas), 'TK'))
+                ? ['Semua Mapel TK (Calistung, Mengaji, B. Inggris)']
+                : ['Semua Mapel Pokok SD (Matematika, IPA, IPS, B. Indonesia, B. Inggris, Tematik)'];
+        }
+
         $mapelList = !empty($mapels) && is_array($mapels) 
             ? ' (Mapel: ' . implode(', ', $mapels) . ')' 
             : '';
 
-        $kategori = $validated['kategori_kelas'] ?? 'Reguler';
-        $kelas = $validated['kelas'] ?? $validated['tingkat_kelas'] ?? '';
-        $program = $validated['minat_program'] ?? '';
         $programDetail = ($kelas ? '[' . $kelas . '] ' : '') . $kategori . ' - ' . $program . $mapelList;
 
         Pendaftaran::create([

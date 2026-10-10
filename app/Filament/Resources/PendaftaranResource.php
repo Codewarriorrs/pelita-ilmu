@@ -163,8 +163,14 @@ class PendaftaranResource extends Resource
                         $mapels = is_array($record->pilihan_mapel) ? $record->pilihan_mapel : [];
                         $kelompokFields = [];
 
-                        // Cari kelompok belajar yang mapelnya cocok dan kuota < 9 siswa
-                        if (!empty($mapels)) {
+                        $isTkOrSd = ($record->program_belajar === 'TK')
+                            || str_starts_with((string) $record->program_belajar, 'SD')
+                            || str_contains(strtoupper((string) $record->kelas), 'SD')
+                            || str_contains(strtoupper((string) $record->kelas), 'TK')
+                            || str_contains(strtoupper((string) $record->kelas), 'PAUD');
+
+                        // Cari kelompok belajar: jika SMP/SMA dengan pilihan mapel spesifik
+                        if (! $isTkOrSd && ! empty($mapels)) {
                             foreach ($mapels as $idx => $mapelName) {
                                 $cleanMapel = trim(preg_replace('/^(TKA|SD|SMP|SMA|Kelas \d+)\s*/i', '', $mapelName));
 
@@ -202,23 +208,26 @@ class PendaftaranResource extends Resource
                                         : "Peringatan: Belum ada kelompok belajar untuk mata pelajaran {$mapelName}. Anda dapat membuat kelompok belajar baru di menu Kelompok Belajar.");
                             }
                         } else {
-                            // Fallback jika program paket tanpa pilihan array mapel (misal SD / TK)
-                            $options = \App\Models\Kelompok::withCount('siswa')
+                            // Untuk TK & SD (semua mapel) atau program paket tanpa per-mapel
+                            $options = \App\Models\Kelompok::with(['mapel', 'tentor'])
+                                ->withCount('siswa')
                                 ->get()
                                 ->filter(fn ($k) => $k->siswa_count < 9)
                                 ->mapWithKeys(function ($k) {
                                     $sisa = 9 - $k->siswa_count;
-                                    $mapelTitle = $k->mapel?->nama_mapel ?? 'Umum';
-                                    return [$k->id => "{$k->nama_kelompok} [{$mapelTitle}] — {$k->siswa_count}/9 Siswa (Sisa {$sisa})"];
+                                    $mapelTitle = $k->mapel?->nama_mapel ?? 'Semua Mapel';
+                                    $tentorName = $k->tentor?->name ?? 'Belum ada tentor';
+                                    $jadwal = $k->jadwal_hari ? " ({$k->jadwal_hari})" : '';
+                                    return [$k->id => "{$k->nama_kelompok} [{$mapelTitle}]{$jadwal} — {$k->siswa_count}/9 Siswa (Sisa {$sisa}) — Tentor: {$tentorName}"];
                                 })
                                 ->all();
 
                             $kelompokFields[] = Select::make('kelompok_ids')
-                                ->label('Pilih Kelompok Belajar')
+                                ->label($isTkOrSd ? 'Pilih Kelompok Belajar (TK / SD - Semua Mapel)' : 'Pilih Kelompok Belajar')
                                 ->multiple()
                                 ->options($options)
-                                ->placeholder('-- Pilih Kelompok Belajar Tersedia --')
-                                ->helperText('Hanya menampilkan kelompok belajar dengan kapasitas tersedia (< 9 siswa).');
+                                ->placeholder('-- Pilih Kelompok Belajar Tersedia (< 9 Siswa) --')
+                                ->helperText('Untuk jenjang TK & SD, seluruh mapel dibimbing dalam kelompok belajar umum / tematik.');
                         }
 
                         $mapelDisplay = !empty($mapels) ? implode(', ', $mapels) : ($record->program_belajar ?: 'Semua Mapel Pokok');

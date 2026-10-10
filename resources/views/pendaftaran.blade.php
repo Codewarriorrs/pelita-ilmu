@@ -534,6 +534,7 @@
             const container = document.getElementById('mapel-container');
             const checkboxesDiv = document.getElementById('mapel-checkboxes');
             const infoText = document.getElementById('mapel-info-text');
+            const badge = document.getElementById('mapel-limit-badge');
 
             if (!select || !container || !checkboxesDiv || !infoText) return;
 
@@ -543,10 +544,38 @@
                 return;
             }
 
+            const jenjangSelect = document.getElementById('jenjang');
+            const currentJenjang = jenjangSelect ? jenjangSelect.value : '';
+
+            // Untuk Jenjang TK dan SD: Otomatis mencakup semua mapel (tanpa checkbox manual)
+            if (currentJenjang === 'TK' || currentJenjang === 'SD' || selectedProgram === 'TK' || selectedProgram.startsWith('SD')) {
+                container.classList.remove('hidden');
+                checkboxesDiv.innerHTML = `
+                    <div class="col-span-full p-4 rounded-xl border-2 border-emerald-600 bg-emerald-50 text-emerald-950 flex items-start gap-3 shadow-sm font-body">
+                        <span class="text-emerald-700 text-lg font-black leading-none">✓</span>
+                        <div class="text-xs">
+                            <strong class="font-headline font-bold block text-sm mb-1 text-emerald-900">
+                                Paket Komplit — Semua Mata Pelajaran Termasuk Otomatis
+                            </strong>
+                            <p class="text-emerald-800 leading-relaxed">
+                                Untuk jenjang <strong>${currentJenjang === 'TK' ? 'TK' : 'SD'}</strong>, bimbingan belajar langsung mencakup seluruh mata pelajaran pokok & bimbingan tugas sekolah secara menyeluruh (${currentJenjang === 'TK' ? 'Calistung, Mengaji, dan Bahasa Inggris' : 'Matematika, IPA, IPS, B. Indonesia, B. Inggris, & Tematik'}). Anda tidak perlu mencentang mata pelajaran.
+                            </p>
+                        </div>
+                    </div>
+                `;
+                infoText.textContent = `Cakupan program untuk jenjang ${currentJenjang === 'TK' ? 'TK' : 'SD'}:`;
+                if (badge) {
+                    badge.textContent = 'Semua Mapel Otomatis Aktif ✓';
+                    badge.className = 'bg-emerald-600 text-white text-[11px] font-bold px-3 py-1 rounded-full border border-black shadow-sm font-body';
+                }
+                return;
+            }
+
+            // Untuk Jenjang SMP & SMA: Tampilkan pilihan mata pelajaran sesuai paket
             container.classList.remove('hidden');
             checkboxesDiv.innerHTML = '';
 
-            const list = mapelData[selectedProgram] || mapelData['SD Kelas 1-5'] || [];
+            const list = mapelData[selectedProgram] || smaMapelList;
             const exactCount = getExactMapelRequired(selectedProgram);
 
             if (exactCount !== null) {
