@@ -58,7 +58,7 @@ class SiswaRelationManager extends RelationManager
                     ->label('Tambah Siswa ke Kelompok Ini')
                     ->preloadRecordSelect()
                     ->recordSelectSearchColumns(['nama_lengkap', 'asal_sekolah'])
-                    ->recordSelectOptionsQuery(fn ($query) => $query->where('status_siswa', 'AKTIF'))
+                    ->recordSelectOptionsQuery(fn ($query) => $query->select(['siswa.id', 'siswa.nama_lengkap', 'siswa.asal_sekolah', 'siswa.kategori_kelas'])->where('status_siswa', 'AKTIF'))
                     ->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->actions([
