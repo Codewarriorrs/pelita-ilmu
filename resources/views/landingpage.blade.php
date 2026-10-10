@@ -90,7 +90,7 @@
                         </div>
                         <div>
                             <h3 class="font-headline text-lg font-bold text-[#193836]">Ruang Kelas Nyaman & Ber-AC</h3>
-                            <p class="font-subtitle text-xs text-primary font-bold">Max 4–6 Siswa / Kelompok</p>
+                            <p class="font-subtitle text-xs text-primary font-bold">Kelas Kelompok</p>
                         </div>
                     </div>
                     <div class="mt-4 rounded-2xl overflow-hidden border-2 border-black shadow-inner">
@@ -220,7 +220,7 @@
                         Program Lengkap Bimbel Pelita Ilmu
                     </h2>
                     <p class="mt-2 font-body text-sm sm:text-base text-void/70">
-                        Kelompok mini 4–6 siswa per kelas agar perhatian tentor merata.
+                        Kelas kelompok agar perhatian tentor merata.
                     </p>
                 </div>
                 <span class="font-subtitle text-xs sm:text-sm font-bold text-[#193836] shrink-0 self-start md:self-auto flex items-center gap-1.5">

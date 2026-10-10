@@ -227,7 +227,7 @@
                         Program Lengkap Bimbel Pelita Ilmu
                     </h2>
                     <p class="font-body text-void/75 text-sm sm:text-base mt-2 max-w-2xl">
-                        Satu kelas berkapasitas mini 4–6 siswa agar perhatian tentor merata ke seluruh anak.
+                        Kelas kelompok agar perhatian tentor merata ke seluruh anak.
                     </p>
                 </div>
                 <div class="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-primary font-subtitle text-xs sm:text-sm font-bold shadow-sm shrink-0">
