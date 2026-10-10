@@ -16,8 +16,8 @@ class SiswaJatuhTempoWidget extends BaseWidget
 
     protected int | string | array $columnSpan = 'full';
 
-    // Poll setiap 60 detik — subquery whereDoesntHave berat, hindari query terlalu sering
-    protected ?string $pollingInterval = '60s';
+    // Matikan auto-polling — subquery whereDoesntHave berat, hemat round-trip ke DB
+    protected ?string $pollingInterval = null;
 
     /**
      * Otorisasi: Hanya role ADMIN yang dapat melihat daftar siswa jatuh tempo & finansial.

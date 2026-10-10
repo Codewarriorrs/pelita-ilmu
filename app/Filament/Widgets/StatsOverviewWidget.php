@@ -13,8 +13,8 @@ class StatsOverviewWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
 
-    // Poll setiap 60 detik, bukan default 5 detik — kurangi query ke DB
-    protected ?string $pollingInterval = '60s';
+    // Matikan auto-polling — hemat round-trip ke database Neon
+    protected ?string $pollingInterval = null;
 
     /**
      * Otorisasi: Hanya role ADMIN yang diizinkan melihat widget finansial & statistik ringkasan.

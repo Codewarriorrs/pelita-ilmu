@@ -41,6 +41,8 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
+    'perf_log' => (bool) env('PERF_LOG', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application URL

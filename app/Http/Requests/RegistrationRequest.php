@@ -58,6 +58,7 @@ class RegistrationRequest extends FormRequest
             'nama_lengkap' => ['required', 'string', 'max:100'],
             'tanggal_lahir' => ['required', 'date', 'before_or_equal:today'],
             'asal_sekolah' => ['required', 'string', 'max:100'],
+            'jenjang' => ['nullable', 'string', 'max:20'],
             'kelas' => ['required', 'string', 'max:50'],
             'tingkat_kelas' => ['nullable', 'string', 'max:50'],
             'kategori_kelas' => ['nullable', 'string', 'in:Reguler,Privat,KELOMPOK,PRIVAT'],

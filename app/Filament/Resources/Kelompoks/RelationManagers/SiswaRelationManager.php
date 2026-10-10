@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Kelompoks\RelationManagers;
 
-use Filament\Actions\AttachAction;
-use Filament\Actions\DetachAction;
+use Filament\Tables\Actions\AttachAction;
+use Filament\Tables\Actions\DetachAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
@@ -57,6 +57,8 @@ class SiswaRelationManager extends RelationManager
                 AttachAction::make()
                     ->label('Tambah Siswa ke Kelompok Ini')
                     ->preloadRecordSelect()
+                    ->recordSelectSearchColumns(['nama_lengkap', 'asal_sekolah'])
+                    ->recordSelectOptionsQuery(fn ($query) => $query->where('status_siswa', 'AKTIF'))
                     ->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->actions([

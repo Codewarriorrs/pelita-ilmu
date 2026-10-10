@@ -161,46 +161,45 @@ class PendaftaranResource extends Resource
                     ->modalSubmitActionLabel('Terima & Daftarkan Siswa')
                     ->form(function (Pendaftaran $record): array {
                         $mapels = is_array($record->pilihan_mapel) ? $record->pilihan_mapel : [];
-                        
-                        // Cari kelompok belajar yang mapelnya cocok dan kuota < 9 siswa
                         $kelompokFields = [];
 
+                        // Cari kelompok belajar yang mapelnya cocok dan kuota < 9 siswa
                         if (!empty($mapels)) {
                             foreach ($mapels as $idx => $mapelName) {
+                                $cleanMapel = trim(preg_replace('/^(TKA|SD|SMP|SMA|Kelas \d+)\s*/i', '', $mapelName));
+
                                 $options = \App\Models\Kelompok::query()
-                                    ->whereHas('mapel', function ($q) use ($mapelName) {
-                                        $q->where('nama_mapel', 'ILIKE', '%' . trim($mapelName) . '%')
-                                          ->orWhereRaw('? ILIKE \'%\' || nama_mapel || \'%\'', [trim($mapelName)]);
+                                    ->where(function ($query) use ($mapelName, $cleanMapel) {
+                                        $query->whereHas('mapel', function ($q) use ($mapelName, $cleanMapel) {
+                                            $q->where('nama_mapel', 'ILIKE', '%' . trim($mapelName) . '%')
+                                              ->orWhere('nama_mapel', 'ILIKE', '%' . $cleanMapel . '%')
+                                              ->orWhereRaw('? ILIKE \'%\' || nama_mapel || \'%\'', [trim($mapelName)]);
+                                        })->orWhere('nama_kelompok', 'ILIKE', '%' . trim($mapelName) . '%')
+                                          ->orWhere('nama_kelompok', 'ILIKE', '%' . $cleanMapel . '%');
                                     })
+                                    ->with(['mapel', 'tentor'])
                                     ->withCount('siswa')
                                     ->get()
                                     ->filter(fn ($k) => $k->siswa_count < 9)
                                     ->mapWithKeys(function ($k) {
                                         $sisa = 9 - $k->siswa_count;
+                                        $mapelTitle = $k->mapel?->nama_mapel ?? '-';
                                         $tentorName = $k->tentor?->name ?? 'Belum ada tentor';
-                                        return [$k->id => "{$k->nama_kelompok} ({$k->jadwal_hari}) — {$k->siswa_count}/9 Siswa (Sisa {$sisa}) — Tentor: {$tentorName}"];
+                                        $jadwal = $k->jadwal_hari ? " ({$k->jadwal_hari})" : '';
+                                        return [$k->id => "{$k->nama_kelompok} [{$mapelTitle}]{$jadwal} — {$k->siswa_count}/9 Siswa (Sisa {$sisa}) — Tentor: {$tentorName}"];
                                     })
                                     ->all();
 
-                                // Jika tidak ada kelompok yang spesifik sesuai nama mapel, berikan pilihan semua kelompok yang kapasitasnya < 9
-                                if (empty($options)) {
-                                    $options = \App\Models\Kelompok::withCount('siswa')
-                                        ->get()
-                                        ->filter(fn ($k) => $k->siswa_count < 9)
-                                        ->mapWithKeys(function ($k) {
-                                            $sisa = 9 - $k->siswa_count;
-                                            $mapelTitle = $k->mapel?->nama_mapel ?? 'Umum';
-                                            return [$k->id => "{$k->nama_kelompok} [{$mapelTitle}] — {$k->siswa_count}/9 Siswa (Sisa {$sisa})"];
-                                        })
-                                        ->all();
-                                }
+                                $hasOptions = !empty($options);
 
                                 $kelompokFields[] = Select::make("kelompok_mapel_{$idx}")
                                     ->label("Kelompok Belajar: {$mapelName}")
                                     ->options($options)
-                                    ->placeholder('-- Pilih Kelompok yang Tersedia (< 9 Siswa) --')
-                                    ->required(count($options) > 0)
-                                    ->helperText('Hanya menampilkan kelompok belajar dengan kapasitas tersedia (< 9 siswa).');
+                                    ->placeholder($hasOptions ? "-- Pilih Kelompok untuk {$mapelName} --" : "Belum ada kelompok tersedia untuk mapel {$mapelName}")
+                                    ->required($hasOptions)
+                                    ->helperText($hasOptions
+                                        ? "Hanya menampilkan kelompok belajar mapel {$mapelName} dengan kuota tersedia (< 9 siswa)."
+                                        : "Peringatan: Belum ada kelompok belajar untuk mata pelajaran {$mapelName}. Anda dapat membuat kelompok belajar baru di menu Kelompok Belajar.");
                             }
                         } else {
                             // Fallback jika program paket tanpa pilihan array mapel (misal SD / TK)

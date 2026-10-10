@@ -14,7 +14,7 @@ class PerformanceTraceMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! env('PERF_LOG', false)) {
+        if (! config('app.perf_log', false)) {
             return $next($request);
         }
 

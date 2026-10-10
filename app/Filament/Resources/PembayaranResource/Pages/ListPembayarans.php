@@ -81,4 +81,11 @@ class ListPembayarans extends ListRecords
             CreateAction::make()->label('Catat Pembayaran Baru'),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            \App\Filament\Resources\PembayaranResource\Widgets\PembayaranOverviewWidget::class,
+        ];
+    }
 }

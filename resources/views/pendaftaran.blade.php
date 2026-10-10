@@ -93,7 +93,7 @@
                         </div>
 
                         <!-- Asal Sekolah -->
-                        <div>
+                        <div class="md:col-span-2">
                             <label for="asal_sekolah" class="block text-xs sm:text-sm font-bold text-void mb-1.5 font-subtitle">
                                 Asal Sekolah <span class="text-rose-500">*</span>
                             </label>
@@ -102,26 +102,46 @@
                                 id="asal_sekolah"
                                 name="asal_sekolah"
                                 value="{{ old('asal_sekolah') }}"
-                                placeholder="Contoh: SD Negeri Manyaran 01"
+                                placeholder="Contoh: SD Negeri Manyaran 01 / SMP Negeri 1 Semarang"
                                 required
                                 class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void placeholder:text-stone-400 focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
                             >
                         </div>
 
+                        <!-- Jenjang Pendidikan -->
+                        <div>
+                            <label for="jenjang" class="block text-xs sm:text-sm font-bold text-void mb-1.5 font-subtitle">
+                                Jenjang Pendidikan <span class="text-rose-500">*</span>
+                            </label>
+                            <select
+                                id="jenjang"
+                                name="jenjang"
+                                onchange="handleJenjangChange()"
+                                required
+                                class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
+                            >
+                                <option value="">-- Pilih Jenjang Sekolah --</option>
+                                <option value="TK" {{ old('jenjang', request('jenjang')) == 'TK' ? 'selected' : '' }}>TK / Prasekolah</option>
+                                <option value="SD" {{ old('jenjang', request('jenjang')) == 'SD' ? 'selected' : '' }}>SD (Sekolah Dasar)</option>
+                                <option value="SMP" {{ old('jenjang', request('jenjang')) == 'SMP' ? 'selected' : '' }}>SMP (Menengah Pertama)</option>
+                                <option value="SMA" {{ old('jenjang', request('jenjang')) == 'SMA' ? 'selected' : '' }}>SMA / SMK / UTBK SNBT</option>
+                            </select>
+                        </div>
+
                         <!-- Kelas -->
                         <div>
                             <label for="kelas" class="block text-xs sm:text-sm font-bold text-void mb-1.5 font-subtitle">
-                                Kelas <span class="text-rose-500">*</span>
+                                Tingkat Kelas <span class="text-rose-500">*</span>
                             </label>
-                            <input
-                                type="text"
+                            <select
                                 id="kelas"
                                 name="kelas"
-                                value="{{ old('kelas', old('tingkat_kelas')) }}"
-                                placeholder="Contoh: Kelas 8 / 5 SD / 10"
+                                onchange="handleKelasChange()"
                                 required
-                                class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void placeholder:text-stone-400 focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
+                                class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body disabled:opacity-50 disabled:bg-stone-200"
                             >
+                                <option value="">-- Pilih Jenjang Terlebih Dahulu --</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -150,7 +170,7 @@
                                     >
                                     <div class="ml-3">
                                         <span class="text-sm font-headline font-bold block">Reguler</span>
-                                        <span class="text-xs text-stone-500 font-body">Reguler (Kelas Mini 4-6 Siswa)</span>
+                                        <span class="text-xs text-stone-500 font-body">Reguler (Kelas Kelompok)</span>
                                     </div>
                                 </label>
 
@@ -179,50 +199,11 @@
                                 name="minat_program"
                                 onchange="updateMapelOptions()"
                                 required
-                                class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
+                                class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body disabled:opacity-50 disabled:bg-stone-200"
                             >
-                                <option value="">-- Pilih Jenjang & Paket Program --</option>
-                                <optgroup label="TK / PAUD">
-                                    <option value="TK">TK — Calistung, Mengaji, Bahasa Inggris</option>
-                                </optgroup>
-                                <optgroup label="SD (Sekolah Dasar)">
-                                    <option value="SD Kelas 1-5">SD Kelas 1–5 — Semua Mapel Pokok & Tematik</option>
-                                    <option value="SD Kelas 6">SD Kelas 6 — Persiapan US + Intensif</option>
-                                    <option value="SD Kelas 6 TKA">SD Kelas 6 — Hanya TKA / Persiapan SMP</option>
-                                </optgroup>
-                                <optgroup label="SMP — Reguler + TKA">
-                                    <option value="SMP 1 Mapel">SMP — 1 Mata Pelajaran</option>
-                                    <option value="SMP 2 Mapel">SMP — 2 Mata Pelajaran</option>
-                                    <option value="SMP 3 Mapel">SMP — 3 Mata Pelajaran</option>
-                                    <option value="SMP 4 Mapel">SMP — 4 Mata Pelajaran</option>
-                                    <option value="SMP 5 Mapel">SMP — 5 Mata Pelajaran</option>
-                                    <option value="SMP 6 Mapel">SMP — 6 Mata Pelajaran</option>
-                                </optgroup>
-                                <optgroup label="SMP — TKA Saja">
-                                    <option value="SMP TKA 1 Mapel">SMP — 1 TKA (Khusus TKA Saja)</option>
-                                    <option value="SMP TKA 2 Mapel">SMP — 2 TKA (Khusus TKA Saja)</option>
-                                </optgroup>
-                                <optgroup label="SMA — Reguler">
-                                    <option value="SMA 1 Mapel">SMA — 1 Mata Pelajaran</option>
-                                    <option value="SMA 2 Mapel">SMA — 2 Mata Pelajaran</option>
-                                    <option value="SMA 3 Mapel">SMA — 3 Mata Pelajaran</option>
-                                    <option value="SMA 4 Mapel">SMA — 4 Mata Pelajaran</option>
-                                    <option value="SMA 5 Mapel">SMA — 5 Mata Pelajaran</option>
-                                    <option value="SMA 6 Mapel">SMA — 6 Mata Pelajaran</option>
-                                </optgroup>
-                                <optgroup label="SMA — UTBK / SNBT">
-                                    <option value="SMA UTBK 1">SMA — 1 Mapel UTBK / SNBT</option>
-                                    <option value="SMA UTBK 2">SMA — 2 Mapel UTBK / SNBT</option>
-                                    <option value="SMA UTBK 3">SMA — 3 Mapel UTBK / SNBT</option>
-                                    <option value="SMA UTBK 4">SMA — 4 Mapel UTBK / SNBT</option>
-                                </optgroup>
-                                <optgroup label="SMA — UTBK + Reguler">
-                                    <option value="SMA UTBK+Reg 1">SMA — 1 Mapel UTBK + Reguler</option>
-                                    <option value="SMA UTBK+Reg 2">SMA — 2 Mapel UTBK + Reguler</option>
-                                    <option value="SMA UTBK+Reg 3">SMA — 3 Mapel UTBK + Reguler</option>
-                                    <option value="SMA UTBK+Reg 4">SMA — 4 Mapel UTBK + Reguler</option>
-                                </optgroup>
+                                <option value="">-- Pilih Jenjang & Kelas Terlebih Dahulu --</option>
                             </select>
+                            <p class="text-xs text-stone-500 mt-1 font-body">Pilihan program belajar disesuaikan otomatis dengan jenjang dan kelas yang dipilih.</p>
                         </div>
 
                         <!-- DINAMIS MATA PELAJARAN -->
@@ -378,7 +359,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT DINAMIS CHECKBOX MATA PELAJARAN DENGAN EXACT VALIDATION -->
+    <!-- JAVASCRIPT DINAMIS KELAS, PROGRAM & CHECKBOX MATA PELAJARAN -->
     <script>
         const smpMapelList = ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'IPA Fisika', 'IPA Biologi', 'IPS'];
         const smaMapelList = ['Matematika Wajib / Lanjut', 'Fisika / Ekonomi', 'Kimia / Geografi', 'Biologi / Sosiologi', 'Bahasa Inggris', 'Informatika / Sejarah'];
@@ -412,6 +393,136 @@
             'SMA UTBK+Reg 4': smaMapelList.concat(['Penalaran UTBK']),
         };
 
+        const kelasOptions = {
+            'TK': ['TK A', 'TK B', 'PAUD'],
+            'SD': ['Kelas 1 SD', 'Kelas 2 SD', 'Kelas 3 SD', 'Kelas 4 SD', 'Kelas 5 SD', 'Kelas 6 SD'],
+            'SMP': ['Kelas 7 SMP', 'Kelas 8 SMP', 'Kelas 9 SMP'],
+            'SMA': ['Kelas 10 SMA', 'Kelas 11 SMA', 'Kelas 12 SMA', 'Alumni / Gap Year (Persiapan UTBK)']
+        };
+
+        const programsByJenjang = {
+            'TK': [
+                { value: 'TK', label: 'TK — Calistung, Mengaji, Bahasa Inggris' }
+            ],
+            'SD': [
+                { value: 'SD Kelas 1-5', label: 'SD Kelas 1–5 — Semua Mapel Pokok & Tematik', kelasFilter: ['Kelas 1 SD', 'Kelas 2 SD', 'Kelas 3 SD', 'Kelas 4 SD', 'Kelas 5 SD'] },
+                { value: 'SD Kelas 6', label: 'SD Kelas 6 — Persiapan US + Intensif', kelasFilter: ['Kelas 6 SD'] },
+                { value: 'SD Kelas 6 TKA', label: 'SD Kelas 6 — Hanya TKA / Persiapan SMP', kelasFilter: ['Kelas 6 SD'] }
+            ],
+            'SMP': [
+                { value: 'SMP 1 Mapel', label: 'SMP — 1 Mata Pelajaran' },
+                { value: 'SMP 2 Mapel', label: 'SMP — 2 Mata Pelajaran' },
+                { value: 'SMP 3 Mapel', label: 'SMP — 3 Mata Pelajaran' },
+                { value: 'SMP 4 Mapel', label: 'SMP — 4 Mata Pelajaran' },
+                { value: 'SMP 5 Mapel', label: 'SMP — 5 Mata Pelajaran' },
+                { value: 'SMP 6 Mapel', label: 'SMP — 6 Mata Pelajaran' },
+                { value: 'SMP TKA 1 Mapel', label: 'SMP — 1 TKA (Khusus TKA Saja)' },
+                { value: 'SMP TKA 2 Mapel', label: 'SMP — 2 TKA (Khusus TKA Saja)' }
+            ],
+            'SMA': [
+                { value: 'SMA 1 Mapel', label: 'SMA — 1 Mata Pelajaran' },
+                { value: 'SMA 2 Mapel', label: 'SMA — 2 Mata Pelajaran' },
+                { value: 'SMA 3 Mapel', label: 'SMA — 3 Mata Pelajaran' },
+                { value: 'SMA 4 Mapel', label: 'SMA — 4 Mata Pelajaran' },
+                { value: 'SMA 5 Mapel', label: 'SMA — 5 Mata Pelajaran' },
+                { value: 'SMA 6 Mapel', label: 'SMA — 6 Mata Pelajaran' },
+                { value: 'SMA UTBK 1', label: 'SMA — 1 Mapel UTBK / SNBT' },
+                { value: 'SMA UTBK 2', label: 'SMA — 2 Mapel UTBK / SNBT' },
+                { value: 'SMA UTBK 3', label: 'SMA — 3 Mapel UTBK / SNBT' },
+                { value: 'SMA UTBK 4', label: 'SMA — 4 Mapel UTBK / SNBT' },
+                { value: 'SMA UTBK+Reg 1', label: 'SMA — 1 Mapel UTBK + Reguler' },
+                { value: 'SMA UTBK+Reg 2', label: 'SMA — 2 Mapel UTBK + Reguler' },
+                { value: 'SMA UTBK+Reg 3', label: 'SMA — 3 Mapel UTBK + Reguler' },
+                { value: 'SMA UTBK+Reg 4', label: 'SMA — 4 Mapel UTBK + Reguler' }
+            ]
+        };
+
+        const initialJenjang = @json(old('jenjang', request('jenjang', '')));
+        const initialKelas = @json(old('kelas', old('tingkat_kelas', '')));
+        const initialProgram = @json(old('minat_program', ''));
+
+        function handleJenjangChange(preserve = false) {
+            const jenjangSelect = document.getElementById('jenjang');
+            const kelasSelect = document.getElementById('kelas');
+            const programSelect = document.getElementById('minat_program');
+            const mapelContainer = document.getElementById('mapel-container');
+
+            if (!jenjangSelect || !kelasSelect || !programSelect) return;
+
+            const selectedJenjang = jenjangSelect.value;
+            kelasSelect.innerHTML = '';
+
+            if (!selectedJenjang || !kelasOptions[selectedJenjang]) {
+                kelasSelect.disabled = true;
+                kelasSelect.innerHTML = '<option value="">-- Pilih Jenjang Terlebih Dahulu --</option>';
+                programSelect.disabled = true;
+                programSelect.innerHTML = '<option value="">-- Pilih Jenjang & Kelas Terlebih Dahulu --</option>';
+                if (mapelContainer) mapelContainer.classList.add('hidden');
+                return;
+            }
+
+            kelasSelect.disabled = false;
+            kelasSelect.innerHTML = '<option value="">-- Pilih Tingkat Kelas --</option>';
+            kelasOptions[selectedJenjang].forEach((item) => {
+                const opt = document.createElement('option');
+                opt.value = item;
+                opt.textContent = item;
+                kelasSelect.appendChild(opt);
+            });
+
+            if (preserve && initialKelas) {
+                kelasSelect.value = initialKelas;
+            }
+
+            handleKelasChange(preserve);
+        }
+
+        function handleKelasChange(preserve = false) {
+            const jenjangSelect = document.getElementById('jenjang');
+            const kelasSelect = document.getElementById('kelas');
+            const programSelect = document.getElementById('minat_program');
+            const mapelContainer = document.getElementById('mapel-container');
+
+            if (!jenjangSelect || !kelasSelect || !programSelect) return;
+
+            const selectedJenjang = jenjangSelect.value;
+            const selectedKelas = kelasSelect.value;
+
+            programSelect.innerHTML = '';
+
+            if (!selectedKelas) {
+                programSelect.disabled = true;
+                programSelect.innerHTML = '<option value="">-- Pilih Tingkat Kelas Terlebih Dahulu --</option>';
+                if (mapelContainer) mapelContainer.classList.add('hidden');
+                return;
+            }
+
+            programSelect.disabled = false;
+            programSelect.innerHTML = '<option value="">-- Pilih Program Belajar --</option>';
+
+            const programList = programsByJenjang[selectedJenjang] || [];
+            programList.forEach((prog) => {
+                if (prog.kelasFilter && !prog.kelasFilter.includes(selectedKelas)) {
+                    return;
+                }
+                const opt = document.createElement('option');
+                opt.value = prog.value;
+                opt.textContent = prog.label;
+                programSelect.appendChild(opt);
+            });
+
+            if (preserve && initialProgram) {
+                programSelect.value = initialProgram;
+            } else if (programSelect.options.length === 2) {
+                // Jika hanya ada 1 pilihan program (misal TK), otomatis pilihkan
+                programSelect.selectedIndex = 1;
+            } else if (programSelect.options.length > 1 && !preserve) {
+                programSelect.selectedIndex = 1;
+            }
+
+            updateMapelOptions();
+        }
+
         function getExactMapelRequired(program) {
             const match = program.match(/(\d+)\s*Mapel/i) || program.match(/UTBK\s*(\d+)/i) || program.match(/TKA\s*(\d+)/i);
             if (match) return parseInt(match[1]);
@@ -435,7 +546,7 @@
             container.classList.remove('hidden');
             checkboxesDiv.innerHTML = '';
 
-            const list = mapelData[selectedProgram] || mapelData['SD Kelas 1-5'];
+            const list = mapelData[selectedProgram] || mapelData['SD Kelas 1-5'] || [];
             const exactCount = getExactMapelRequired(selectedProgram);
 
             if (exactCount !== null) {
@@ -486,13 +597,25 @@
             }
         }
 
-        // Form Submit Exact Match Guard
+        // Initialize on DOMContentLoaded & Submit guard
         document.addEventListener('DOMContentLoaded', function() {
+            if (initialJenjang) {
+                const jenjangSelect = document.getElementById('jenjang');
+                if (jenjangSelect) {
+                    jenjangSelect.value = initialJenjang;
+                    handleJenjangChange(true);
+                }
+            }
+
             const form = document.querySelector('form[action*="daftar"]');
             if (form) {
                 form.addEventListener('submit', function(e) {
                     const programSelect = document.getElementById('minat_program');
-                    if (!programSelect) return;
+                    if (!programSelect || !programSelect.value) {
+                        e.preventDefault();
+                        alert('Silakan pilih jenjang, kelas, dan paket program belajar terlebih dahulu.');
+                        return;
+                    }
 
                     const exactCount = getExactMapelRequired(programSelect.value);
                     if (exactCount !== null) {

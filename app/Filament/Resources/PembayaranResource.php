@@ -161,11 +161,19 @@ class PembayaranResource extends Resource
                     ->sortable()
                     ->weight('semibold'),
 
-                TextColumn::make('periode')
-                    ->label('Periode')
-                    ->state(fn (Pembayaran $record): string => ($bulanOptions[$record->untuk_bulan] ?? $record->untuk_bulan) . ' ' . $record->untuk_tahun)
+                TextColumn::make('siswa.tipe_jatuh_tempo')
+                    ->label('Jatuh Tempo')
                     ->badge()
-                    ->color('primary'),
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'AWAL BULAN' => 'Jatuh Tempo Awal Bulan',
+                        'AKHIR BULAN' => 'Jatuh Tempo Akhir Bulan',
+                        default => '-',
+                    })
+                    ->color(fn (?string $state): string => match ($state) {
+                        'AWAL BULAN' => 'warning',
+                        'AKHIR BULAN' => 'info',
+                        default => 'gray',
+                    }),
 
                 TextColumn::make('metode_bayar')
                     ->label('Metode Bayar')

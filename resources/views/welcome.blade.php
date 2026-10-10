@@ -428,7 +428,7 @@
                     </h2>
 
                     <p class="font-body text-white/85 text-sm sm:text-base leading-relaxed max-w-2xl">
-                        Daftarkan putra-putri Anda hari ini di Bimbel Pelita Ilmu. Dapatkan bimbingan intensif 4-6 siswa per kelompok dengan pengajar S1/S2 berdedikasi tinggi di Bimbel Pelita Ilmu!
+                        Daftarkan putra-putri Anda hari ini di Bimbel Pelita Ilmu. Dapatkan bimbingan intensif kelompok dengan pengajar S1/S2 berdedikasi tinggi di Bimbel Pelita Ilmu!
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">

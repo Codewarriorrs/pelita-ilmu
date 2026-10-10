@@ -285,7 +285,7 @@
                                         >
                                         <div class="ml-3">
                                             <span class="text-sm font-heading font-bold block">Reguler</span>
-                                            <span class="text-xs text-stone-500">Reguler (Kelas Mini 4-6 Siswa)</span>
+                                            <span class="text-xs text-stone-500">Reguler (Kelas Kelompok)</span>
                                         </div>
                                     </label>
 

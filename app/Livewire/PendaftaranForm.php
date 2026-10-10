@@ -61,7 +61,7 @@ class PendaftaranForm extends Component
 
     // Daftar Kategori Kelas
     public array $daftarKategori = [
-        'Reguler' => 'Reguler (Kelas Mini 4-6 Siswa)',
+        'Reguler' => 'Reguler (Kelas Kelompok)',
         'Privat' => 'Privat (1-on-1 Intensif Khusus)',
     ];
 

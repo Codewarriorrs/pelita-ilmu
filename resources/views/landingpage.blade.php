@@ -256,7 +256,7 @@
                         </div>
                         <div class="pt-6">
                             <p class="font-headline text-2xl font-extrabold text-void mb-3">Rp 195.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
-                            <a href="{{ route('pendaftaran') }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET TK ➔</a>
+                            <a href="{{ route('pendaftaran', ['jenjang' => 'TK']) }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET TK ➔</a>
                         </div>
                     </div>
                 </div>
@@ -286,7 +286,7 @@
                         </div>
                         <div class="pt-6">
                             <p class="font-headline text-2xl font-extrabold text-void mb-3">Rp 195.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
-                            <a href="{{ route('pendaftaran') }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SD ➔</a>
+                            <a href="{{ route('pendaftaran', ['jenjang' => 'SD']) }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SD ➔</a>
                         </div>
                     </div>
                 </div>
@@ -311,12 +311,12 @@
                             <ul class="space-y-2 font-body text-xs text-void/85">
                                 <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Reguler & Persiapan Khusus TKA</li>
                                 <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Pendampingan PR & Ulangan Harian</li>
-                                <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Kelompok Kecil Intensif (4-6 Siswa)</li>
+                                <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Kelompok Kecil Intensif</li>
                             </ul>
                         </div>
                         <div class="pt-6">
                             <p class="font-headline text-2xl font-extrabold text-void mb-3">Mulai Rp 150.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
-                            <a href="{{ route('pendaftaran') }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SMP ➔</a>
+                            <a href="{{ route('pendaftaran', ['jenjang' => 'SMP']) }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SMP ➔</a>
                         </div>
                     </div>
                 </div>
@@ -346,7 +346,7 @@
                         </div>
                         <div class="pt-6">
                             <p class="font-headline text-2xl font-extrabold text-void mb-3">Mulai Rp 200.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
-                            <a href="{{ route('pendaftaran') }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SMA ➔</a>
+                            <a href="{{ route('pendaftaran', ['jenjang' => 'SMA']) }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SMA ➔</a>
                         </div>
                     </div>
                 </div>
@@ -369,7 +369,7 @@
                         Siap Antarkan Putra-Putri Anda Meraih Prestasi Terbaik?
                     </h2>
                     <p class="font-body text-white/90 text-sm sm:text-base leading-relaxed max-w-2xl">
-                        Daftarkan putra-putri Anda hari ini di Bimbel Pelita Ilmu. Dapatkan bimbingan intensif 4-6 siswa per kelompok dengan pengajar S1/S2 berdedikasi tinggi!
+                        Daftarkan putra-putri Anda hari ini di Bimbel Pelita Ilmu. Dapatkan bimbingan intensif kelompok dengan pengajar S1/S2 berdedikasi tinggi!
                     </p>
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
                         <a href="{{ route('pendaftaran') }}" class="inline-flex h-14 items-center justify-center rounded-2xl bg-highlight text-void font-headline font-black text-sm uppercase tracking-wider px-8 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">

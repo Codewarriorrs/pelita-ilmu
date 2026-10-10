@@ -24,8 +24,7 @@ echo "[deploy] Discovering packages..."
 php artisan package:discover --ansi || true
 
 echo "[deploy] Caching config, routes, views, filament components..."
-php artisan config:cache || echo "[deploy] Warning: config:cache failed"
-php artisan route:cache || echo "[deploy] Warning: route:cache failed"
+php artisan optimize || echo "[deploy] Warning: optimize failed"
 php artisan filament:optimize || php artisan filament:cache-components || echo "[deploy] Warning: filament optimization failed"
 php artisan icons:cache || echo "[deploy] Warning: icons:cache failed"
 

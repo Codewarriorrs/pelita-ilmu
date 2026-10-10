@@ -16,7 +16,15 @@ class KelompokForm
                 TextInput::make('nama_kelompok')
                     ->required(),
                 Select::make('mapel_id')
-                    ->relationship('mapel', 'id')
+                    ->label('Mata Pelajaran')
+                    ->relationship('mapel', 'nama_mapel')
+                    ->searchable()
+                    ->preload()
+                    ->createOptionForm([
+                        TextInput::make('nama_mapel')
+                            ->label('Nama Mata Pelajaran')
+                            ->required(),
+                    ])
                     ->required(),
                 Select::make('tentor_id')
                     ->relationship('tentor', 'name')

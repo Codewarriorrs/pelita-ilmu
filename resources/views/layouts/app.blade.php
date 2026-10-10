@@ -8,7 +8,7 @@
         <!-- Primary SEO Meta Tags -->
         <title>@yield('title', 'Bimbel Pelita Ilmu Semarang - Bimbingan Belajar Berprestasi TK, SD, SMP, SMA & UTBK')</title>
         <meta name="title" content="Bimbel Pelita Ilmu Semarang - Bimbingan Belajar Berprestasi TK, SD, SMP, SMA & UTBK">
-        <meta name="description" content="Bimbel Pelita Ilmu Semarang menyediakan bimbingan belajar berkualitas intensif (4-6 siswa/kelompok) untuk jenjang TK, SD, SMP, SMA & Persiapan UTBK dengan tentor lulusan S1/S2 berpengalaman.">
+        <meta name="description" content="Bimbel Pelita Ilmu Semarang menyediakan bimbingan belajar berkualitas intensif kelompok untuk jenjang TK, SD, SMP, SMA & Persiapan UTBK dengan tentor lulusan S1/S2 berpengalaman.">
         <meta name="keywords" content="bimbel semarang, bimbingan belajar semarang, pelita ilmu, les privat semarang, les sma semarang, bimbel utbk semarang, les smp semarang, bimbel tk sd semarang">
         <meta name="author" content="Bimbel Pelita Ilmu">
         <meta name="robots" content="index, follow">
@@ -21,14 +21,14 @@
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:title" content="Bimbel Pelita Ilmu Semarang - Raih Prestasimu">
-        <meta property="og:description" content="Bimbingan belajar intensif 4-6 siswa per kelompok dengan pengajar S1/S2 berdedikasi tinggi di Semarang.">
+        <meta property="og:description" content="Bimbingan belajar intensif kelompok dengan pengajar S1/S2 berdedikasi tinggi di Semarang.">
         <meta property="og:image" content="{{ asset('images/logo-bimbel.png') }}">
 
         <!-- Twitter Card -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:url" content="{{ url()->current() }}">
         <meta property="twitter:title" content="Bimbel Pelita Ilmu Semarang - Raih Prestasimu">
-        <meta property="twitter:description" content="Bimbingan belajar intensif 4-6 siswa per kelompok dengan pengajar S1/S2 berdedikasi tinggi di Semarang.">
+        <meta property="twitter:description" content="Bimbingan belajar intensif kelompok dengan pengajar S1/S2 berdedikasi tinggi di Semarang.">
         <meta property="twitter:image" content="{{ asset('images/logo-bimbel.png') }}">
 
         <!-- JSON-LD Structured Data Schema -->
