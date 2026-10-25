@@ -1,0 +1,48 @@
+name: Deploy to Biznet GIO VPS
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+              TARGET_DIR="/var/www/pelita-ilmu"
+              BRANCH="main"
+            elif [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+              TARGET_DIR="/var/www/pelita-ilmu-dev"
+              BRANCH="dev"
+            fi
+            
+            echo "=========================================="
+            echo "🚀 Deploying $BRANCH to $TARGET_DIR..."
+            echo "=========================================="
+            
+            cd $TARGET_DIR
+            sudo git fetch origin $BRANCH
+            sudo git checkout $BRANCH
+            sudo git pull origin $BRANCH
+            
+            sudo composer install --no-dev --optimize-autoloader
+            sudo php artisan migrate --force
+            
+            sudo npm ci
+            sudo npm run build
+            
+            sudo php artisan optimize
+            
+            sudo chown -R www-data:www-data storage bootstrap/cache
+            sudo chmod -R 775 storage bootstrap/cache
+            
+            echo "✅ Deployment to $TARGET_DIR completed successfully!"

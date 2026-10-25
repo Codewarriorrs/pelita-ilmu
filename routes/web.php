@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
@@ -9,5 +8,7 @@ Route::get('/', [RegistrationController::class, 'index'])->name('home');
 Route::get('/daftar', [RegistrationController::class, 'create'])->name('pendaftaran');
 Route::post('/daftar', [RegistrationController::class, 'store'])->name('daftar.store');
 
-// Redirect /login ke /admin/login (Filament Native Login)
-Route::redirect('/login', '/admin/login')->name('login');
+// Route Autentikasi Utama: /behindpelita & /adminlogin (Filament Native Login)
+Route::redirect('/behindpelita', '/admin/login')->name('behindpelita');
+Route::redirect('/adminlogin', '/behindpelita')->name('adminlogin');
+Route::redirect('/login', '/behindpelita')->name('login');

@@ -3,7 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        @if (str_starts_with(config('app.url'), 'https://'))
+            <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        @endif
         
         <!-- Primary SEO Meta Tags -->
         <title>@yield('title', 'Bimbel Pelita Ilmu Semarang - Bimbingan Belajar Berprestasi TK, SD, SMP, SMA & UTBK')</title>

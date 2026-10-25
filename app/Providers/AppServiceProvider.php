@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(\App\Models\JadwalKelompok::class, \App\Policies\JadwalKelompokPolicy::class);
         Gate::policy(\App\Models\DetailPresensi::class, \App\Policies\DetailPresensiPolicy::class);
 
-        if (app()->environment('production')) {
+        if (app()->environment('production') && str_starts_with(config('app.url'), 'https://')) {
             URL::forceScheme('https');
         }
 
