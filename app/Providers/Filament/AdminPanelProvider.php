@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path('behindpelita')
             ->login()
             ->brandName('Pelita Ilmu Bimbel')
             ->brandLogo(asset('images/logo-bimbel.png'))

@@ -14,8 +14,11 @@ trait HasSmartCancelAction
         // Cek path URL sebelumnya
         $path = $previous ? parse_url($previous, PHP_URL_PATH) : null;
 
-        // Abaikan jika previous URL adalah dashboard /admin atau halaman form saat ini
-        $isDashboard = $path && (rtrim($path, '/') === '/admin' || str_ends_with(rtrim($path, '/'), '/admin'));
+        // Abaikan jika previous URL adalah dashboard /behindpelita atau /admin atau halaman form saat ini
+        $isDashboard = $path && (
+            rtrim($path, '/') === '/behindpelita' || str_ends_with(rtrim($path, '/'), '/behindpelita') ||
+            rtrim($path, '/') === '/admin' || str_ends_with(rtrim($path, '/'), '/admin')
+        );
         $isCurrent = $previous && (rtrim($previous, '/') === rtrim(url()->current(), '/'));
 
         // Jika ada previous URL yang valid (misal list jadwal / siswa / filter / rekap), kembali ke situ.
