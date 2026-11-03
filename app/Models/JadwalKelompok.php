@@ -18,6 +18,7 @@ class JadwalKelompok extends Model
     protected $fillable = [
         'kelompok_id',
         'tanggal_sesi',
+        'ruang_kelas',
         'status_sesi',
         'materi_pembahasan',
         'catatan_tentor',

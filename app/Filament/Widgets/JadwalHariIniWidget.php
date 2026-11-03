@@ -4,8 +4,10 @@ namespace App\Filament\Widgets;
 
 use App\Models\JadwalKelompok;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
 class JadwalHariIniWidget extends BaseWidget
@@ -14,14 +16,10 @@ class JadwalHariIniWidget extends BaseWidget
 
     protected int | string | array $columnSpan = 'full';
 
-    // Matikan auto-polling — kurangi round-trip ke DB
     protected ?string $pollingInterval = null;
 
-    protected static ?string $heading = 'Jadwal Bimbingan Belajar Hari Ini';
+    protected static ?string $heading = 'Jadwal Bimbingan Belajar';
 
-    /**
-     * Otorisasi: Dapat dilihat oleh Admin maupun Tentor yang login.
-     */
     public static function canView(): bool
     {
         return auth()->check();
@@ -29,33 +27,47 @@ class JadwalHariIniWidget extends BaseWidget
 
     public function table(Table $table): Table
     {
-        $hariIni = Carbon::today()->toDateString();
-
-        /** @var \App\Models\User|null $user */
-        $user = auth()->user();
-
         $query = JadwalKelompok::query()
-            // 1. Filter hanya sesi bimbingan hari ini
-            ->whereDate('tanggal_sesi', $hariIni)
-            // 2. Eager Loading relasi untuk menghindari N+1 Query Problem
             ->with([
                 'kelompok.tentor',
                 'kelompok.mapel',
             ]);
 
-        if ($user && $user->isTentor()) {
-            $query->whereHas('kelompok', function ($q) use ($user) {
-                $q->where('tentor_id', $user->id);
-            });
-        }
-
         return $table
             ->query($query)
+            ->filters([
+                SelectFilter::make('rentang_waktu')
+                    ->label('Filter Waktu')
+                    ->options([
+                        'hari_ini' => 'Hari Ini',
+                        'bulan_ini' => 'Bulan Ini',
+                    ])
+                    ->default('hari_ini')
+                    ->query(function (Builder $query, array $data) {
+                        $value = !empty($data['value']) ? $data['value'] : 'hari_ini';
+                        if ($value === 'bulan_ini') {
+                            return $query->whereMonth('tanggal_sesi', Carbon::now()->month)
+                                ->whereYear('tanggal_sesi', Carbon::now()->year);
+                        }
+                        return $query->whereDate('tanggal_sesi', Carbon::today()->toDateString());
+                    }),
+            ])
             ->columns([
+                TextColumn::make('tanggal_sesi')
+                    ->label('Tanggal')
+                    ->date('d M Y')
+                    ->sortable(),
+
                 TextColumn::make('kelompok.nama_kelompok')
                     ->label('Nama Kelompok')
                     ->searchable()
                     ->weight('bold'),
+
+                TextColumn::make('ruang_kelas')
+                    ->label('Ruangan')
+                    ->badge()
+                    ->color('info')
+                    ->placeholder('-'),
 
                 TextColumn::make('kelompok.mapel.nama_mapel')
                     ->label('Mata Pelajaran')
@@ -88,9 +100,10 @@ class JadwalHariIniWidget extends BaseWidget
                         default => 'gray',
                     }),
             ])
-            ->emptyStateHeading('Tidak Ada Sesi Bimbingan Hari Ini')
-            ->emptyStateDescription('Hari ini tidak ada jadwal kelompok belajar tatap muka yang terdaftar.')
+            ->emptyStateHeading('Tidak Ada Sesi Bimbingan')
+            ->emptyStateDescription('Tidak ada jadwal kelompok belajar untuk periode yang dipilih.')
             ->emptyStateIcon('heroicon-o-calendar-days')
             ->paginated([5, 10]);
     }
 }
+

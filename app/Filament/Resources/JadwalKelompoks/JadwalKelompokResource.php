@@ -56,6 +56,17 @@ class JadwalKelompokResource extends Resource
                     ->default(now())
                     ->required(),
 
+                Select::make('ruang_kelas')
+                    ->label('Ruang Kelas')
+                    ->options([
+                        'Ruang 1 (Utama)' => 'Ruang 1 (Utama)',
+                        'Ruang 2 (AC)' => 'Ruang 2 (AC)',
+                        'Ruang 3' => 'Ruang 3',
+                        'Ruang Privat' => 'Ruang Privat',
+                    ])
+                    ->searchable()
+                    ->preload(),
+
                 Select::make('status_sesi')
                     ->label('Status Pertemuan')
                     ->options([
@@ -96,6 +107,12 @@ class JadwalKelompokResource extends Resource
                     ->label('Kelompok Belajar')
                     ->searchable()
                     ->sortable(),
+
+                TextColumn::make('ruang_kelas')
+                    ->label('Ruangan')
+                    ->badge()
+                    ->color('info')
+                    ->placeholder('-'),
 
                 TextColumn::make('jam_sesi')
                     ->label('Waktu / Jam')
@@ -152,7 +169,7 @@ class JadwalKelompokResource extends Resource
                             'daftar_kehadiran' => $daftarSiswa->map(function ($siswa) use ($presensiTersimpan) {
                                 return [
                                     'siswa_id'   => $siswa->id,
-                                    'nama_siswa' => $siswa->nama_lengkap,
+                                    'nama_siswa' => $siswa->nama_lengkap . ($siswa->status_siswa !== 'AKTIF' ? " ({$siswa->status_siswa})" : ''),
                                     'status'     => $presensiTersimpan[$siswa->id]->status_kehadiran ?? 'HADIR',
                                 ];
                             })->toArray(),

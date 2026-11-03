@@ -123,7 +123,7 @@ class RekapPresensiMatrix extends Page
         $isTentor = $user && $user->isTentor();
 
         // 1. Dropdown kelompoks (dependent pada Jenjang dan hak akses Tentor)
-        $allKelompoksQuery = Kelompok::query();
+        $allKelompoksQuery = Kelompok::query()->with(['mapel', 'tentor']);
         if ($isTentor) {
             $allKelompoksQuery->where('tentor_id', $user->id);
         }
@@ -178,7 +178,7 @@ class RekapPresensiMatrix extends Page
         $startDate = Carbon::createFromDate($tahun, $bulan, 1)->startOfMonth()->toDateString();
         $endDate = Carbon::createFromDate($tahun, $bulan, 1)->endOfMonth()->toDateString();
 
-        $jadwalQuery = JadwalKelompok::with('kelompok')
+        $jadwalQuery = JadwalKelompok::with(['kelompok.mapel', 'kelompok.tentor'])
             ->whereBetween('tanggal_sesi', [$startDate, $endDate]);
 
         if ($isTentor) {
@@ -212,8 +212,7 @@ class RekapPresensiMatrix extends Page
             }
         }
 
-        // 4. Fetch active students only
-        $siswaQuery = Siswa::query()->where('status_siswa', 'AKTIF');
+        $siswaQuery = Siswa::query()->with('kelompok');
 
         if ($isTentor) {
             $siswaQuery->whereHas('kelompok', function ($q) use ($user) {
@@ -251,7 +250,7 @@ class RekapPresensiMatrix extends Page
             }
         }
 
-        $allKelompoksQuery = Kelompok::query();
+        $allKelompoksQuery = Kelompok::query()->with(['mapel', 'tentor']);
         if ($isTentor) {
             $allKelompoksQuery->where('tentor_id', $user->id);
         }

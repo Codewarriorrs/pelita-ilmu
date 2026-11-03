@@ -15,6 +15,7 @@ use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
@@ -124,6 +125,11 @@ class PembayaranResource extends Resource
                     ->numeric()
                     ->default((int) date('Y'))
                     ->required(),
+
+                Textarea::make('keterangan')
+                    ->label('Keterangan')
+                    ->placeholder('Catatan atau keterangan pembayaran')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -200,6 +206,12 @@ class PembayaranResource extends Resource
                     ->state(fn (Pembayaran $record): string => ($record->status_bayar === 'LUNAS' && $record->tanggal_bayar) ? \Carbon\Carbon::parse($record->tanggal_bayar)->translatedFormat('d M Y') : '-')
                     ->sortable(),
 
+                TextColumn::make('keterangan')
+                    ->label('Keterangan')
+                    ->limit(25)
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->placeholder('-'),
+
                 TextColumn::make('adminPencatat.name')
                     ->label('Pencatat Admin')
                     ->color('gray')
@@ -264,6 +276,9 @@ class PembayaranResource extends Resource
                             ->label('Tanggal Pembayaran')
                             ->default(now())
                             ->required(),
+                        Textarea::make('keterangan')
+                            ->label('Keterangan')
+                            ->placeholder('Catatan pembayaran (opsional)'),
                     ])
                     ->action(function (array $data, Pembayaran $record): void {
                         $record->update([
@@ -271,6 +286,7 @@ class PembayaranResource extends Resource
                             'biaya_dibayar' => $data['biaya_dibayar'],
                             'metode_bayar' => $data['metode_bayar'],
                             'tanggal_bayar' => $data['tanggal_bayar'],
+                            'keterangan' => $data['keterangan'] ?? null,
                             'admin_pencatat_id' => auth()->id(),
                         ]);
 

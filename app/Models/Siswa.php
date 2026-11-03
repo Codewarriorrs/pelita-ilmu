@@ -29,6 +29,7 @@ class Siswa extends Model
         'nama_ortu',
         'no_telp_ortu',
         'biaya_bulanan',
+        'keterangan',
     ];
 
     protected $casts = [

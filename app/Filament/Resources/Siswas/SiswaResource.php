@@ -71,6 +71,7 @@ class SiswaResource extends Resource
                     ->label('Status Siswa')
                     ->options([
                         'CALON' => 'Calon',
+                        'BELUM_MULAI' => 'Belum Mulai',
                         'AKTIF' => 'Aktif',
                         'NONAKTIF' => 'Nonaktif',
                     ])
@@ -93,6 +94,10 @@ class SiswaResource extends Resource
                     ->default(0),
                 Textarea::make('alamat_rumah')
                     ->label('Alamat Rumah')
+                    ->columnSpanFull(),
+                Textarea::make('keterangan')
+                    ->label('Keterangan')
+                    ->placeholder('Catatan atau keterangan khusus siswa')
                     ->columnSpanFull(),
             ]);
     }
@@ -124,6 +129,7 @@ class SiswaResource extends Resource
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'AKTIF' => '🟢 AKTIF',
                         'CALON' => '🟡 CALON',
+                        'BELUM_MULAI' => '🟠 BELUM MULAI',
                         'NONAKTIF' => '🔴 NONAKTIF',
                         default => $state,
                     })
@@ -135,6 +141,11 @@ class SiswaResource extends Resource
                     ->label('Biaya/Bln')
                     ->money('IDR', locale: 'id')
                     ->visible(fn () => auth()->user()?->isAdmin() ?? true),
+                TextColumn::make('keterangan')
+                    ->label('Keterangan')
+                    ->limit(25)
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->placeholder('-'),
             ])
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('status_siswa')
@@ -142,6 +153,7 @@ class SiswaResource extends Resource
                     ->options([
                         'AKTIF' => 'Aktif',
                         'CALON' => 'Calon',
+                        'BELUM_MULAI' => 'Belum Mulai',
                         'NONAKTIF' => 'Nonaktif',
                     ]),
                 \Filament\Tables\Filters\SelectFilter::make('tipe_belajar')

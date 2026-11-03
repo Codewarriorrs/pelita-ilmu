@@ -17,12 +17,19 @@ class PembayaranOverviewWidget extends BaseWidget
         $tahunIni = (int) date('Y');
         $namaBulan = Carbon::now()->locale('id')->translatedFormat('F Y');
 
-        // Total Pendapatan Bulan Ini
-        $totalBulanIni = (float) Pembayaran::query()
+        $rekapMetode = Pembayaran::query()
+            ->selectRaw("metode_bayar, SUM(biaya_dibayar) as total")
             ->where('status_bayar', 'LUNAS')
             ->where('untuk_bulan', $bulanIni)
             ->where('untuk_tahun', $tahunIni)
-            ->sum('biaya_dibayar');
+            ->groupBy('metode_bayar')
+            ->pluck('total', 'metode_bayar')
+            ->toArray();
+
+        $tunai = (float) ($rekapMetode['TUNAI'] ?? 0);
+        $transfer = (float) ($rekapMetode['TRANSFER'] ?? 0);
+        $qris = (float) ($rekapMetode['QRIS'] ?? 0);
+        $totalBulanIni = $tunai + $transfer + $qris;
 
         // Total Pendapatan Keseluruhan
         $totalKeseluruhan = (float) Pembayaran::query()
@@ -42,9 +49,13 @@ class PembayaranOverviewWidget extends BaseWidget
             ->where('untuk_tahun', $tahunIni)
             ->count();
 
+        $formattedTunai = 'Rp ' . number_format($tunai, 0, ',', '.');
+        $formattedTransfer = 'Rp ' . number_format($transfer, 0, ',', '.');
+        $formattedQris = 'Rp ' . number_format($qris, 0, ',', '.');
+
         return [
             Stat::make("Pendapatan {$namaBulan}", 'Rp ' . number_format($totalBulanIni, 0, ',', '.'))
-                ->description("{$jumlahLunasBulanIni} transaksi lunas bulan ini")
+                ->description("Tunai: {$formattedTunai} | Trf: {$formattedTransfer} | QRIS: {$formattedQris}")
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('success'),
 

@@ -44,16 +44,26 @@ class StatsOverviewWidget extends BaseWidget
             return Siswa::query()->where('status_siswa', 'AKTIF')->count();
         });
 
-        $totalPemasukan = Cache::remember("stats.{$role}.{$userId}.pemasukan.{$bulanSekarang}.{$tahunSekarang}", 60, function () use ($bulanSekarang, $tahunSekarang) {
+        $rekapMetode = Cache::remember("stats.{$role}.{$userId}.metode_bayar.{$bulanSekarang}.{$tahunSekarang}", 60, function () use ($bulanSekarang, $tahunSekarang) {
             return Pembayaran::query()
+                ->selectRaw("metode_bayar, SUM(biaya_dibayar) as total")
                 ->where('status_bayar', 'LUNAS')
                 ->where('untuk_bulan', $bulanSekarang)
                 ->where('untuk_tahun', $tahunSekarang)
-                ->sum('biaya_dibayar');
+                ->groupBy('metode_bayar')
+                ->pluck('total', 'metode_bayar')
+                ->toArray();
         });
 
-        // Format mata uang Rupiah tanpa resiko floating point issue
-        $formattedPemasukan = 'Rp ' . number_format((float) $totalPemasukan, 0, ',', '.');
+        $tunai = (float) ($rekapMetode['TUNAI'] ?? 0);
+        $transfer = (float) ($rekapMetode['TRANSFER'] ?? 0);
+        $qris = (float) ($rekapMetode['QRIS'] ?? 0);
+        $totalPemasukan = $tunai + $transfer + $qris;
+
+        $formattedPemasukan = 'Rp ' . number_format($totalPemasukan, 0, ',', '.');
+        $formattedTunai = 'Rp ' . number_format($tunai, 0, ',', '.');
+        $formattedTransfer = 'Rp ' . number_format($transfer, 0, ',', '.');
+        $formattedQris = 'Rp ' . number_format($qris, 0, ',', '.');
 
         return [
             Stat::make('Total Siswa Aktif', $totalSiswaAktif . ' Siswa')
@@ -62,9 +72,24 @@ class StatsOverviewWidget extends BaseWidget
                 ->color('success'),
 
             Stat::make('Pemasukan ' . $namaBulan, $formattedPemasukan)
-                ->description('Total pembayaran SPP terkonfirmasi')
+                ->description("Tunai: {$formattedTunai} | Transfer: {$formattedTransfer} | QRIS: {$formattedQris}")
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('primary'),
+
+            Stat::make('Pemasukan Tunai', $formattedTunai)
+                ->description('Metode Tunai / Cash')
+                ->descriptionIcon('heroicon-m-banknotes')
+                ->color('success'),
+
+            Stat::make('Pemasukan Transfer', $formattedTransfer)
+                ->description('Transfer Rekening Bank')
+                ->descriptionIcon('heroicon-m-credit-card')
+                ->color('info'),
+
+            Stat::make('Pemasukan QRIS', $formattedQris)
+                ->description('Pembayaran via QRIS')
+                ->descriptionIcon('heroicon-m-qr-code')
+                ->color('warning'),
         ];
     }
 }
