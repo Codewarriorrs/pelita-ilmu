@@ -60,6 +60,14 @@ class PendaftaranResource extends Resource
                     ->placeholder('Contoh: Regular 10 SMA Mat-1 / Privat SMA')
                     ->maxLength(255),
 
+                TextInput::make('paket_pendaftaran')
+                    ->label('Pilihan Pendaftaran')
+                    ->maxLength(50),
+
+                TextInput::make('ukuran_kaos')
+                    ->label('Ukuran Kaos')
+                    ->maxLength(10),
+
                 TextInput::make('nomor_wa')
                     ->label('Nomor WhatsApp')
                     ->tel()
@@ -101,6 +109,13 @@ class PendaftaranResource extends Resource
 
                 TextColumn::make('minat_program')
                     ->label('Minat Program'),
+
+                TextColumn::make('paket_pendaftaran')
+                    ->label('Biaya Pendaftaran')
+                    ->badge()
+                    ->color(fn (?string $state): string => str_contains($state ?? '', 'Kaos') ? 'warning' : 'gray')
+                    ->formatStateUsing(fn (Pendaftaran $record): string => ($record->paket_pendaftaran ?? '-') . ($record->ukuran_kaos ? " (Size: {$record->ukuran_kaos})" : ''))
+                    ->searchable(),
 
                 TextColumn::make('nomor_wa')
                     ->label('Nomor WA')

@@ -24,6 +24,8 @@ class Pendaftaran extends Model
         'no_telp_siswa',
         'alamat_rumah',
         'minat_program',
+        'paket_pendaftaran',
+        'ukuran_kaos',
         'nomor_wa',
         'status_tindak_lanjut',
         'tanggal_masuk',

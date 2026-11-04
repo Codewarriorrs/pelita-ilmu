@@ -261,11 +261,15 @@
                                 id="nomor_wali"
                                 name="no_telp_ortu"
                                 value="{{ old('no_telp_ortu') }}"
-                                placeholder="08xxxxxxxxxx (hanya angka)"
+                                placeholder="Contoh: 081234567890"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                 required
                                 class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void placeholder:text-stone-400 focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
                             >
-                            <p class="mt-1 text-[11px] text-stone-500 font-body">Nomor ini digunakan untuk konfirmasi pendaftaran & jadwal belajar.</p>
+                            <p class="mt-1.5 text-xs text-stone-600 font-body">Format: Hanya angka (contoh: 081234567890).</p>
+                            <p class="text-xs text-stone-500 font-body">Digunakan untuk konfirmasi pendaftaran & jadwal belajar.</p>
                         </div>
 
                         <!-- No Telp Siswa -->
@@ -281,10 +285,13 @@
                                 id="nomor_telepon_siswa"
                                 name="no_telp_siswa"
                                 value="{{ old('no_telp_siswa') }}"
-                                placeholder="08xxxxxxxxxx (bila ada)"
+                                placeholder="Contoh: 081234567890"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                 class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void placeholder:text-stone-400 focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
                             >
-                            <p class="mt-1 text-[11px] text-stone-500 font-body">Boleh dikosongkan untuk siswa jenjang TK / SD.</p>
+                            <p class="mt-1.5 text-xs text-stone-500 font-body">Format: Hanya angka. Boleh dikosongkan untuk siswa jenjang TK / SD.</p>
                         </div>
                     </div>
                 </div>
@@ -307,6 +314,83 @@
                             required
                             class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void placeholder:text-stone-400 focus:border-primary focus:bg-white focus:outline-none transition-all resize-none shadow-sm font-body"
                         >{{ old('alamat_rumah') }}</textarea>
+                    </div>
+                </div>
+
+                <!-- SECTION 5: PILIHAN BIAYA PENDAFTARAN -->
+                <div class="pt-6 border-t-2 border-black">
+                    <div class="flex items-center gap-3 pb-3 mb-6 border-b-2 border-black">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white font-headline font-extrabold text-sm border border-black shadow-sm">5</span>
+                        <h2 class="text-xl sm:text-2xl font-headline font-extrabold text-void">Pilihan Biaya Pendaftaran</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs sm:text-sm font-bold text-void mb-1.5 font-subtitle">
+                                Paket Pendaftaran <span class="text-rose-500">*</span>
+                            </label>
+                            <p class="text-xs text-stone-600 mb-3 font-body">Silakan tentukan salah satu opsi biaya pendaftaran di bawah ini:</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Opsi 1: Hanya Pendaftaran -->
+                            <label class="flex items-start p-4 rounded-xl border-2 border-black cursor-pointer transition-all bg-white text-void shadow-sm hover:border-primary">
+                                <input
+                                    type="radio"
+                                    name="paket_pendaftaran"
+                                    value="Hanya Pendaftaran"
+                                    id="paket_hanya_pendaftaran"
+                                    onchange="handlePaketPendaftaranChange()"
+                                    {{ old('paket_pendaftaran') == 'Hanya Pendaftaran' ? 'checked' : '' }}
+                                    required
+                                    class="h-4 w-4 mt-1 text-primary border-black focus:ring-0"
+                                >
+                                <div class="ml-3">
+                                    <span class="text-sm font-headline font-bold block text-void">Hanya Pendaftaran</span>
+                                    <span class="text-xs text-stone-500 font-body mt-0.5 block">Biaya administrasi pendaftaran standar tanpa merchandise kaos bimbel.</span>
+                                </div>
+                            </label>
+
+                            <!-- Opsi 2: Dengan Kaos -->
+                            <label class="flex items-start p-4 rounded-xl border-2 border-black cursor-pointer transition-all bg-white text-void shadow-sm hover:border-primary">
+                                <input
+                                    type="radio"
+                                    name="paket_pendaftaran"
+                                    value="Dengan Kaos (+Rp70.000)"
+                                    id="paket_dengan_kaos"
+                                    onchange="handlePaketPendaftaranChange()"
+                                    {{ old('paket_pendaftaran') == 'Dengan Kaos (+Rp70.000)' ? 'checked' : '' }}
+                                    required
+                                    class="h-4 w-4 mt-1 text-primary border-black focus:ring-0"
+                                >
+                                <div class="ml-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-headline font-bold block text-void">Dengan Kaos (+Rp70.000)</span>
+                                        <span class="text-[10px] font-headline font-black bg-highlight text-void px-2 py-0.5 rounded-full border border-black shadow-sm">SPESIAL</span>
+                                    </div>
+                                    <span class="text-xs text-stone-500 font-body mt-0.5 block">Termasuk 1 pcs kaos resmi eksklusif Bimbel Pelita Ilmu.</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Dropdown Ukuran Kaos (Dinamis) -->
+                        <div id="container-ukuran-kaos" class="{{ old('paket_pendaftaran') == 'Dengan Kaos (+Rp70.000)' ? '' : 'hidden' }} pt-2">
+                            <label for="ukuran_kaos" class="block text-xs sm:text-sm font-bold text-void mb-1.5 font-subtitle">
+                                Pilih Ukuran Kaos <span class="text-rose-500">*</span>
+                            </label>
+                            <select
+                                id="ukuran_kaos"
+                                name="ukuran_kaos"
+                                class="w-full sm:w-1/2 rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
+                            >
+                                <option value="">-- Pilih Ukuran Kaos --</option>
+                                <option value="S" {{ old('ukuran_kaos') == 'S' ? 'selected' : '' }}>S (Small)</option>
+                                <option value="M" {{ old('ukuran_kaos') == 'M' ? 'selected' : '' }}>M (Medium)</option>
+                                <option value="L" {{ old('ukuran_kaos') == 'L' ? 'selected' : '' }}>L (Large)</option>
+                                <option value="XL" {{ old('ukuran_kaos') == 'XL' ? 'selected' : '' }}>XL (Extra Large)</option>
+                                <option value="XXL" {{ old('ukuran_kaos') == 'XXL' ? 'selected' : '' }}>XXL (Double Extra Large)</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -626,8 +710,27 @@
             }
         }
 
+        function handlePaketPendaftaranChange() {
+            const radioDenganKaos = document.getElementById('paket_dengan_kaos');
+            const containerUkuran = document.getElementById('container-ukuran-kaos');
+            const selectUkuran = document.getElementById('ukuran_kaos');
+
+            if (radioDenganKaos && radioDenganKaos.checked) {
+                if (containerUkuran) containerUkuran.classList.remove('hidden');
+                if (selectUkuran) selectUkuran.required = true;
+            } else {
+                if (containerUkuran) containerUkuran.classList.add('hidden');
+                if (selectUkuran) {
+                    selectUkuran.required = false;
+                    selectUkuran.value = '';
+                }
+            }
+        }
+
         // Initialize on DOMContentLoaded & Submit guard
         document.addEventListener('DOMContentLoaded', function() {
+            handlePaketPendaftaranChange();
+
             if (initialJenjang) {
                 const jenjangSelect = document.getElementById('jenjang');
                 if (jenjangSelect) {
@@ -653,6 +756,25 @@
                             e.preventDefault();
                             alert(`Pendaftaran belum dapat dikirim:\nUntuk paket "${programSelect.value}", Anda wajib memilih tepat ${exactCount} mata pelajaran.\n\nSaat ini baru terpilih: ${checkedCount} mapel. Mohon lengkapi pilihan mapel terlebih dahulu.`);
                             document.getElementById('mapel-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            return;
+                        }
+                    }
+
+                    const radioHanya = document.getElementById('paket_hanya_pendaftaran');
+                    const radioKaos = document.getElementById('paket_dengan_kaos');
+                    if ((!radioHanya || !radioHanya.checked) && (!radioKaos || !radioKaos.checked)) {
+                        e.preventDefault();
+                        alert('Silakan pilih salah satu opsi biaya pendaftaran (Langkah 5).');
+                        return;
+                    }
+
+                    if (radioKaos && radioKaos.checked) {
+                        const selectUkuran = document.getElementById('ukuran_kaos');
+                        if (!selectUkuran || !selectUkuran.value) {
+                            e.preventDefault();
+                            alert('Silakan pilih ukuran kaos terlebih dahulu.');
+                            selectUkuran?.focus();
+                            return;
                         }
                     }
                 });
