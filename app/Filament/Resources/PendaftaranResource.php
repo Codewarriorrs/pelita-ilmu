@@ -51,6 +51,10 @@ class PendaftaranResource extends Resource
                     ->required()
                     ->maxLength(255),
 
+                TextInput::make('nama_panggilan')
+                    ->label('Nama Panggilan')
+                    ->maxLength(50),
+
                 TextInput::make('asal_sekolah')
                     ->label('Asal Sekolah')
                     ->maxLength(255),
@@ -99,6 +103,7 @@ class PendaftaranResource extends Resource
             ->columns([
                 TextColumn::make('nama_lengkap')
                     ->label('Nama Calon Siswa')
+                    ->description(fn (Pendaftaran $record): ?string => $record->nama_panggilan ? "Panggilan: {$record->nama_panggilan}" : null)
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),

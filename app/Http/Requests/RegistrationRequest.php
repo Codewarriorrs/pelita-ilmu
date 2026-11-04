@@ -56,6 +56,7 @@ class RegistrationRequest extends FormRequest
     {
         return [
             'nama_lengkap' => ['required', 'string', 'min:3', 'max:100'],
+            'nama_panggilan' => ['required', 'string', 'min:2', 'max:50'],
             'tanggal_lahir' => ['required', 'date', 'before_or_equal:today'],
             'asal_sekolah' => ['required', 'string', 'min:2', 'max:100'],
             'jenjang' => ['required', 'string', 'in:TK,SD,SMP,SMA'],
@@ -104,6 +105,7 @@ class RegistrationRequest extends FormRequest
     {
         return [
             'nama_lengkap.required' => 'Nama lengkap calon siswa wajib diisi.',
+            'nama_panggilan.required' => 'Nama panggilan calon siswa wajib diisi.',
             'tanggal_lahir.required' => 'Tanggal lahir calon siswa wajib diisi.',
             'tanggal_lahir.before_or_equal' => 'Tanggal lahir tidak boleh melebihi hari ini.',
             'asal_sekolah.required' => 'Asal sekolah calon siswa wajib diisi.',

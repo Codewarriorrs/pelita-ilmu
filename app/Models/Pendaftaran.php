@@ -13,6 +13,7 @@ class Pendaftaran extends Model
 
     protected $fillable = [
         'nama_lengkap',
+        'nama_panggilan',
         'asal_sekolah',
         'kelas',
         'kategori_kelas',

@@ -76,6 +76,22 @@
                             >
                         </div>
 
+                        <!-- Nama Panggilan -->
+                        <div class="md:col-span-2">
+                            <label for="nama_panggilan" class="block text-xs sm:text-sm font-bold text-void mb-1.5 font-subtitle">
+                                Nama Panggilan Siswa <span class="text-rose-500">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="nama_panggilan"
+                                name="nama_panggilan"
+                                value="{{ old('nama_panggilan') }}"
+                                placeholder="Contoh: Rian"
+                                required
+                                class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void placeholder:text-stone-400 focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
+                            >
+                        </div>
+
                         <!-- Tanggal Lahir -->
                         <div>
                             <label for="tanggal_lahir" class="block text-xs sm:text-sm font-bold text-void mb-1.5 font-subtitle">

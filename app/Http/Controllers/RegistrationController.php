@@ -54,6 +54,7 @@ class RegistrationController extends Controller
 
         Pendaftaran::create([
             'nama_lengkap' => $validated['nama_lengkap'],
+            'nama_panggilan' => $validated['nama_panggilan'] ?? null,
             'asal_sekolah' => $validated['asal_sekolah'] ?? null,
             'kelas' => $kelas,
             'kategori_kelas' => $kategori,
