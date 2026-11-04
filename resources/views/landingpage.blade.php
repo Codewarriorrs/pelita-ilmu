@@ -336,7 +336,7 @@
                         <div class="space-y-4">
                             <div class="pb-3 border-b border-stone-200">
                                 <p class="font-subtitle text-xs font-bold text-[#193836] mb-1">Pilihan Paket (Reguler, TKA & UTBK):</p>
-                                <p class="font-body text-xs text-void/80 leading-relaxed">MTK Wajib/Lanjut, Fisika, Kimia, Biologi, B. Indo, B. Ing, UTBK</p>
+                                <p class="font-body text-xs text-void/80 leading-relaxed">MTK Wajib, MTK Lanjut, Fisika, Kimia, Biologi, Ekonomi, Sosiologi, B. Indo, B. Ing, UTBK</p>
                             </div>
                             <ul class="space-y-2 font-body text-xs text-void/85">
                                 <li class="flex items-center gap-2"><span class="text-primary font-bold">✓</span> Reguler, TKA & Intensif UTBK / SNBT</li>

@@ -446,7 +446,19 @@
     <!-- JAVASCRIPT DINAMIS KELAS, PROGRAM & CHECKBOX MATA PELAJARAN -->
     <script>
         const smpMapelList = ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'IPA Fisika', 'IPA Biologi', 'IPS'];
-        const smaMapelList = ['Matematika Wajib / Lanjut', 'Fisika / Ekonomi', 'Kimia / Geografi', 'Biologi / Sosiologi', 'Bahasa Inggris', 'Informatika / Sejarah'];
+        const smaMapelList = [
+            'Matematika Wajib',
+            'Matematika Lanjut',
+            'Fisika',
+            'Kimia',
+            'Biologi',
+            'Ekonomi',
+            'Sosiologi',
+            'Geografi',
+            'Bahasa Indonesia',
+            'Bahasa Inggris',
+            'Informatika / Sejarah'
+        ];
 
         const mapelData = {
             'TK': ['Membaca & Calistung', 'Mengaji / Iqro', 'Bahasa Inggris Dasar', 'Kreativitas & Seni'],
