@@ -285,7 +285,7 @@
                             </ul>
                         </div>
                         <div class="pt-6">
-                            <p class="font-headline text-2xl font-extrabold text-void mb-3">Rp 195.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
+                            <p class="font-headline text-2xl font-extrabold text-void mb-3">Mulai Rp 195.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
                             <a href="{{ route('pendaftaran', ['jenjang' => 'SD']) }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SD ➔</a>
                         </div>
                     </div>
@@ -315,18 +315,18 @@
                             </ul>
                         </div>
                         <div class="pt-6">
-                            <p class="font-headline text-2xl font-extrabold text-void mb-3">Mulai Rp 150.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
+                            <p class="font-headline text-2xl font-extrabold text-void mb-3">Mulai Rp 110.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
                             <a href="{{ route('pendaftaran', ['jenjang' => 'SMP']) }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SMP ➔</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- CARD SMA -->
+                <!-- CARD SMA & SMK -->
                 <div class="flex flex-col rounded-[32px] overflow-hidden border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white hover:-translate-y-1 transition-transform">
                     <div class="bg-primary p-6 text-white flex items-center justify-between min-h-[108px] border-b-2 border-black">
                         <div>
-                            <span class="text-[10px] font-subtitle font-bold text-highlight uppercase tracking-wider block mb-1">MENENGAH ATAS & UTBK</span>
-                            <h3 class="font-headline text-2xl font-bold text-white">SMA & UTBK</h3>
+                            <span class="text-[10px] font-subtitle font-bold text-highlight uppercase tracking-wider block mb-1">MENENGAH ATAS / SMK & UTBK</span>
+                            <h3 class="font-headline text-2xl font-bold text-white">SMA / SMK & UTBK</h3>
                         </div>
                         <div class="h-10 w-10 rounded-full bg-highlight text-void font-headline font-black text-xs flex items-center justify-center border-2 border-black shrink-0">
                             SMA
@@ -345,8 +345,8 @@
                             </ul>
                         </div>
                         <div class="pt-6">
-                            <p class="font-headline text-2xl font-extrabold text-void mb-3">Mulai Rp 200.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
-                            <a href="{{ route('pendaftaran', ['jenjang' => 'SMA']) }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SMA ➔</a>
+                            <p class="font-headline text-2xl font-extrabold text-void mb-3">Mulai Rp 130.000 <span class="text-xs font-normal font-body text-void/60">/bln</span></p>
+                            <a href="{{ route('pendaftaran', ['jenjang' => 'SMA']) }}" class="w-full inline-flex items-center justify-center py-3 bg-highlight hover:bg-yellow-400 text-void font-headline font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PILIH PAKET SMA / SMK ➔</a>
                         </div>
                     </div>
                 </div>
