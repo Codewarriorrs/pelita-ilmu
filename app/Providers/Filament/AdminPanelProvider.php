@@ -38,6 +38,10 @@ class AdminPanelProvider extends PanelProvider
             ->darkMode(false)
             ->font('Plus Jakarta Sans')
             ->renderHook(
+                \Filament\View\PanelsRenderHook::SIDEBAR_FOOTER,
+                fn () => view('filament.components.sidebar-logout'),
+            )
+            ->renderHook(
                 \Filament\View\PanelsRenderHook::HEAD_START,
                 fn () => new \Illuminate\Support\HtmlString('
                     <link rel="icon" type="image/png" href="' . asset('images/logo-bimbel-removebg.png') . '">
@@ -136,12 +140,32 @@ class AdminPanelProvider extends PanelProvider
                             box-shadow: 0 1px 2px 0 rgba(0,0,0,0.15) !important;
                         }
                         .fi-badge span, .fi-badge div { color: #ffffff !important; font-weight: 800 !important; }
-                        .fi-badge-color-success, [class*="fi-badge-color-success"] { background-color: #16a34a !important; color: #ffffff !important; }
-                        .fi-badge-color-danger,  [class*="fi-badge-color-danger"]  { background-color: #dc2626 !important; color: #ffffff !important; }
-                        .fi-badge-color-warning, [class*="fi-badge-color-warning"] { background-color: #d97706 !important; color: #ffffff !important; }
-                        .fi-badge-color-info,    [class*="fi-badge-color-info"]    { background-color: #2563eb !important; color: #ffffff !important; }
-                        .fi-badge-color-primary, [class*="fi-badge-color-primary"] { background-color: #0f766e !important; color: #ffffff !important; }
-                        .fi-badge-color-gray,    [class*="fi-badge-color-gray"]    { background-color: #475569 !important; color: #ffffff !important; }
+                        .fi-badge-color-success, [class*="fi-badge-color-success"], .fi-color-success, [class*="fi-color-success"] { background-color: #16a34a !important; color: #ffffff !important; }
+                        .fi-badge-color-danger,  [class*="fi-badge-color-danger"],  .fi-color-danger,  [class*="fi-color-danger"]  { background-color: #dc2626 !important; color: #ffffff !important; }
+                        .fi-badge-color-warning, [class*="fi-badge-color-warning"], .fi-color-warning, [class*="fi-color-warning"] { background-color: #d97706 !important; color: #ffffff !important; }
+                        .fi-badge-color-info,    [class*="fi-badge-color-info"],    .fi-color-info,    [class*="fi-color-info"]    { background-color: #2563eb !important; color: #ffffff !important; }
+                        .fi-badge-color-primary, [class*="fi-badge-color-primary"], .fi-color-primary, [class*="fi-color-primary"] { background-color: #0f766e !important; color: #ffffff !important; }
+                        .fi-badge-color-gray,    [class*="fi-badge-color-gray"],    .fi-color-gray,    [class*="fi-color-gray"]    { background-color: #475569 !important; color: #ffffff !important; }
+
+                        /* ===== ACTIVE TABLE FILTER INDICATORS (Filter Aktif) ===== */
+                        .fi-ta-filter-indicators .fi-badge {
+                            background-color: #193836 !important;
+                            border: 1px solid #102624 !important;
+                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+                        }
+                        .fi-ta-filter-indicators .fi-badge span,
+                        .fi-ta-filter-indicators .fi-badge div {
+                            color: #ffffff !important;
+                            font-weight: 800 !important;
+                        }
+                        .fi-ta-filter-indicators .fi-badge button,
+                        .fi-ta-filter-indicators .fi-badge svg {
+                            color: #ffffff !important;
+                            stroke: currentColor !important;
+                        }
+                        .fi-ta-filter-indicators .fi-badge button:hover svg {
+                            color: #fca5a5 !important;
+                        }
 
                         /* ===== ICON BUTTONS ===== */
                         .fi-icon-btn { border-radius: 0.5rem !important; transition: transform 0.15s ease !important; }
