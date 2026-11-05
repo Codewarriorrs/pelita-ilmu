@@ -100,47 +100,30 @@ class PendaftaranResource extends Resource
         return $table
             ->defaultSort('tanggal_masuk', 'desc')
             ->defaultPaginationPageOption(10)
+            ->content(fn () => view('filament.resources.pendaftaran.table-content', [
+                'records' => $table->getRecords(),
+            ]))
             ->columns([
                 TextColumn::make('nama_lengkap')
                     ->label('Nama Calon Siswa')
-                    ->description(fn (Pendaftaran $record): ?string => $record->nama_panggilan ? "Panggilan: {$record->nama_panggilan}" : null)
                     ->searchable()
-                    ->sortable()
-                    ->weight('bold'),
+                    ->sortable(),
 
                 TextColumn::make('asal_sekolah')
                     ->label('Asal Sekolah')
                     ->searchable(),
 
                 TextColumn::make('minat_program')
-                    ->label('Minat Program'),
+                    ->label('Program')
+                    ->searchable(),
 
                 TextColumn::make('paket_pendaftaran')
-                    ->label('Biaya Pendaftaran')
-                    ->badge()
-                    ->color(fn (?string $state): string => str_contains($state ?? '', 'Kaos') ? 'warning' : 'gray')
-                    ->formatStateUsing(fn (Pendaftaran $record): string => ($record->paket_pendaftaran ?? '-') . ($record->ukuran_kaos ? " (Size: {$record->ukuran_kaos})" : ''))
+                    ->label('Paket')
                     ->searchable(),
 
                 TextColumn::make('nomor_wa')
                     ->label('Nomor WA')
-                    ->icon('heroicon-m-phone')
                     ->searchable(),
-
-                TextColumn::make('status_tindak_lanjut')
-                    ->label('Status')
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'BARU' => '🟡 BARU MASUK',
-                        'DIHUBUNGI' => '🔵 DIHUBUNGI',
-                        'DITERIMA' => '🟢 DITERIMA',
-                        default => $state,
-                    })
-                    ->weight('extrabold'),
-
-                TextColumn::make('tanggal_masuk')
-                    ->label('Tgl Masuk')
-                    ->dateTime('d M Y H:i')
-                    ->sortable(),
             ])
             ->filters([
                 SelectFilter::make('status_tindak_lanjut')
