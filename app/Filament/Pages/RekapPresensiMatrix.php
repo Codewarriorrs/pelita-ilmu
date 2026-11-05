@@ -87,16 +87,17 @@ class RekapPresensiMatrix extends Page
                 $q->where('kelas', 'ILIKE', '%TK%')
                   ->orWhere('kelas', 'ILIKE', '%PAUD%')
                   ->orWhere('kategori_kelas', 'ILIKE', '%TK%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%PAUD%')
-                  ->orWhereHas('kelompok', fn ($kq) => $this->filterKelompokByJenjang($kq, 'TK'));
+                  ->orWhere('kategori_kelas', 'ILIKE', '%PAUD%');
             })->where(function ($q) {
-                $q->whereNull('kelas')
-                  ->orWhere(function ($sub) {
-                      $sub->where('kelas', 'NOT ILIKE', '%SD%')
-                          ->where('kelas', 'NOT ILIKE', '%SMP%')
-                          ->where('kelas', 'NOT ILIKE', '%SMA%')
-                          ->where('kelas', 'NOT ILIKE', '%SMK%');
-                  });
+                $q->where(function ($sub) {
+                    $sub->whereNull('kelas')
+                        ->orWhere(function ($s) {
+                            $s->where('kelas', 'NOT ILIKE', '%SD%')
+                              ->where('kelas', 'NOT ILIKE', '%SMP%')
+                              ->where('kelas', 'NOT ILIKE', '%SMA%')
+                              ->where('kelas', 'NOT ILIKE', '%SMK%');
+                        });
+                });
             });
         } elseif ($jenjang === 'SD') {
             $query->where(function ($q) {
@@ -108,14 +109,30 @@ class RekapPresensiMatrix extends Page
                   ->orWhere('kelas', 'ILIKE', 'Kelas 4%')
                   ->orWhere('kelas', 'ILIKE', 'Kelas 5%')
                   ->orWhere('kelas', 'ILIKE', 'Kelas 6%')
-                  ->orWhereHas('kelompok', fn ($kq) => $this->filterKelompokByJenjang($kq, 'SD'));
+                  ->orWhere('kelas', 'ILIKE', '1 %')
+                  ->orWhere('kelas', 'ILIKE', '2 %')
+                  ->orWhere('kelas', 'ILIKE', '3 %')
+                  ->orWhere('kelas', 'ILIKE', '4 %')
+                  ->orWhere('kelas', 'ILIKE', '5 %')
+                  ->orWhere('kelas', 'ILIKE', '6 %');
             })->where(function ($q) {
-                $q->where('kelas', 'NOT ILIKE', '%SMP%')
-                  ->where('kelas', 'NOT ILIKE', '%SMA%')
-                  ->where('kelas', 'NOT ILIKE', '%SMK%')
-                  ->where('kategori_kelas', 'NOT ILIKE', '%SMP%')
-                  ->where('kategori_kelas', 'NOT ILIKE', '%SMA%')
-                  ->where('kategori_kelas', 'NOT ILIKE', '%SMK%');
+                $q->where(function ($sub) {
+                    $sub->whereNull('kelas')
+                        ->orWhere(function ($s) {
+                            $s->where('kelas', 'NOT ILIKE', '%SMP%')
+                              ->where('kelas', 'NOT ILIKE', '%SMA%')
+                              ->where('kelas', 'NOT ILIKE', '%SMK%')
+                              ->where('kelas', 'NOT ILIKE', '%TK%')
+                              ->where('kelas', 'NOT ILIKE', '%PAUD%');
+                        });
+                })->where(function ($sub) {
+                    $sub->whereNull('kategori_kelas')
+                        ->orWhere(function ($s) {
+                            $s->where('kategori_kelas', 'NOT ILIKE', '%SMP%')
+                              ->where('kategori_kelas', 'NOT ILIKE', '%SMA%')
+                              ->where('kategori_kelas', 'NOT ILIKE', '%SMK%');
+                        });
+                });
             });
         } elseif ($jenjang === 'SMP') {
             $query->where(function ($q) {
@@ -126,16 +143,24 @@ class RekapPresensiMatrix extends Page
                   ->orWhere('kelas', 'ILIKE', 'Kelas 9%')
                   ->orWhere('kelas', 'ILIKE', '7 %')
                   ->orWhere('kelas', 'ILIKE', '8 %')
-                  ->orWhere('kelas', 'ILIKE', '9 %')
-                  ->orWhereHas('kelompok', fn ($kq) => $this->filterKelompokByJenjang($kq, 'SMP'));
+                  ->orWhere('kelas', 'ILIKE', '9 %');
             })->where(function ($q) {
-                $q->where('kelas', 'NOT ILIKE', '%SMA%')
-                  ->where('kelas', 'NOT ILIKE', '%SMK%')
-                  ->where('kelas', 'NOT ILIKE', '%SD%')
-                  ->where('kelas', 'NOT ILIKE', '%TK%')
-                  ->where('kategori_kelas', 'NOT ILIKE', '%SMA%')
-                  ->where('kategori_kelas', 'NOT ILIKE', '%SMK%')
-                  ->where('kategori_kelas', 'NOT ILIKE', '%SD%');
+                $q->where(function ($sub) {
+                    $sub->whereNull('kelas')
+                        ->orWhere(function ($s) {
+                            $s->where('kelas', 'NOT ILIKE', '%SMA%')
+                              ->where('kelas', 'NOT ILIKE', '%SMK%')
+                              ->where('kelas', 'NOT ILIKE', '%SD%')
+                              ->where('kelas', 'NOT ILIKE', '%TK%');
+                        });
+                })->where(function ($sub) {
+                    $sub->whereNull('kategori_kelas')
+                        ->orWhere(function ($s) {
+                            $s->where('kategori_kelas', 'NOT ILIKE', '%SMA%')
+                              ->where('kategori_kelas', 'NOT ILIKE', '%SMK%')
+                              ->where('kategori_kelas', 'NOT ILIKE', '%SD%');
+                        });
+                });
             });
         } elseif ($jenjang === 'SMA') {
             $query->where(function ($q) {
@@ -148,14 +173,22 @@ class RekapPresensiMatrix extends Page
                   ->orWhere('kelas', 'ILIKE', 'Kelas 12%')
                   ->orWhere('kelas', 'ILIKE', '10 %')
                   ->orWhere('kelas', 'ILIKE', '11 %')
-                  ->orWhere('kelas', 'ILIKE', '12 %')
-                  ->orWhereHas('kelompok', fn ($kq) => $this->filterKelompokByJenjang($kq, 'SMA'));
+                  ->orWhere('kelas', 'ILIKE', '12 %');
             })->where(function ($q) {
-                $q->where('kelas', 'NOT ILIKE', '%SMP%')
-                  ->where('kelas', 'NOT ILIKE', '%SD%')
-                  ->where('kelas', 'NOT ILIKE', '%TK%')
-                  ->where('kategori_kelas', 'NOT ILIKE', '%SMP%')
-                  ->where('kategori_kelas', 'NOT ILIKE', '%SD%');
+                $q->where(function ($sub) {
+                    $sub->whereNull('kelas')
+                        ->orWhere(function ($s) {
+                            $s->where('kelas', 'NOT ILIKE', '%SMP%')
+                              ->where('kelas', 'NOT ILIKE', '%SD%')
+                              ->where('kelas', 'NOT ILIKE', '%TK%');
+                        });
+                })->where(function ($sub) {
+                    $sub->whereNull('kategori_kelas')
+                        ->orWhere(function ($s) {
+                            $s->where('kategori_kelas', 'NOT ILIKE', '%SMP%')
+                              ->where('kategori_kelas', 'NOT ILIKE', '%SD%');
+                        });
+                });
             });
         } elseif ($jenjang === 'UTBK') {
             $query->where(function ($q) {
@@ -164,8 +197,7 @@ class RekapPresensiMatrix extends Page
                   ->orWhere('kategori_kelas', 'ILIKE', '%SNBT%')
                   ->orWhere('kategori_kelas', 'ILIKE', '%TPA%')
                   ->orWhere('kelas', 'ILIKE', '%Alumni%')
-                  ->orWhere('kelas', 'ILIKE', '%Gap Year%')
-                  ->orWhereHas('kelompok', fn ($kq) => $this->filterKelompokByJenjang($kq, 'UTBK'));
+                  ->orWhere('kelas', 'ILIKE', '%Gap Year%');
             });
         }
     }
@@ -279,12 +311,14 @@ class RekapPresensiMatrix extends Page
             });
         }
 
+        if ($this->jenjang && $this->jenjang !== 'ALL') {
+            $this->filterSiswaByJenjang($siswaQuery, $this->jenjang);
+        }
+
         if ($this->kelompokId) {
             $siswaQuery->whereHas('kelompok', function ($q) {
                 $q->where('kelompok.id', $this->kelompokId);
             });
-        } elseif ($this->jenjang && $this->jenjang !== 'ALL') {
-            $this->filterSiswaByJenjang($siswaQuery, $this->jenjang);
         }
 
         if (!empty($this->jenjangKelas)) {
