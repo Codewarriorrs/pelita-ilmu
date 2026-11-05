@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName('Pelita Ilmu Bimbel')
             ->brandLogo(asset('images/logo-bimbel.png'))
-            ->brandLogoHeight('3.5rem')
+            ->brandLogoHeight('6rem')
             ->homeUrl('/')
             ->favicon(asset('images/logo-bimbel-removebg.png'))
             ->darkMode(false)
@@ -46,16 +46,31 @@ class AdminPanelProvider extends PanelProvider
                 fn () => new \Illuminate\Support\HtmlString('
                     <link rel="icon" type="image/png" href="' . asset('images/logo-bimbel-removebg.png') . '">
                     <style>
-                        /* ===== LOGIN PAGE BRAND LOGO (Perbesar ke 3.5rem) ===== */
+                        /* ===== LOGIN PAGE BRAND LOGO (6rem) ===== */
                         .fi-simple-layout .fi-logo,
-                        .fi-simple-main .fi-logo {
-                            height: 3.5rem !important;
-                            max-height: 3.5rem !important;
+                        .fi-simple-main .fi-logo,
+                        .fi-simple-header .fi-logo,
+                        .fi-simple-page .fi-logo,
+                        .fi-simple-layout img.fi-logo,
+                        .fi-simple-main img.fi-logo,
+                        .fi-simple-header img.fi-logo,
+                        .fi-simple-header .fi-logo img {
+                            height: 6rem !important;
+                            max-height: 6rem !important;
+                            width: auto !important;
+                            max-width: 100% !important;
+                            object-fit: contain !important;
+                            margin: 0 auto !important;
+                            display: block !important;
                         }
-                        .fi-simple-layout .fi-logo img,
-                        .fi-simple-main .fi-logo img {
-                            height: 3.5rem !important;
-                            max-height: 3.5rem !important;
+
+                        /* ===== SIDEBAR / TOPBAR BRAND LOGO ===== */
+                        .fi-sidebar-header .fi-logo,
+                        .fi-sidebar-header img.fi-logo,
+                        .fi-topbar .fi-logo,
+                        .fi-topbar img.fi-logo {
+                            height: 2.75rem !important;
+                            max-height: 2.75rem !important;
                             width: auto !important;
                             object-fit: contain !important;
                         }
