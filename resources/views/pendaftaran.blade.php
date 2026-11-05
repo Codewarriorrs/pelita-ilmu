@@ -181,6 +181,7 @@
                                         type="radio"
                                         name="kategori_kelas"
                                         value="Reguler"
+                                        onchange="handleKategoriChange()"
                                         checked
                                         class="h-4 w-4 text-primary border-black focus:ring-0"
                                     >
@@ -195,6 +196,7 @@
                                         type="radio"
                                         name="kategori_kelas"
                                         value="Privat"
+                                        onchange="handleKategoriChange()"
                                         class="h-4 w-4 text-primary border-black focus:ring-0"
                                     >
                                     <div class="ml-3">
@@ -609,21 +611,27 @@
                 return;
             }
 
+            const kategoriRadio = document.querySelector('input[name="kategori_kelas"]:checked');
+            const isPrivat = kategoriRadio && kategoriRadio.value === 'Privat';
+
             programSelect.disabled = false;
             programSelect.innerHTML = '<option value="">-- Pilih Program Belajar --</option>';
 
             const programList = programsByJenjang[selectedJenjang] || [];
+            const previousSelected = programSelect.value;
             programList.forEach((prog) => {
                 if (prog.kelasFilter && !prog.kelasFilter.includes(selectedKelas)) {
                     return;
                 }
                 const opt = document.createElement('option');
                 opt.value = prog.value;
-                opt.textContent = prog.label;
+                opt.textContent = getProgramLabel(prog, isPrivat);
                 programSelect.appendChild(opt);
             });
 
-            if (preserve && initialProgram) {
+            if (preserve && previousSelected) {
+                programSelect.value = previousSelected;
+            } else if (preserve && initialProgram) {
                 programSelect.value = initialProgram;
             } else if (programSelect.options.length === 2) {
                 // Jika hanya ada 1 pilihan program (misal TK), otomatis pilihkan
@@ -633,6 +641,30 @@
             }
 
             updateMapelOptions();
+        }
+
+        function handleKategoriChange() {
+            handleKelasChange(true);
+        }
+
+        function getProgramLabel(prog, isPrivat) {
+            if (!isPrivat) return prog.label;
+
+            const priceMatch = prog.label.match(/Rp\s*([\d\.]+)/);
+            if (!priceMatch) return prog.label + ' Privat';
+
+            const basePrice = parseInt(priceMatch[1].replace(/\./g, ''));
+            const privatPrice = basePrice + 140000;
+            const formattedPrice = 'Rp ' + privatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+            let textPart = prog.label.replace(/\s*\(Rp\s*[\d\.]+\/bln\)/, '');
+            if (textPart.includes('Reguler')) {
+                textPart = textPart.replace(/Reguler/g, 'Privat');
+            } else {
+                textPart = textPart + ' Privat';
+            }
+
+            return textPart + ' (' + formattedPrice + '/bln)';
         }
 
         function getExactMapelRequired(program) {

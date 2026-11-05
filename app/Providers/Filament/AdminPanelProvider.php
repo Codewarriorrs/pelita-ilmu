@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName('Pelita Ilmu Bimbel')
             ->brandLogo(asset('images/logo-bimbel.png'))
-            ->brandLogoHeight('2.5rem')
+            ->brandLogoHeight('3.5rem')
             ->homeUrl('/')
             ->favicon(asset('images/logo-bimbel-removebg.png'))
             ->darkMode(false)
@@ -42,6 +42,20 @@ class AdminPanelProvider extends PanelProvider
                 fn () => new \Illuminate\Support\HtmlString('
                     <link rel="icon" type="image/png" href="' . asset('images/logo-bimbel-removebg.png') . '">
                     <style>
+                        /* ===== LOGIN PAGE BRAND LOGO (Perbesar ke 3.5rem) ===== */
+                        .fi-simple-layout .fi-logo,
+                        .fi-simple-main .fi-logo {
+                            height: 3.5rem !important;
+                            max-height: 3.5rem !important;
+                        }
+                        .fi-simple-layout .fi-logo img,
+                        .fi-simple-main .fi-logo img {
+                            height: 3.5rem !important;
+                            max-height: 3.5rem !important;
+                            width: auto !important;
+                            object-fit: contain !important;
+                        }
+
                         /* ===== TABLE HEADER: Search + Title + Buttons di 1 Baris Sejajar ===== */
                         .fi-ta-header-ctn {
                             display: flex !important;

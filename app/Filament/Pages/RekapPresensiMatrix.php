@@ -82,33 +82,92 @@ class RekapPresensiMatrix extends Page
 
     protected function filterSiswaByJenjang(Builder $query, string $jenjang): void
     {
-        $query->where(function ($q) use ($jenjang) {
-            if ($jenjang === 'TK') {
+        if ($jenjang === 'TK') {
+            $query->where(function ($q) {
                 $q->where('kelas', 'ILIKE', '%TK%')
+                  ->orWhere('kelas', 'ILIKE', '%PAUD%')
                   ->orWhere('kategori_kelas', 'ILIKE', '%TK%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%PAUD%');
-            } elseif ($jenjang === 'SD') {
+                  ->orWhere('kategori_kelas', 'ILIKE', '%PAUD%')
+                  ->orWhereHas('kelompok', fn ($kq) => $this->filterKelompokByJenjang($kq, 'TK'));
+            })->where(function ($q) {
+                $q->whereNull('kelas')
+                  ->orWhere(function ($sub) {
+                      $sub->where('kelas', 'NOT ILIKE', '%SD%')
+                          ->where('kelas', 'NOT ILIKE', '%SMP%')
+                          ->where('kelas', 'NOT ILIKE', '%SMA%')
+                          ->where('kelas', 'NOT ILIKE', '%SMK%');
+                  });
+            });
+        } elseif ($jenjang === 'SD') {
+            $query->where(function ($q) {
                 $q->where('kelas', 'ILIKE', '%SD%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%SD%');
-            } elseif ($jenjang === 'SMP') {
+                  ->orWhere('kategori_kelas', 'ILIKE', '%SD%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 1%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 2%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 3%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 4%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 5%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 6%')
+                  ->orWhereHas('kelompok', fn ($kq) => $this->filterKelompokByJenjang($kq, 'SD'));
+            })->where(function ($q) {
+                $q->where('kelas', 'NOT ILIKE', '%SMP%')
+                  ->where('kelas', 'NOT ILIKE', '%SMA%')
+                  ->where('kelas', 'NOT ILIKE', '%SMK%')
+                  ->where('kategori_kelas', 'NOT ILIKE', '%SMP%')
+                  ->where('kategori_kelas', 'NOT ILIKE', '%SMA%')
+                  ->where('kategori_kelas', 'NOT ILIKE', '%SMK%');
+            });
+        } elseif ($jenjang === 'SMP') {
+            $query->where(function ($q) {
                 $q->where('kelas', 'ILIKE', '%SMP%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%SMP%');
-            } elseif ($jenjang === 'SMA') {
+                  ->orWhere('kategori_kelas', 'ILIKE', '%SMP%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 7%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 8%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 9%')
+                  ->orWhere('kelas', 'ILIKE', '7 %')
+                  ->orWhere('kelas', 'ILIKE', '8 %')
+                  ->orWhere('kelas', 'ILIKE', '9 %')
+                  ->orWhereHas('kelompok', fn ($kq) => $this->filterKelompokByJenjang($kq, 'SMP'));
+            })->where(function ($q) {
+                $q->where('kelas', 'NOT ILIKE', '%SMA%')
+                  ->where('kelas', 'NOT ILIKE', '%SMK%')
+                  ->where('kelas', 'NOT ILIKE', '%SD%')
+                  ->where('kelas', 'NOT ILIKE', '%TK%')
+                  ->where('kategori_kelas', 'NOT ILIKE', '%SMA%')
+                  ->where('kategori_kelas', 'NOT ILIKE', '%SMK%')
+                  ->where('kategori_kelas', 'NOT ILIKE', '%SD%');
+            });
+        } elseif ($jenjang === 'SMA') {
+            $query->where(function ($q) {
                 $q->where('kelas', 'ILIKE', '%SMA%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%SMA%')
                   ->orWhere('kelas', 'ILIKE', '%SMK%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%SMK%');
-            } elseif ($jenjang === 'UTBK') {
+                  ->orWhere('kategori_kelas', 'ILIKE', '%SMA%')
+                  ->orWhere('kategori_kelas', 'ILIKE', '%SMK%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 10%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 11%')
+                  ->orWhere('kelas', 'ILIKE', 'Kelas 12%')
+                  ->orWhere('kelas', 'ILIKE', '10 %')
+                  ->orWhere('kelas', 'ILIKE', '11 %')
+                  ->orWhere('kelas', 'ILIKE', '12 %')
+                  ->orWhereHas('kelompok', fn ($kq) => $this->filterKelompokByJenjang($kq, 'SMA'));
+            })->where(function ($q) {
+                $q->where('kelas', 'NOT ILIKE', '%SMP%')
+                  ->where('kelas', 'NOT ILIKE', '%SD%')
+                  ->where('kelas', 'NOT ILIKE', '%TK%')
+                  ->where('kategori_kelas', 'NOT ILIKE', '%SMP%')
+                  ->where('kategori_kelas', 'NOT ILIKE', '%SD%');
+            });
+        } elseif ($jenjang === 'UTBK') {
+            $query->where(function ($q) {
                 $q->where('kelas', 'ILIKE', '%UTBK%')
                   ->orWhere('kategori_kelas', 'ILIKE', '%UTBK%')
                   ->orWhere('kategori_kelas', 'ILIKE', '%SNBT%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%TPA%');
-            }
-
-            $q->orWhereHas('kelompok', function ($kq) use ($jenjang) {
-                $this->filterKelompokByJenjang($kq, $jenjang);
+                  ->orWhere('kategori_kelas', 'ILIKE', '%TPA%')
+                  ->orWhere('kelas', 'ILIKE', '%Alumni%')
+                  ->orWhere('kelas', 'ILIKE', '%Gap Year%')
+                  ->orWhereHas('kelompok', fn ($kq) => $this->filterKelompokByJenjang($kq, 'UTBK'));
             });
-        });
+        }
     }
 
     public function getMatrixData(): array
@@ -250,11 +309,6 @@ class RekapPresensiMatrix extends Page
             }
         }
 
-        $allKelompoksQuery = Kelompok::query()->with(['mapel', 'tentor']);
-        if ($isTentor) {
-            $allKelompoksQuery->where('tentor_id', $user->id);
-        }
-        $allKelompoks = $allKelompoksQuery->orderBy('nama_kelompok')->get();
 
         return [
             'mapelList' => $mapelList,
