@@ -100,30 +100,57 @@ class PendaftaranResource extends Resource
         return $table
             ->defaultSort('tanggal_masuk', 'desc')
             ->defaultPaginationPageOption(10)
-            ->content(fn () => view('filament.resources.pendaftaran.table-content', [
-                'records' => $table->getRecords(),
-            ]))
             ->columns([
                 TextColumn::make('nama_lengkap')
-                    ->label('Nama Calon Siswa')
-                    ->searchable()
+                    ->label('Calon Siswa')
+                    ->weight('bold')
+                    ->description(function (Pendaftaran $record): string {
+                        $parts = [];
+                        if ($record->nama_panggilan) {
+                            $parts[] = "Panggilan: {$record->nama_panggilan}";
+                        }
+                        if ($record->asal_sekolah) {
+                            $parts[] = $record->asal_sekolah;
+                        }
+                        return implode(' • ', $parts);
+                    })
+                    ->searchable(['nama_lengkap', 'nama_panggilan', 'asal_sekolah'])
                     ->sortable(),
 
-                TextColumn::make('asal_sekolah')
-                    ->label('Asal Sekolah')
-                    ->searchable(),
-
                 TextColumn::make('minat_program')
-                    ->label('Program')
-                    ->searchable(),
+                    ->label('Program Belajar')
+                    ->formatStateUsing(fn (Pendaftaran $record): string => $record->program_clean)
+                    ->description(function (Pendaftaran $record): ?string {
+                        $desc = [];
+                        if (!empty($record->mapel_list)) {
+                            $desc[] = 'Mapel: ' . implode(', ', $record->mapel_list);
+                        }
+                        if ($record->paket_pendaftaran) {
+                            $kaos = $record->ukuran_kaos ? " (Size: {$record->ukuran_kaos})" : '';
+                            $desc[] = $record->paket_pendaftaran . $kaos;
+                        }
+                        return !empty($desc) ? implode(' | ', $desc) : null;
+                    })
+                    ->wrap()
+                    ->searchable(['minat_program', 'program_belajar', 'paket_pendaftaran']),
 
-                TextColumn::make('paket_pendaftaran')
-                    ->label('Paket')
-                    ->searchable(),
-
-                TextColumn::make('nomor_wa')
-                    ->label('Nomor WA')
-                    ->searchable(),
+                TextColumn::make('status_tindak_lanjut')
+                    ->label('Status & Tanggal')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'DITERIMA' => 'success',
+                        'DIHUBUNGI' => 'info',
+                        'BARU' => 'warning',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'DITERIMA' => 'DITERIMA',
+                        'DIHUBUNGI' => 'DIHUBUNGI',
+                        'BARU' => 'BARU MASUK',
+                        default => $state,
+                    })
+                    ->description(fn (Pendaftaran $record): string => $record->tanggal_masuk ? $record->tanggal_masuk->format('d M Y H:i') : '-')
+                    ->sortable('tanggal_masuk'),
             ])
             ->filters([
                 SelectFilter::make('status_tindak_lanjut')
@@ -137,16 +164,10 @@ class PendaftaranResource extends Resource
             ->actions([
                 Action::make('hubungi_wa')
                     ->label('WhatsApp')
+                    ->tooltip('Hubungi via WhatsApp')
                     ->icon('heroicon-m-chat-bubble-left-right')
                     ->color('success')
-                    ->url(function (Pendaftaran $record): string {
-                        $targetWa = $record->no_telp_ortu ?: $record->nomor_wa ?: '';
-                        $phone = preg_replace('/^0/', '62', preg_replace('/[^\d]/', '', $targetWa));
-                        $nama = $record->nama_lengkap;
-                        $program = $record->program_belajar ?: $record->minat_program ?: 'Bimbel';
-                        $pesan = urlencode("Halo Bapak/Ibu {$record->nama_ortu}, terima kasih telah mendaftarkan ananda {$nama} di Bimbel Pelita Ilmu untuk program {$program}. Kami ingin mengonfirmasi pendaftaran dan jadwal belajar ananda.");
-                        return "https://wa.me/{$phone}?text={$pesan}";
-                    })
+                    ->url(fn (Pendaftaran $record): string => $record->wa_url)
                     ->openUrlInNewTab()
                     ->action(function (Pendaftaran $record): void {
                         if ($record->status_tindak_lanjut === 'BARU') {

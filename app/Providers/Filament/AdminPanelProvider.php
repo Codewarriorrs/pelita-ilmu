@@ -254,16 +254,17 @@ class AdminPanelProvider extends PanelProvider
                                 box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.06) !important;
                             }
                             .fi-ta-table > tbody > tr > td {
-                                display: flex !important;
-                                align-items: center !important;
-                                justify-content: space-between !important;
-                                padding: 0.45rem 0 !important;
+                                display: block !important;
+                                padding: 0.5rem 0 !important;
                                 border-bottom: 1px dashed #e2e8f0 !important;
                                 font-size: 0.85rem !important;
+                                width: 100% !important;
                             }
                             .fi-ta-table > tbody > tr > td:last-child {
                                 border-bottom: none !important;
                                 padding-top: 0.75rem !important;
+                                display: flex !important;
+                                align-items: center !important;
                                 justify-content: flex-end !important;
                                 gap: 0.5rem !important;
                             }
