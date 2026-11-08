@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use App\Models\MataPelajaran;
 use App\Models\Kelompok;
@@ -12,6 +14,17 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (!Schema::hasColumn('siswa', 'kelas')) {
+            Schema::table('siswa', function (Blueprint $table) {
+                $table->string('kelas')->nullable();
+            });
+        }
+        if (!Schema::hasColumn('siswa', 'pilihan_mapel')) {
+            Schema::table('siswa', function (Blueprint $table) {
+                $table->json('pilihan_mapel')->nullable();
+            });
+        }
+
         $mapels = array (
   0 => 'Calistung & Tematik TK',
   1 => 'Tematik SD',
