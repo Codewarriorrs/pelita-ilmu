@@ -54,6 +54,7 @@ class RegistrationController extends Controller
 
         Pendaftaran::create([
             'nama_lengkap' => $validated['nama_lengkap'],
+            'nama_panggilan' => $validated['nama_panggilan'] ?? null,
             'asal_sekolah' => $validated['asal_sekolah'] ?? null,
             'kelas' => $kelas,
             'kategori_kelas' => $kategori,
@@ -65,6 +66,8 @@ class RegistrationController extends Controller
             'no_telp_siswa' => $validated['no_telp_siswa'] ?? null,
             'alamat_rumah' => $validated['alamat_rumah'] ?? null,
             'minat_program' => $programDetail,
+            'paket_pendaftaran' => $validated['paket_pendaftaran'] ?? null,
+            'ukuran_kaos' => $validated['ukuran_kaos'] ?? null,
             'nomor_wa' => $validated['no_telp_ortu'] ?? null,
             'status_tindak_lanjut' => 'BARU',
             'tanggal_masuk' => now(),

@@ -32,7 +32,7 @@ jobs:
             cd $TARGET_DIR
             sudo git fetch origin $BRANCH
             sudo git checkout $BRANCH
-            sudo git pull origin $BRANCH
+            sudo git reset --hard origin/$BRANCH
             
             sudo composer install --no-dev --optimize-autoloader
             sudo php artisan migrate --force

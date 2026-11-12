@@ -76,6 +76,22 @@
                             >
                         </div>
 
+                        <!-- Nama Panggilan -->
+                        <div class="md:col-span-2">
+                            <label for="nama_panggilan" class="block text-xs sm:text-sm font-bold text-void mb-1.5 font-subtitle">
+                                Nama Panggilan Siswa <span class="text-rose-500">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="nama_panggilan"
+                                name="nama_panggilan"
+                                value="{{ old('nama_panggilan') }}"
+                                placeholder="Contoh: Rian"
+                                required
+                                class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void placeholder:text-stone-400 focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
+                            >
+                        </div>
+
                         <!-- Tanggal Lahir -->
                         <div>
                             <label for="tanggal_lahir" class="block text-xs sm:text-sm font-bold text-void mb-1.5 font-subtitle">
@@ -165,12 +181,13 @@
                                         type="radio"
                                         name="kategori_kelas"
                                         value="Reguler"
+                                        onchange="handleKategoriChange()"
                                         checked
                                         class="h-4 w-4 text-primary border-black focus:ring-0"
                                     >
                                     <div class="ml-3">
                                         <span class="text-sm font-headline font-bold block">Reguler</span>
-                                        <span class="text-xs text-stone-500 font-body">Reguler (Kelas Kelompok)</span>
+                                        <span class="text-xs text-stone-500 font-body">Reguler (Kelas Kelompok) — Mulai Rp 110.000/bln</span>
                                     </div>
                                 </label>
 
@@ -179,11 +196,12 @@
                                         type="radio"
                                         name="kategori_kelas"
                                         value="Privat"
+                                        onchange="handleKategoriChange()"
                                         class="h-4 w-4 text-primary border-black focus:ring-0"
                                     >
                                     <div class="ml-3">
                                         <span class="text-sm font-headline font-bold block">Privat</span>
-                                        <span class="text-xs text-stone-500 font-body">Privat (1-on-1 Intensif Khusus)</span>
+                                        <span class="text-xs text-stone-500 font-body">Privat (1-on-1 Intensif Khusus) — Mulai Rp 250.000/bln</span>
                                     </div>
                                 </label>
                             </div>
@@ -261,11 +279,15 @@
                                 id="nomor_wali"
                                 name="no_telp_ortu"
                                 value="{{ old('no_telp_ortu') }}"
-                                placeholder="08xxxxxxxxxx (hanya angka)"
+                                placeholder="Contoh: 081234567890"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                 required
                                 class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void placeholder:text-stone-400 focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
                             >
-                            <p class="mt-1 text-[11px] text-stone-500 font-body">Nomor ini digunakan untuk konfirmasi pendaftaran & jadwal belajar.</p>
+                            <p class="mt-1.5 text-xs text-stone-600 font-body">Format: Hanya angka (contoh: 081234567890).</p>
+                            <p class="text-xs text-stone-500 font-body">Digunakan untuk konfirmasi pendaftaran & jadwal belajar.</p>
                         </div>
 
                         <!-- No Telp Siswa -->
@@ -281,10 +303,13 @@
                                 id="nomor_telepon_siswa"
                                 name="no_telp_siswa"
                                 value="{{ old('no_telp_siswa') }}"
-                                placeholder="08xxxxxxxxxx (bila ada)"
+                                placeholder="Contoh: 081234567890"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                 class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void placeholder:text-stone-400 focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
                             >
-                            <p class="mt-1 text-[11px] text-stone-500 font-body">Boleh dikosongkan untuk siswa jenjang TK / SD.</p>
+                            <p class="mt-1.5 text-xs text-stone-500 font-body">Format: Hanya angka. Boleh dikosongkan untuk siswa jenjang TK / SD.</p>
                         </div>
                     </div>
                 </div>
@@ -307,6 +332,83 @@
                             required
                             class="w-full rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void placeholder:text-stone-400 focus:border-primary focus:bg-white focus:outline-none transition-all resize-none shadow-sm font-body"
                         >{{ old('alamat_rumah') }}</textarea>
+                    </div>
+                </div>
+
+                <!-- SECTION 5: PILIHAN BIAYA PENDAFTARAN -->
+                <div class="pt-6 border-t-2 border-black">
+                    <div class="flex items-center gap-3 pb-3 mb-6 border-b-2 border-black">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white font-headline font-extrabold text-sm border border-black shadow-sm">5</span>
+                        <h2 class="text-xl sm:text-2xl font-headline font-extrabold text-void">Pilihan Biaya Pendaftaran</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs sm:text-sm font-bold text-void mb-1.5 font-subtitle">
+                                Paket Pendaftaran <span class="text-rose-500">*</span>
+                            </label>
+                            <p class="text-xs text-stone-600 mb-3 font-body">Silakan tentukan salah satu opsi biaya pendaftaran di bawah ini:</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Opsi 1: Hanya Pendaftaran -->
+                            <label class="flex items-start p-4 rounded-xl border-2 border-black cursor-pointer transition-all bg-white text-void shadow-sm hover:border-primary">
+                                <input
+                                    type="radio"
+                                    name="paket_pendaftaran"
+                                    value="Hanya Pendaftaran"
+                                    id="paket_hanya_pendaftaran"
+                                    onchange="handlePaketPendaftaranChange()"
+                                    {{ old('paket_pendaftaran') == 'Hanya Pendaftaran' ? 'checked' : '' }}
+                                    required
+                                    class="h-4 w-4 mt-1 text-primary border-black focus:ring-0"
+                                >
+                                <div class="ml-3">
+                                    <span class="text-sm font-headline font-bold block text-void">Hanya Pendaftaran</span>
+                                    <span class="text-xs text-stone-500 font-body mt-0.5 block">Biaya administrasi pendaftaran standar tanpa merchandise kaos bimbel.</span>
+                                </div>
+                            </label>
+
+                            <!-- Opsi 2: Dengan Kaos -->
+                            <label class="flex items-start p-4 rounded-xl border-2 border-black cursor-pointer transition-all bg-white text-void shadow-sm hover:border-primary">
+                                <input
+                                    type="radio"
+                                    name="paket_pendaftaran"
+                                    value="Dengan Kaos (+Rp70.000)"
+                                    id="paket_dengan_kaos"
+                                    onchange="handlePaketPendaftaranChange()"
+                                    {{ old('paket_pendaftaran') == 'Dengan Kaos (+Rp70.000)' ? 'checked' : '' }}
+                                    required
+                                    class="h-4 w-4 mt-1 text-primary border-black focus:ring-0"
+                                >
+                                <div class="ml-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-headline font-bold block text-void">Dengan Kaos (+Rp70.000)</span>
+                                        <span class="text-[10px] font-headline font-black bg-highlight text-void px-2 py-0.5 rounded-full border border-black shadow-sm">SPESIAL</span>
+                                    </div>
+                                    <span class="text-xs text-stone-500 font-body mt-0.5 block">Termasuk 1 pcs kaos resmi eksklusif Bimbel Pelita Ilmu.</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Dropdown Ukuran Kaos (Dinamis) -->
+                        <div id="container-ukuran-kaos" class="{{ old('paket_pendaftaran') == 'Dengan Kaos (+Rp70.000)' ? '' : 'hidden' }} pt-2">
+                            <label for="ukuran_kaos" class="block text-xs sm:text-sm font-bold text-void mb-1.5 font-subtitle">
+                                Pilih Ukuran Kaos <span class="text-rose-500">*</span>
+                            </label>
+                            <select
+                                id="ukuran_kaos"
+                                name="ukuran_kaos"
+                                class="w-full sm:w-1/2 rounded-xl border-2 border-black bg-stone-50 px-5 py-3.5 text-sm text-void focus:border-primary focus:bg-white focus:outline-none transition-all shadow-sm font-body"
+                            >
+                                <option value="">-- Pilih Ukuran Kaos --</option>
+                                <option value="S" {{ old('ukuran_kaos') == 'S' ? 'selected' : '' }}>S (Small)</option>
+                                <option value="M" {{ old('ukuran_kaos') == 'M' ? 'selected' : '' }}>M (Medium)</option>
+                                <option value="L" {{ old('ukuran_kaos') == 'L' ? 'selected' : '' }}>L (Large)</option>
+                                <option value="XL" {{ old('ukuran_kaos') == 'XL' ? 'selected' : '' }}>XL (Extra Large)</option>
+                                <option value="XXL" {{ old('ukuran_kaos') == 'XXL' ? 'selected' : '' }}>XXL (Double Extra Large)</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -362,7 +464,19 @@
     <!-- JAVASCRIPT DINAMIS KELAS, PROGRAM & CHECKBOX MATA PELAJARAN -->
     <script>
         const smpMapelList = ['Matematika', 'Bahasa Indonesia', 'Bahasa Inggris', 'IPA Fisika', 'IPA Biologi', 'IPS'];
-        const smaMapelList = ['Matematika Wajib / Lanjut', 'Fisika / Ekonomi', 'Kimia / Geografi', 'Biologi / Sosiologi', 'Bahasa Inggris', 'Informatika / Sejarah'];
+        const smaMapelList = [
+            'Matematika Wajib',
+            'Matematika Lanjut',
+            'Fisika',
+            'Kimia',
+            'Biologi',
+            'Ekonomi',
+            'Sosiologi',
+            'Geografi',
+            'Bahasa Indonesia',
+            'Bahasa Inggris',
+            'Informatika / Sejarah'
+        ];
 
         const mapelData = {
             'TK': ['Membaca & Calistung', 'Mengaji / Iqro', 'Bahasa Inggris Dasar', 'Kreativitas & Seni'],
@@ -402,38 +516,38 @@
 
         const programsByJenjang = {
             'TK': [
-                { value: 'TK', label: 'TK — Calistung, Mengaji, Bahasa Inggris' }
+                { value: 'TK', label: 'TK — Calistung, Mengaji, Bahasa Inggris (Rp 195.000/bln)' }
             ],
             'SD': [
-                { value: 'SD Kelas 1-5', label: 'SD Kelas 1–5 — Semua Mapel Pokok & Tematik', kelasFilter: ['Kelas 1 SD', 'Kelas 2 SD', 'Kelas 3 SD', 'Kelas 4 SD', 'Kelas 5 SD'] },
-                { value: 'SD Kelas 6', label: 'SD Kelas 6 — Persiapan US + Intensif', kelasFilter: ['Kelas 6 SD'] },
-                { value: 'SD Kelas 6 TKA', label: 'SD Kelas 6 — Hanya TKA / Persiapan SMP', kelasFilter: ['Kelas 6 SD'] }
+                { value: 'SD Kelas 1-5', label: 'SD Kelas 1–5 — Semua Mapel Pokok & Tematik (Rp 195.000/bln)', kelasFilter: ['Kelas 1 SD', 'Kelas 2 SD', 'Kelas 3 SD', 'Kelas 4 SD', 'Kelas 5 SD'] },
+                { value: 'SD Kelas 6', label: 'SD Kelas 6 — Persiapan US + Intensif (Rp 225.000/bln)', kelasFilter: ['Kelas 6 SD'] },
+                { value: 'SD Kelas 6 TKA', label: 'SD Kelas 6 — Hanya TKA / Persiapan SMP (Rp 210.000/bln)', kelasFilter: ['Kelas 6 SD'] }
             ],
             'SMP': [
-                { value: 'SMP 1 Mapel', label: 'SMP — 1 Mata Pelajaran' },
-                { value: 'SMP 2 Mapel', label: 'SMP — 2 Mata Pelajaran' },
-                { value: 'SMP 3 Mapel', label: 'SMP — 3 Mata Pelajaran' },
-                { value: 'SMP 4 Mapel', label: 'SMP — 4 Mata Pelajaran' },
-                { value: 'SMP 5 Mapel', label: 'SMP — 5 Mata Pelajaran' },
-                { value: 'SMP 6 Mapel', label: 'SMP — 6 Mata Pelajaran' },
-                { value: 'SMP TKA 1 Mapel', label: 'SMP — 1 TKA (Khusus TKA Saja)' },
-                { value: 'SMP TKA 2 Mapel', label: 'SMP — 2 TKA (Khusus TKA Saja)' }
+                { value: 'SMP 1 Mapel', label: 'SMP — 1 Mata Pelajaran (Rp 110.000/bln)' },
+                { value: 'SMP 2 Mapel', label: 'SMP — 2 Mata Pelajaran (Rp 180.000/bln)' },
+                { value: 'SMP 3 Mapel', label: 'SMP — 3 Mata Pelajaran (Rp 240.000/bln)' },
+                { value: 'SMP 4 Mapel', label: 'SMP — 4 Mata Pelajaran (Rp 290.000/bln)' },
+                { value: 'SMP 5 Mapel', label: 'SMP — 5 Mata Pelajaran (Rp 330.000/bln)' },
+                { value: 'SMP 6 Mapel', label: 'SMP — 6 Mata Pelajaran (Rp 360.000/bln)' },
+                { value: 'SMP TKA 1 Mapel', label: 'SMP — 1 TKA (Khusus TKA Saja) (Rp 130.000/bln)' },
+                { value: 'SMP TKA 2 Mapel', label: 'SMP — 2 TKA (Khusus TKA Saja) (Rp 210.000/bln)' }
             ],
             'SMA': [
-                { value: 'SMA 1 Mapel', label: 'SMA — 1 Mata Pelajaran' },
-                { value: 'SMA 2 Mapel', label: 'SMA — 2 Mata Pelajaran' },
-                { value: 'SMA 3 Mapel', label: 'SMA — 3 Mata Pelajaran' },
-                { value: 'SMA 4 Mapel', label: 'SMA — 4 Mata Pelajaran' },
-                { value: 'SMA 5 Mapel', label: 'SMA — 5 Mata Pelajaran' },
-                { value: 'SMA 6 Mapel', label: 'SMA — 6 Mata Pelajaran' },
-                { value: 'SMA UTBK 1', label: 'SMA — 1 Mapel UTBK / SNBT' },
-                { value: 'SMA UTBK 2', label: 'SMA — 2 Mapel UTBK / SNBT' },
-                { value: 'SMA UTBK 3', label: 'SMA — 3 Mapel UTBK / SNBT' },
-                { value: 'SMA UTBK 4', label: 'SMA — 4 Mapel UTBK / SNBT' },
-                { value: 'SMA UTBK+Reg 1', label: 'SMA — 1 Mapel UTBK + Reguler' },
-                { value: 'SMA UTBK+Reg 2', label: 'SMA — 2 Mapel UTBK + Reguler' },
-                { value: 'SMA UTBK+Reg 3', label: 'SMA — 3 Mapel UTBK + Reguler' },
-                { value: 'SMA UTBK+Reg 4', label: 'SMA — 4 Mapel UTBK + Reguler' }
+                { value: 'SMA 1 Mapel', label: 'SMA — 1 Mata Pelajaran (Rp 130.000/bln)' },
+                { value: 'SMA 2 Mapel', label: 'SMA — 2 Mata Pelajaran (Rp 220.000/bln)' },
+                { value: 'SMA 3 Mapel', label: 'SMA — 3 Mata Pelajaran (Rp 300.000/bln)' },
+                { value: 'SMA 4 Mapel', label: 'SMA — 4 Mata Pelajaran (Rp 370.000/bln)' },
+                { value: 'SMA 5 Mapel', label: 'SMA — 5 Mata Pelajaran (Rp 430.000/bln)' },
+                { value: 'SMA 6 Mapel', label: 'SMA — 6 Mata Pelajaran (Rp 480.000/bln)' },
+                { value: 'SMA UTBK 1', label: 'SMA — 1 Mapel UTBK / SNBT (Rp 175.000/bln)' },
+                { value: 'SMA UTBK 2', label: 'SMA — 2 Mapel UTBK / SNBT (Rp 290.000/bln)' },
+                { value: 'SMA UTBK 3', label: 'SMA — 3 Mapel UTBK / SNBT (Rp 390.000/bln)' },
+                { value: 'SMA UTBK 4', label: 'SMA — 4 Mapel UTBK / SNBT (Rp 470.000/bln)' },
+                { value: 'SMA UTBK+Reg 1', label: 'SMA — 1 Mapel UTBK + Reguler (Rp 210.000/bln)' },
+                { value: 'SMA UTBK+Reg 2', label: 'SMA — 2 Mapel UTBK + Reguler (Rp 340.000/bln)' },
+                { value: 'SMA UTBK+Reg 3', label: 'SMA — 3 Mapel UTBK + Reguler (Rp 450.000/bln)' },
+                { value: 'SMA UTBK+Reg 4', label: 'SMA — 4 Mapel UTBK + Reguler (Rp 540.000/bln)' }
             ]
         };
 
@@ -497,21 +611,27 @@
                 return;
             }
 
+            const kategoriRadio = document.querySelector('input[name="kategori_kelas"]:checked');
+            const isPrivat = kategoriRadio && kategoriRadio.value === 'Privat';
+
             programSelect.disabled = false;
             programSelect.innerHTML = '<option value="">-- Pilih Program Belajar --</option>';
 
             const programList = programsByJenjang[selectedJenjang] || [];
+            const previousSelected = programSelect.value;
             programList.forEach((prog) => {
                 if (prog.kelasFilter && !prog.kelasFilter.includes(selectedKelas)) {
                     return;
                 }
                 const opt = document.createElement('option');
                 opt.value = prog.value;
-                opt.textContent = prog.label;
+                opt.textContent = getProgramLabel(prog, isPrivat);
                 programSelect.appendChild(opt);
             });
 
-            if (preserve && initialProgram) {
+            if (preserve && previousSelected) {
+                programSelect.value = previousSelected;
+            } else if (preserve && initialProgram) {
                 programSelect.value = initialProgram;
             } else if (programSelect.options.length === 2) {
                 // Jika hanya ada 1 pilihan program (misal TK), otomatis pilihkan
@@ -521,6 +641,30 @@
             }
 
             updateMapelOptions();
+        }
+
+        function handleKategoriChange() {
+            handleKelasChange(true);
+        }
+
+        function getProgramLabel(prog, isPrivat) {
+            if (!isPrivat) return prog.label;
+
+            const priceMatch = prog.label.match(/Rp\s*([\d\.]+)/);
+            if (!priceMatch) return prog.label + ' Privat';
+
+            const basePrice = parseInt(priceMatch[1].replace(/\./g, ''));
+            const privatPrice = basePrice + 140000;
+            const formattedPrice = 'Rp ' + privatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+            let textPart = prog.label.replace(/\s*\(Rp\s*[\d\.]+\/bln\)/, '');
+            if (textPart.includes('Reguler')) {
+                textPart = textPart.replace(/Reguler/g, 'Privat');
+            } else {
+                textPart = textPart + ' Privat';
+            }
+
+            return textPart + ' (' + formattedPrice + '/bln)';
         }
 
         function getExactMapelRequired(program) {
@@ -626,8 +770,27 @@
             }
         }
 
+        function handlePaketPendaftaranChange() {
+            const radioDenganKaos = document.getElementById('paket_dengan_kaos');
+            const containerUkuran = document.getElementById('container-ukuran-kaos');
+            const selectUkuran = document.getElementById('ukuran_kaos');
+
+            if (radioDenganKaos && radioDenganKaos.checked) {
+                if (containerUkuran) containerUkuran.classList.remove('hidden');
+                if (selectUkuran) selectUkuran.required = true;
+            } else {
+                if (containerUkuran) containerUkuran.classList.add('hidden');
+                if (selectUkuran) {
+                    selectUkuran.required = false;
+                    selectUkuran.value = '';
+                }
+            }
+        }
+
         // Initialize on DOMContentLoaded & Submit guard
         document.addEventListener('DOMContentLoaded', function() {
+            handlePaketPendaftaranChange();
+
             if (initialJenjang) {
                 const jenjangSelect = document.getElementById('jenjang');
                 if (jenjangSelect) {
@@ -653,6 +816,25 @@
                             e.preventDefault();
                             alert(`Pendaftaran belum dapat dikirim:\nUntuk paket "${programSelect.value}", Anda wajib memilih tepat ${exactCount} mata pelajaran.\n\nSaat ini baru terpilih: ${checkedCount} mapel. Mohon lengkapi pilihan mapel terlebih dahulu.`);
                             document.getElementById('mapel-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            return;
+                        }
+                    }
+
+                    const radioHanya = document.getElementById('paket_hanya_pendaftaran');
+                    const radioKaos = document.getElementById('paket_dengan_kaos');
+                    if ((!radioHanya || !radioHanya.checked) && (!radioKaos || !radioKaos.checked)) {
+                        e.preventDefault();
+                        alert('Silakan pilih salah satu opsi biaya pendaftaran (Langkah 5).');
+                        return;
+                    }
+
+                    if (radioKaos && radioKaos.checked) {
+                        const selectUkuran = document.getElementById('ukuran_kaos');
+                        if (!selectUkuran || !selectUkuran.value) {
+                            e.preventDefault();
+                            alert('Silakan pilih ukuran kaos terlebih dahulu.');
+                            selectUkuran?.focus();
+                            return;
                         }
                     }
                 });

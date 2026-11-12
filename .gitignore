@@ -81,3 +81,12 @@ test_*.php
 *.tmp
 *.bak
 *.old
+
+# Data & Spreadsheets
+*.xlsx
+*.csv
+
+# AI Agents & Skills
+AGENTS.md
+/.agents/
+/.agent/

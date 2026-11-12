@@ -32,16 +32,49 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName('Pelita Ilmu Bimbel')
             ->brandLogo(asset('images/logo-bimbel.png'))
-            ->brandLogoHeight('2.5rem')
+            ->brandLogoHeight('6rem')
             ->homeUrl('/')
             ->favicon(asset('images/logo-bimbel-removebg.png'))
             ->darkMode(false)
             ->font('Plus Jakarta Sans')
             ->renderHook(
+                \Filament\View\PanelsRenderHook::SIDEBAR_FOOTER,
+                fn () => view('filament.components.sidebar-logout'),
+            )
+            ->renderHook(
                 \Filament\View\PanelsRenderHook::HEAD_START,
                 fn () => new \Illuminate\Support\HtmlString('
                     <link rel="icon" type="image/png" href="' . asset('images/logo-bimbel-removebg.png') . '">
                     <style>
+                        /* ===== LOGIN PAGE BRAND LOGO (6rem) ===== */
+                        .fi-simple-layout .fi-logo,
+                        .fi-simple-main .fi-logo,
+                        .fi-simple-header .fi-logo,
+                        .fi-simple-page .fi-logo,
+                        .fi-simple-layout img.fi-logo,
+                        .fi-simple-main img.fi-logo,
+                        .fi-simple-header img.fi-logo,
+                        .fi-simple-header .fi-logo img {
+                            height: 6rem !important;
+                            max-height: 6rem !important;
+                            width: auto !important;
+                            max-width: 100% !important;
+                            object-fit: contain !important;
+                            margin: 0 auto !important;
+                            display: block !important;
+                        }
+
+                        /* ===== SIDEBAR / TOPBAR BRAND LOGO ===== */
+                        .fi-sidebar-header .fi-logo,
+                        .fi-sidebar-header img.fi-logo,
+                        .fi-topbar .fi-logo,
+                        .fi-topbar img.fi-logo {
+                            height: 2.75rem !important;
+                            max-height: 2.75rem !important;
+                            width: auto !important;
+                            object-fit: contain !important;
+                        }
+
                         /* ===== TABLE HEADER: Search + Title + Buttons di 1 Baris Sejajar ===== */
                         .fi-ta-header-ctn {
                             display: flex !important;
@@ -129,6 +162,26 @@ class AdminPanelProvider extends PanelProvider
                         .fi-badge-color-primary, [class*="fi-badge-color-primary"] { background-color: #0f766e !important; color: #ffffff !important; }
                         .fi-badge-color-gray,    [class*="fi-badge-color-gray"]    { background-color: #475569 !important; color: #ffffff !important; }
 
+                        /* ===== ACTIVE TABLE FILTER INDICATORS (Filter Aktif) ===== */
+                        .fi-ta-filter-indicators .fi-badge {
+                            background-color: #193836 !important;
+                            border: 1px solid #102624 !important;
+                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+                        }
+                        .fi-ta-filter-indicators .fi-badge span,
+                        .fi-ta-filter-indicators .fi-badge div {
+                            color: #ffffff !important;
+                            font-weight: 800 !important;
+                        }
+                        .fi-ta-filter-indicators .fi-badge button,
+                        .fi-ta-filter-indicators .fi-badge svg {
+                            color: #ffffff !important;
+                            stroke: currentColor !important;
+                        }
+                        .fi-ta-filter-indicators .fi-badge button:hover svg {
+                            color: #fca5a5 !important;
+                        }
+
                         /* ===== ICON BUTTONS ===== */
                         .fi-icon-btn { border-radius: 0.5rem !important; transition: transform 0.15s ease !important; }
                         .fi-icon-btn:hover { transform: scale(1.12) !important; }
@@ -201,16 +254,17 @@ class AdminPanelProvider extends PanelProvider
                                 box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.06) !important;
                             }
                             .fi-ta-table > tbody > tr > td {
-                                display: flex !important;
-                                align-items: center !important;
-                                justify-content: space-between !important;
-                                padding: 0.45rem 0 !important;
+                                display: block !important;
+                                padding: 0.5rem 0 !important;
                                 border-bottom: 1px dashed #e2e8f0 !important;
                                 font-size: 0.85rem !important;
+                                width: 100% !important;
                             }
                             .fi-ta-table > tbody > tr > td:last-child {
                                 border-bottom: none !important;
                                 padding-top: 0.75rem !important;
+                                display: flex !important;
+                                align-items: center !important;
                                 justify-content: flex-end !important;
                                 gap: 0.5rem !important;
                             }

@@ -38,13 +38,13 @@ class RegistrationRequest extends FormRequest
 
         if ($this->filled('no_telp_siswa')) {
             $this->merge([
-                'no_telp_siswa' => preg_replace('/[^\d+]/', '', (string) $this->input('no_telp_siswa')),
+                'no_telp_siswa' => preg_replace('/[^\d]/', '', (string) $this->input('no_telp_siswa')),
             ]);
         }
 
         if ($this->filled('no_telp_ortu')) {
             $this->merge([
-                'no_telp_ortu' => preg_replace('/[^\d+]/', '', (string) $this->input('no_telp_ortu')),
+                'no_telp_ortu' => preg_replace('/[^\d]/', '', (string) $this->input('no_telp_ortu')),
             ]);
         }
     }
@@ -55,19 +55,22 @@ class RegistrationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_lengkap' => ['required', 'string', 'max:100'],
+            'nama_lengkap' => ['required', 'string', 'min:3', 'max:100'],
+            'nama_panggilan' => ['required', 'string', 'min:2', 'max:50'],
             'tanggal_lahir' => ['required', 'date', 'before_or_equal:today'],
-            'asal_sekolah' => ['required', 'string', 'max:100'],
-            'jenjang' => ['nullable', 'string', 'max:20'],
+            'asal_sekolah' => ['required', 'string', 'min:2', 'max:100'],
+            'jenjang' => ['required', 'string', 'in:TK,SD,SMP,SMA'],
             'kelas' => ['required', 'string', 'max:50'],
             'tingkat_kelas' => ['nullable', 'string', 'max:50'],
-            'kategori_kelas' => ['nullable', 'string', 'in:Reguler,Privat,KELOMPOK,PRIVAT'],
+            'kategori_kelas' => ['required', 'string', 'in:Reguler,Privat,KELOMPOK,PRIVAT'],
             'minat_program' => ['required', 'string'],
             'mata_pelajaran' => ['nullable', 'array'],
-            'alamat_rumah' => ['required', 'string', 'max:255'],
-            'nama_ortu' => ['required', 'string', 'max:100'],
-            'no_telp_ortu' => ['required', 'string'],
-            'no_telp_siswa' => ['nullable', 'string'],
+            'alamat_rumah' => ['required', 'string', 'min:5', 'max:255'],
+            'nama_ortu' => ['required', 'string', 'min:3', 'max:100'],
+            'no_telp_ortu' => ['required', 'string', 'regex:/^[0-9]{9,15}$/'],
+            'no_telp_siswa' => ['nullable', 'string', 'regex:/^[0-9]{9,15}$/'],
+            'paket_pendaftaran' => ['required', 'string', 'in:Hanya Pendaftaran,Dengan Kaos (+Rp70.000)'],
+            'ukuran_kaos' => ['required_if:paket_pendaftaran,Dengan Kaos (+Rp70.000)', 'nullable', 'string', 'in:S,M,L,XL,XXL'],
             'website_address' => ['nullable', 'max:0', 'prohibited'],
         ];
     }
@@ -102,6 +105,7 @@ class RegistrationRequest extends FormRequest
     {
         return [
             'nama_lengkap.required' => 'Nama lengkap calon siswa wajib diisi.',
+            'nama_panggilan.required' => 'Nama panggilan calon siswa wajib diisi.',
             'tanggal_lahir.required' => 'Tanggal lahir calon siswa wajib diisi.',
             'tanggal_lahir.before_or_equal' => 'Tanggal lahir tidak boleh melebihi hari ini.',
             'asal_sekolah.required' => 'Asal sekolah calon siswa wajib diisi.',
@@ -110,6 +114,10 @@ class RegistrationRequest extends FormRequest
             'alamat_rumah.required' => 'Alamat rumah tempat tinggal wajib diisi.',
             'nama_ortu.required' => 'Nama orang tua / wali wajib diisi.',
             'no_telp_ortu.required' => 'Nomor WhatsApp orang tua wajib diisi untuk konfirmasi pendaftaran.',
+            'no_telp_ortu.regex' => 'Nomor WhatsApp orang tua harus berupa angka (9 - 15 digit).',
+            'no_telp_siswa.regex' => 'Nomor telepon/WhatsApp siswa harus berupa angka (9 - 15 digit).',
+            'paket_pendaftaran.required' => 'Pilihan biaya pendaftaran (Langkah 5) wajib dipilih.',
+            'ukuran_kaos.required_if' => 'Ukuran kaos wajib dipilih jika memilih opsi pendaftaran dengan kaos.',
             'website_address.prohibited' => 'Aktivitas bot terdeteksi.',
         ];
     }

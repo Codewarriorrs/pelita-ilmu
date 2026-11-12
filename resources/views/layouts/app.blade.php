@@ -232,45 +232,59 @@
             </a>
         </div>
 
-        <!-- EASTER EGG GAME MODAL (Neo-Brutalist Program Card Style + Lightbulb Rocket Dino Game) -->
-        <div id="easter-egg-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in">
-            <div class="relative w-full max-w-3xl sm:max-w-4xl bg-white border-4 border-black rounded-[32px] p-6 sm:p-10 text-void shadow-[12px_12px_0px_0px_rgba(255,229,0,1)] text-center overflow-hidden transition-all transform scale-100">
+        <!-- EASTER EGG GAME MODAL (Neo-Brutalist Arcade + Vector Rocket Runner) -->
+        <div id="easter-egg-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-6 animate-fade-in">
+            <div class="relative w-full max-w-5xl bg-white border-4 border-black rounded-[32px] p-5 sm:p-8 text-void shadow-[12px_12px_0px_0px_rgba(255,229,0,1)] text-center overflow-hidden transition-all transform scale-100">
                 
                 <!-- Close Button -->
-                <button type="button" onclick="closeEasterEgg()" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-stone-100 hover:bg-stone-200 border-2 border-black flex items-center justify-center text-black font-bold text-base shadow-sm">
+                <button type="button" onclick="closeEasterEgg()" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-stone-100 hover:bg-stone-200 border-3 border-black flex items-center justify-center text-black font-extrabold text-lg shadow-sm active:translate-y-0.5 transition-all z-20">
                     ✕
                 </button>
 
-                <!-- Header Text -->
-                <p class="font-headline font-black text-sm sm:text-base text-primary uppercase tracking-widest mb-2 animate-bounce">
-                    🚀 PELITA ROCKET RUNNER 💡
-                </p>
-
-                <h3 class="font-headline text-3xl sm:text-4xl font-black text-[#193836] mb-2">
-                    Game Rahasia Pelita Ilmu!
-                </h3>
-                <p class="font-subtitle text-xs sm:text-sm text-void/80 mb-5">
-                    Tekan <span class="bg-stone-200 px-2.5 py-1 rounded-lg border-2 border-black font-mono font-bold">SPASI</span> atau <span class="bg-stone-200 px-2.5 py-1 rounded-lg border-2 border-black font-mono font-bold">TAP LAYAR</span> untuk melompati rintangan buku!
-                </p>
+                <!-- Header Title -->
+                <div class="flex flex-col items-center justify-center mb-3">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-800 border-2 border-black text-xs font-headline font-black uppercase tracking-wider mb-1">
+                        🚀 PELITA ROCKET RUNNER ⚡
+                    </span>
+                    <h3 class="font-headline text-2xl sm:text-3xl font-black text-[#193836]">
+                        Misi Luar Angkasa Pelita Ilmu!
+                    </h3>
+                    <p class="font-subtitle text-xs sm:text-sm text-stone-600">
+                        Gunakan <kbd class="bg-stone-100 px-2 py-0.5 rounded border border-black font-mono font-bold text-xs">SPASI</kbd> atau <span class="font-bold text-teal-700">TAP LAYAR</span> untuk melompati rintangan buku pelajaran!
+                    </p>
+                </div>
 
                 <!-- Canvas Game Screen -->
-                <div class="relative rounded-3xl overflow-hidden border-4 border-black bg-gradient-to-b from-[#193836] to-primary p-2 mb-5 shadow-2xl">
-                    <canvas id="rocketGameCanvas" width="700" height="260" class="w-full h-auto cursor-pointer block rounded-2xl"></canvas>
-                    <div id="gameOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/60 text-white p-6 backdrop-blur-xs">
-                        <span class="font-headline text-2xl sm:text-3xl font-black text-highlight mb-3 drop-shadow-md">SIAP MELUNCUR? 🚀</span>
-                        <button type="button" onclick="startRocketGame()" class="px-8 py-3.5 bg-highlight hover:bg-yellow-400 text-void font-headline font-black text-sm uppercase tracking-wider rounded-2xl border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 transition-all">
-                            MULAI MAIN SEKARANG 🎮
+                <div class="relative rounded-2xl overflow-hidden border-4 border-black bg-[#0B1B19] mb-4 shadow-xl">
+                    <canvas id="rocketGameCanvas" width="860" height="320" class="w-full h-auto cursor-pointer block"></canvas>
+                    
+                    <div id="gameOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-white p-6 backdrop-blur-xs transition-opacity">
+                        <span id="overlayTitle" class="font-headline text-2xl sm:text-3xl font-black text-[#FFE500] mb-3 drop-shadow-md">
+                            SIAP MELUNCUR? 🚀
+                        </span>
+                        <p class="text-xs text-stone-300 font-subtitle mb-5 max-w-sm">
+                            Kendalikan roket riset Pelita Ilmu menembus angkasa dan raih skor tertinggi!
+                        </p>
+                        <button type="button" onclick="startRocketGame()" class="px-8 py-3.5 bg-[#FFE500] hover:bg-yellow-400 text-stone-950 font-headline font-black text-xs sm:text-sm uppercase tracking-wider rounded-xl border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 transition-all cursor-pointer">
+                            MULAI TERBANG SEKARANG 🎮
                         </button>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between font-subtitle text-xs font-bold text-[#193836] px-2 mb-4">
-                    <span>Skor: <span id="gameScore" class="text-primary font-black">0</span></span>
-                    <span>High Score: <span id="gameHighScore" class="text-highlight-dark font-black">0</span></span>
+                <!-- Score Board & Close Action -->
+                <div class="flex items-center justify-between font-headline text-xs sm:text-sm font-extrabold text-[#193836] px-2 mb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-stone-500">Skor Sesi:</span>
+                        <span id="gameScore" class="text-lg text-emerald-700 font-black">0</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-stone-500">Rekor Terbaik:</span>
+                        <span id="gameHighScore" class="text-lg text-amber-600 font-black">0</span>
+                    </div>
                 </div>
 
-                <button type="button" onclick="closeEasterEgg()" class="w-full py-3 bg-[#193836] hover:bg-[#122A28] text-white font-headline font-black rounded-xl text-xs uppercase tracking-wider border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all">
-                    Tutup Game 🎓
+                <button type="button" onclick="closeEasterEgg()" class="w-full py-2.5 bg-[#193836] hover:bg-[#122A28] text-white font-headline font-black rounded-xl text-xs uppercase tracking-wider border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer">
+                    Tutup Game ✕
                 </button>
             </div>
         </div>
@@ -293,15 +307,30 @@
                 }
             }
 
-            // EASTER EGG & LIGHTBULB ROCKET GAME SCRIPT
+            // ARCADE VECTOR ROCKET ENGINE
             let canvas, ctx;
             let gameRunning = false;
             let animationFrameId;
-            let score = 0, highScore = localStorage.getItem('pelita_rocket_highscore') || 0;
+            let score = 0, highScore = parseInt(localStorage.getItem('pelita_rocket_highscore') || '0', 10);
             
-            const rocket = { x: 40, y: 120, width: 34, height: 34, vy: 0, gravity: 0.6, jumpPower: -10, isGrounded: true };
+            const groundY = 260;
+            const rocket = {
+                x: 80,
+                y: 215,
+                width: 48,
+                height: 26,
+                vy: 0,
+                gravity: 0.65,
+                jumpPower: -11.5,
+                isGrounded: true,
+                angle: 0
+            };
+            
             let obstacles = [];
+            let particles = [];
+            let stars = [];
             let frameCount = 0;
+            let groundOffset = 0;
 
             function triggerEasterEgg() {
                 const modal = document.getElementById('easter-egg-modal');
@@ -318,13 +347,26 @@
                 if (modal) {
                     modal.classList.add('hidden');
                     gameRunning = false;
-                    cancelAnimationFrame(animationFrameId);
+                    if (animationFrameId) cancelAnimationFrame(animationFrameId);
                 }
             }
 
             function initCanvas() {
                 canvas = document.getElementById('rocketGameCanvas');
                 ctx = canvas.getContext('2d');
+                
+                // Initialize Parallax Stars
+                stars = [];
+                for (let i = 0; i < 70; i++) {
+                    stars.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * (groundY - 10),
+                        radius: Math.random() * 1.8 + 0.6,
+                        speed: Math.random() * 2 + 0.5,
+                        brightness: Math.random() * 0.7 + 0.3
+                    });
+                }
+                
                 drawStaticScene();
 
                 canvas.onclick = function() {
@@ -344,37 +386,229 @@
             }
 
             function modalIsHidden() {
-                return document.getElementById('easter-egg-modal').classList.contains('hidden');
+                const modal = document.getElementById('easter-egg-modal');
+                return !modal || modal.classList.contains('hidden');
             }
 
-            function drawStaticScene() {
-                ctx.fillStyle = '#193836';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                // Draw Ground
-                ctx.fillStyle = '#FFE500';
-                ctx.fillRect(0, 192, canvas.width, 30);
-                ctx.fillStyle = '#000000';
-                ctx.fillRect(0, 190, canvas.width, 2);
-
-                // Draw Lightbulb Rocket
-                drawRocket(rocket.x, rocket.y);
-            }
-
-            let rocketImg = new Image();
-            rocketImg.src = "{{ asset('images/roket.png') }}";
-
-            function drawRocket(x, y) {
-                if (rocketImg.complete && rocketImg.naturalWidth !== 0) {
-                    ctx.drawImage(rocketImg, x, y - 5, 34, 34);
-                } else {
-                    ctx.font = '28px sans-serif';
-                    ctx.fillText('🚀', x, y + 24);
+            function drawStars() {
+                for (let s of stars) {
+                    if (gameRunning) {
+                        s.x -= s.speed;
+                        if (s.x < 0) s.x = canvas.width;
+                    }
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${s.brightness})`;
+                    ctx.fill();
                 }
             }
 
+            function drawGround() {
+                // Ground Base
+                const grad = ctx.createLinearGradient(0, groundY, 0, canvas.height);
+                grad.addColorStop(0, '#0F2F2C');
+                grad.addColorStop(1, '#051816');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+
+                // Neon Golden Border
+                ctx.fillStyle = '#FFE500';
+                ctx.fillRect(0, groundY, canvas.width, 3);
+
+                // Animated Runway Dashes
+                if (gameRunning) {
+                    groundOffset = (groundOffset + 4.5) % 40;
+                }
+                ctx.fillStyle = 'rgba(255, 229, 0, 0.4)';
+                for (let x = -groundOffset; x < canvas.width; x += 40) {
+                    ctx.fillRect(x, groundY + 14, 20, 2);
+                }
+            }
+
+            // DRAW VECTOR ROCKET WITH FLAME PARTICLES & TILT
+            function drawRocket(r) {
+                // Emit Exhaust Particles while running
+                if (gameRunning) {
+                    particles.push({
+                        x: r.x - 4,
+                        y: r.y + 13 + (Math.random() - 0.5) * 6,
+                        vx: -(Math.random() * 3 + 2.5),
+                        vy: (Math.random() - 0.5) * 1.5,
+                        radius: Math.random() * 4 + 2,
+                        alpha: 1,
+                        color: Math.random() > 0.4 ? '#FFE500' : '#FF5722'
+                    });
+                }
+
+                // Draw Particle Trail
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    let p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.radius *= 0.94;
+                    p.alpha -= 0.035;
+
+                    if (p.alpha <= 0 || p.radius <= 0.4) {
+                        particles.splice(i, 1);
+                        continue;
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = Math.max(0, p.alpha);
+                    ctx.fill();
+                    ctx.globalAlpha = 1.0;
+                }
+
+                ctx.save();
+                ctx.translate(r.x + r.width / 2, r.y + r.height / 2);
+                
+                // Tilt rotation based on velocity
+                let targetAngle = r.vy < -1 ? -0.25 : (r.vy > 2 ? 0.20 : 0);
+                r.angle += (targetAngle - r.angle) * 0.2;
+                ctx.rotate(r.angle);
+
+                const w = r.width;
+                const h = r.height;
+                const hx = -w / 2;
+                const hy = -h / 2;
+
+                // 1. Thruster Jet Flame (Flickering Animated Polygon)
+                if (gameRunning) {
+                    const flameLen = Math.random() * 12 + 14;
+                    ctx.beginPath();
+                    ctx.moveTo(hx, hy + 6);
+                    ctx.lineTo(hx - flameLen, hy + h / 2);
+                    ctx.lineTo(hx, hy + h - 6);
+                    ctx.closePath();
+                    ctx.fillStyle = '#FF5722';
+                    ctx.fill();
+
+                    // Inner Core Flame
+                    ctx.beginPath();
+                    ctx.moveTo(hx, hy + 9);
+                    ctx.lineTo(hx - (flameLen * 0.6), hy + h / 2);
+                    ctx.lineTo(hx, hy + h - 9);
+                    ctx.closePath();
+                    ctx.fillStyle = '#FFE500';
+                    ctx.fill();
+                }
+
+                // 2. Thruster Nozzle
+                ctx.fillStyle = '#1E293B';
+                ctx.fillRect(hx - 3, hy + 6, 4, h - 12);
+
+                // 3. Rocket Upper Fin
+                ctx.beginPath();
+                ctx.moveTo(hx + 8, hy + 4);
+                ctx.lineTo(hx - 2, hy - 6);
+                ctx.lineTo(hx + 14, hy + 4);
+                ctx.closePath();
+                ctx.fillStyle = '#009688';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.fill();
+                ctx.stroke();
+
+                // 4. Rocket Lower Fin
+                ctx.beginPath();
+                ctx.moveTo(hx + 8, hy + h - 4);
+                ctx.lineTo(hx - 2, hy + h + 6);
+                ctx.lineTo(hx + 14, hy + h - 4);
+                ctx.closePath();
+                ctx.fillStyle = '#009688';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.fill();
+                ctx.stroke();
+
+                // 5. Rocket Fuselage (Aerodynamic Body)
+                ctx.beginPath();
+                ctx.moveTo(hx + 4, hy + 2);
+                ctx.lineTo(hx + w - 16, hy + 2);
+                // Curved Nose Cone
+                ctx.quadraticCurveTo(hx + w, hy + h / 2, hx + w - 16, hy + h - 2);
+                ctx.lineTo(hx + 4, hy + h - 2);
+                ctx.closePath();
+                ctx.fillStyle = '#FFFFFF';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2.5;
+                ctx.fill();
+                ctx.stroke();
+
+                // 6. Yellow Nose Cap
+                ctx.beginPath();
+                ctx.moveTo(hx + w - 16, hy + 3);
+                ctx.quadraticCurveTo(hx + w, hy + h / 2, hx + w - 16, hy + h - 3);
+                ctx.closePath();
+                ctx.fillStyle = '#FFE500';
+                ctx.fill();
+
+                // 7. Circular Cockpit Window
+                ctx.beginPath();
+                ctx.arc(hx + w - 20, hy + h / 2, 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#38BDF8';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 1.5;
+                ctx.fill();
+                ctx.stroke();
+
+                // Window Glare
+                ctx.beginPath();
+                ctx.arc(hx + w - 21, hy + h / 2 - 1.5, 1.5, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            // DRAW VECTOR BOOK OBSTACLE (Vector Stack of Books)
             function drawObstacle(obs) {
-                ctx.font = '24px sans-serif';
-                ctx.fillText('📚', obs.x, obs.y + 24);
+                const x = obs.x;
+                const y = obs.y;
+                const w = obs.width;
+                const h = obs.height;
+
+                // Book 1 (Bottom)
+                ctx.fillStyle = '#009688';
+                ctx.fillRect(x, y + h - 14, w, 14);
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x, y + h - 14, w, 14);
+                // Pages
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(x + w - 5, y + h - 12, 4, 10);
+
+                // Book 2 (Middle)
+                if (h > 24) {
+                    ctx.fillStyle = '#D97706';
+                    ctx.fillRect(x + 2, y + h - 26, w - 4, 13);
+                    ctx.strokeRect(x + 2, y + h - 26, w - 4, 13);
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(x + w - 6, y + h - 24, 3, 9);
+                }
+
+                // Book 3 (Top)
+                if (h > 36) {
+                    ctx.fillStyle = '#E11D48';
+                    ctx.fillRect(x + 4, y, w - 8, 12);
+                    ctx.strokeRect(x + 4, y, w - 8, 12);
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(x + w - 8, y + 2, 3, 8);
+                }
+
+                // Yellow Bookmark Ribbon on top book
+                ctx.fillStyle = '#FFE500';
+                ctx.fillRect(x + 10, y + 2, 4, 12);
+            }
+
+            function drawStaticScene() {
+                ctx.fillStyle = '#0B1B19';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                drawStars();
+                drawGround();
+                drawRocket(rocket);
             }
 
             function jump() {
@@ -390,7 +624,8 @@
                 score = 0;
                 frameCount = 0;
                 obstacles = [];
-                rocket.y = 155;
+                particles = [];
+                rocket.y = 215;
                 rocket.vy = 0;
                 rocket.isGrounded = true;
                 document.getElementById('gameScore').innerText = 0;
@@ -402,43 +637,57 @@
 
                 frameCount++;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                drawStaticScene();
+
+                // Background
+                ctx.fillStyle = '#0B1B19';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                drawStars();
+                drawGround();
 
                 // Rocket Physics
                 rocket.vy += rocket.gravity;
                 rocket.y += rocket.vy;
-                if (rocket.y >= 155) {
-                    rocket.y = 155;
+                if (rocket.y >= 215) {
+                    rocket.y = 215;
                     rocket.vy = 0;
                     rocket.isGrounded = true;
                 }
 
-                // Spawn Obstacles
-                if (frameCount % 85 === 0) {
-                    obstacles.push({ x: canvas.width, y: 160, width: 24, height: 28 });
+                // Spawn Obstacles (Varied Heights)
+                if (frameCount % 90 === 0) {
+                    const randomH = [28, 38, 48][Math.floor(Math.random() * 3)];
+                    obstacles.push({
+                        x: canvas.width,
+                        y: groundY - randomH,
+                        width: 32,
+                        height: randomH
+                    });
                 }
 
                 // Move & Draw Obstacles
                 for (let i = 0; i < obstacles.length; i++) {
                     let obs = obstacles[i];
-                    obs.x -= 3.5;
+                    obs.x -= 4.5;
                     drawObstacle(obs);
 
-                    // Collision detection
-                    if (rocket.x < obs.x + obs.width &&
-                        rocket.x + rocket.width > obs.x &&
-                        rocket.y < obs.y + obs.height &&
-                        rocket.y + rocket.height > obs.y) {
+                    // Precise Hitbox Collision
+                    if (rocket.x + 4 < obs.x + obs.width &&
+                        rocket.x + rocket.width - 6 > obs.x &&
+                        rocket.y + 4 < obs.y + obs.height &&
+                        rocket.y + rocket.height - 4 > obs.y) {
                         gameOver();
                         return;
                     }
                 }
 
-                // Remove offscreen
-                obstacles = obstacles.filter(obs => obs.x > -30);
+                // Clean offscreen obstacles
+                obstacles = obstacles.filter(obs => obs.x > -40);
+
+                // Draw Rocket above obstacles
+                drawRocket(rocket);
 
                 // Score increment
-                if (frameCount % 6 === 0) {
+                if (frameCount % 5 === 0) {
                     score++;
                     document.getElementById('gameScore').innerText = score;
                 }
@@ -448,7 +697,7 @@
 
             function gameOver() {
                 gameRunning = false;
-                cancelAnimationFrame(animationFrameId);
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
 
                 if (score > highScore) {
                     highScore = score;
@@ -456,8 +705,32 @@
                     document.getElementById('gameHighScore').innerText = highScore;
                 }
 
-                document.getElementById('gameOverlay').classList.remove('hidden');
-                document.getElementById('gameOverlay').querySelector('span').innerText = 'GAME OVER! SKOR: ' + score;
+                const overlay = document.getElementById('gameOverlay');
+                overlay.classList.remove('hidden');
+                document.getElementById('overlayTitle').innerText = 'GAME OVER! SKOR: ' + score;
+            }
+
+            function createConfetti() {
+                const colors = ['#FFE500', '#009688', '#ffffff', '#FF5722', '#4CAF50'];
+                for (let i = 0; i < 40; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'fixed pointer-events-none z-[130] rounded-full';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = Math.random() * 100 + 'vh';
+                    confetti.style.width = (Math.random() * 10 + 6) + 'px';
+                    confetti.style.height = (Math.random() * 10 + 6) + 'px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.opacity = Math.random();
+                    confetti.style.transition = 'all 1.5s ease-out';
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => {
+                        confetti.style.transform = `translate(${(Math.random() - 0.5) * 200}px, ${(Math.random() - 0.5) * 200}px) scale(0)`;
+                        confetti.style.opacity = '0';
+                    }, 50);
+
+                    setTimeout(() => confetti.remove(), 1500);
+                }
             }
 
             function createConfetti() {

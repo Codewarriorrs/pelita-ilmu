@@ -51,6 +51,10 @@ class PendaftaranResource extends Resource
                     ->required()
                     ->maxLength(255),
 
+                TextInput::make('nama_panggilan')
+                    ->label('Nama Panggilan')
+                    ->maxLength(50),
+
                 TextInput::make('asal_sekolah')
                     ->label('Asal Sekolah')
                     ->maxLength(255),
@@ -59,6 +63,14 @@ class PendaftaranResource extends Resource
                     ->label('Minat Program / Kelas')
                     ->placeholder('Contoh: Regular 10 SMA Mat-1 / Privat SMA')
                     ->maxLength(255),
+
+                TextInput::make('paket_pendaftaran')
+                    ->label('Pilihan Pendaftaran')
+                    ->maxLength(50),
+
+                TextInput::make('ukuran_kaos')
+                    ->label('Ukuran Kaos')
+                    ->maxLength(10),
 
                 TextInput::make('nomor_wa')
                     ->label('Nomor WhatsApp')
@@ -90,37 +102,137 @@ class PendaftaranResource extends Resource
             ->defaultPaginationPageOption(10)
             ->columns([
                 TextColumn::make('nama_lengkap')
-                    ->label('Nama Calon Siswa')
-                    ->searchable()
-                    ->sortable()
-                    ->weight('bold'),
+                    ->label('Calon Siswa')
+                    ->html()
+                    ->formatStateUsing(function (Pendaftaran $record): string {
+                        $html = '<div class="space-y-1">';
+                        $html .= '<div class="font-bold text-gray-900 leading-snug">' . e($record->nama_lengkap) . '</div>';
 
-                TextColumn::make('asal_sekolah')
-                    ->label('Asal Sekolah')
-                    ->searchable(),
+                        $details = [];
+                        if (!empty($record->nama_panggilan)) {
+                            $details[] = '<span class="text-gray-500 font-medium">Panggilan:</span> ' . e($record->nama_panggilan);
+                        }
+                        if (!empty($record->asal_sekolah)) {
+                            $details[] = '<span class="text-gray-500 font-medium">Sekolah:</span> ' . e($record->asal_sekolah);
+                        }
+                        if (!empty($record->nama_ortu)) {
+                            $details[] = '<span class="text-gray-500 font-medium">Ortu:</span> ' . e($record->nama_ortu);
+                        }
 
-                TextColumn::make('minat_program')
-                    ->label('Minat Program'),
+                        if (!empty($details)) {
+                            $html .= '<ul class="space-y-0.5 text-xs text-gray-600 list-disc list-inside">';
+                            foreach ($details as $detail) {
+                                $html .= '<li>' . $detail . '</li>';
+                            }
+                            $html .= '</ul>';
+                        }
 
-                TextColumn::make('nomor_wa')
-                    ->label('Nomor WA')
-                    ->icon('heroicon-m-phone')
-                    ->searchable(),
+                        $html .= '</div>';
+                        return $html;
+                    })
+                    ->searchable(['nama_lengkap', 'asal_sekolah', 'nama_ortu'])
+                    ->sortable(),
+
+                TextColumn::make('kelas')
+                    ->label('Kelas & Jenjang')
+                    ->html()
+                    ->formatStateUsing(function (Pendaftaran $record): string {
+                        $kelas = $record->kelas ?: '-';
+                        $upper = strtoupper($kelas);
+
+                        $badgeClass = 'inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-800';
+                        if (str_contains($upper, 'SD')) {
+                            $badgeClass = 'inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
+                        } elseif (str_contains($upper, 'SMP')) {
+                            $badgeClass = 'inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200';
+                        } elseif (str_contains($upper, 'SMA') || str_contains($upper, 'SMK') || str_contains($upper, 'UTBK')) {
+                            $badgeClass = 'inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200';
+                        }
+
+                        $html = '<div class="space-y-1">';
+                        $html .= '<div><span class="' . $badgeClass . '">' . e($kelas) . '</span></div>';
+
+                        $details = [];
+                        if (!empty($record->kategori_kelas)) {
+                            $details[] = '<span class="text-gray-500 font-medium">Tipe:</span> ' . e($record->kategori_kelas);
+                        }
+
+                        if (!empty($details)) {
+                            $html .= '<ul class="space-y-0.5 text-xs text-gray-600 list-disc list-inside">';
+                            foreach ($details as $detail) {
+                                $html .= '<li>' . $detail . '</li>';
+                            }
+                            $html .= '</ul>';
+                        }
+
+                        $html .= '</div>';
+                        return $html;
+                    })
+                    ->searchable(['kelas', 'kategori_kelas'])
+                    ->sortable('kelas'),
+
+                TextColumn::make('program_belajar')
+                    ->label('Program Belajar')
+                    ->html()
+                    ->formatStateUsing(function (Pendaftaran $record): string {
+                        $progName = $record->program_belajar ?: $record->program_clean;
+
+                        $html = '<div class="space-y-1">';
+                        $html .= '<div class="font-semibold text-gray-900 leading-snug">' . e($progName) . '</div>';
+
+                        $details = [];
+                        if (!empty($record->mapel_list)) {
+                            $details[] = '<span class="text-gray-500 font-medium">Mapel:</span> ' . e(implode(', ', $record->mapel_list));
+                        }
+
+                        if (!empty($record->minat_program) && preg_match('/(Dengan Kaos.*?)(?:\(|$)/i', $record->minat_program, $m)) {
+                            $details[] = '<span class="text-gray-500 font-medium">Tambahan:</span> ' . e(trim($m[1]));
+                        }
+
+                        if (!empty($details)) {
+                            $html .= '<ul class="space-y-0.5 text-xs text-gray-600 list-disc list-inside">';
+                            foreach ($details as $detail) {
+                                $html .= '<li>' . $detail . '</li>';
+                            }
+                            $html .= '</ul>';
+                        }
+
+                        $html .= '</div>';
+                        return $html;
+                    })
+                    ->wrap()
+                    ->searchable(['program_belajar', 'minat_program']),
 
                 TextColumn::make('status_tindak_lanjut')
-                    ->label('Status')
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'BARU' => '🟡 BARU MASUK',
-                        'DIHUBUNGI' => '🔵 DIHUBUNGI',
-                        'DITERIMA' => '🟢 DITERIMA',
-                        default => $state,
-                    })
-                    ->weight('extrabold'),
+                    ->label('Status & Tanggal')
+                    ->html()
+                    ->formatStateUsing(function (Pendaftaran $record): string {
+                        $status = $record->status_tindak_lanjut ?: 'BARU';
+                        $badgeClass = match ($status) {
+                            'DITERIMA' => 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800',
+                            'DIHUBUNGI' => 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800',
+                            'BARU' => 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800',
+                            default => 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800',
+                        };
+                        $label = match ($status) {
+                            'DITERIMA' => 'DITERIMA',
+                            'DIHUBUNGI' => 'DIHUBUNGI',
+                            'BARU' => 'BARU MASUK',
+                            default => $status,
+                        };
 
-                TextColumn::make('tanggal_masuk')
-                    ->label('Tgl Masuk')
-                    ->dateTime('d M Y H:i')
-                    ->sortable(),
+                        $html = '<div class="space-y-1">';
+                        $html .= '<div><span class="' . $badgeClass . '">' . e($label) . '</span></div>';
+
+                        $tgl = $record->tanggal_masuk ? $record->tanggal_masuk->format('d M Y, H:i') : '-';
+                        $html .= '<ul class="space-y-0.5 text-xs text-gray-600 list-disc list-inside">';
+                        $html .= '<li><span class="text-gray-500 font-medium">Masuk:</span> ' . e($tgl) . '</li>';
+                        $html .= '</ul>';
+
+                        $html .= '</div>';
+                        return $html;
+                    })
+                    ->sortable('tanggal_masuk'),
             ])
             ->filters([
                 SelectFilter::make('status_tindak_lanjut')
@@ -133,17 +245,12 @@ class PendaftaranResource extends Resource
             ])
             ->actions([
                 Action::make('hubungi_wa')
-                    ->label('WhatsApp')
+                    ->label('WA')
+                    ->tooltip('Hubungi via WhatsApp')
                     ->icon('heroicon-m-chat-bubble-left-right')
                     ->color('success')
-                    ->url(function (Pendaftaran $record): string {
-                        $targetWa = $record->no_telp_ortu ?: $record->nomor_wa ?: '';
-                        $phone = preg_replace('/^0/', '62', preg_replace('/[^\d]/', '', $targetWa));
-                        $nama = $record->nama_lengkap;
-                        $program = $record->program_belajar ?: $record->minat_program ?: 'Bimbel';
-                        $pesan = urlencode("Halo Bapak/Ibu {$record->nama_ortu}, terima kasih telah mendaftarkan ananda {$nama} di Bimbel Pelita Ilmu untuk program {$program}. Kami ingin mengonfirmasi pendaftaran dan jadwal belajar ananda.");
-                        return "https://wa.me/{$phone}?text={$pesan}";
-                    })
+                    ->button()
+                    ->url(fn (Pendaftaran $record): string => $record->wa_url)
                     ->openUrlInNewTab()
                     ->action(function (Pendaftaran $record): void {
                         if ($record->status_tindak_lanjut === 'BARU') {
