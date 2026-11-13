@@ -42,6 +42,11 @@ class AdminPanelProvider extends PanelProvider
                 fn () => view('filament.components.sidebar-logout'),
             )
             ->renderHook(
+                \Filament\View\PanelsRenderHook::RESOURCE_PAGES_LIST_RECORDS_TABLE_AFTER,
+                fn () => view('filament.resources.pembayaran-resource.components.sticky-scrollbar'),
+                scopes: \App\Filament\Resources\PembayaranResource\Pages\ListPembayarans::class,
+            )
+            ->renderHook(
                 \Filament\View\PanelsRenderHook::HEAD_START,
                 fn () => new \Illuminate\Support\HtmlString('
                     <link rel="icon" type="image/png" href="' . asset('images/logo-bimbel-removebg.png') . '">
@@ -164,22 +169,22 @@ class AdminPanelProvider extends PanelProvider
 
                         /* ===== ACTIVE TABLE FILTER INDICATORS (Filter Aktif) ===== */
                         .fi-ta-filter-indicators .fi-badge {
-                            background-color: #193836 !important;
-                            border: 1px solid #102624 !important;
-                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+                            background-color: #ecfdf5 !important;
+                            border: 1px solid #10b981 !important;
+                            box-shadow: 0 1px 2px rgba(16, 185, 129, 0.12) !important;
                         }
                         .fi-ta-filter-indicators .fi-badge span,
                         .fi-ta-filter-indicators .fi-badge div {
-                            color: #ffffff !important;
-                            font-weight: 800 !important;
+                            color: #065f46 !important;
+                            font-weight: 700 !important;
                         }
                         .fi-ta-filter-indicators .fi-badge button,
                         .fi-ta-filter-indicators .fi-badge svg {
-                            color: #ffffff !important;
+                            color: #065f46 !important;
                             stroke: currentColor !important;
                         }
                         .fi-ta-filter-indicators .fi-badge button:hover svg {
-                            color: #fca5a5 !important;
+                            color: #dc2626 !important;
                         }
 
                         /* ===== ICON BUTTONS ===== */

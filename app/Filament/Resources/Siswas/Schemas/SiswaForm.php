@@ -4,8 +4,10 @@ namespace App\Filament\Resources\Siswas\Schemas;
 
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 
 class SiswaForm
@@ -18,15 +20,40 @@ class SiswaForm
                     ->required(),
                 TextInput::make('asal_sekolah'),
                 TextInput::make('kategori_kelas'),
-                TextInput::make('tipe_belajar')
+                Select::make('tipe_belajar')
+                    ->options([
+                        'KELOMPOK' => 'Kelompok',
+                        'PRIVAT' => 'Privat',
+                    ])
                     ->required()
                     ->default('KELOMPOK'),
-                TextInput::make('tipe_jatuh_tempo')
+                Select::make('tipe_jatuh_tempo')
+                    ->options([
+                        'AWAL BULAN' => 'Jatuh Tempo Awal Bulan',
+                        'AKHIR BULAN' => 'Jatuh Tempo Akhir Bulan',
+                    ])
                     ->required()
                     ->default('AWAL BULAN'),
-                TextInput::make('status_siswa')
+                Select::make('status_siswa')
+                    ->options([
+                        'CALON' => 'Calon',
+                        'BELUM_MULAI' => 'Belum Mulai',
+                        'AKTIF' => 'Aktif',
+                        'NONAKTIF' => 'Nonaktif',
+                    ])
                     ->required()
-                    ->default('CALON'),
+                    ->default('CALON')
+                    ->live()
+                    ->afterStateUpdated(function (mixed $state, callable $set, callable $get): void {
+                        if ($state === 'NONAKTIF' && blank($get('tanggal_keluar'))) {
+                            $set('tanggal_keluar', now()->toDateString());
+                        }
+                    }),
+                DatePicker::make('tanggal_keluar')
+                    ->label('Tanggal Keluar / Berhenti')
+                    ->visible(fn (Get $get): bool => $get('status_siswa') === 'NONAKTIF')
+                    ->helperText('Tanggal siswa resmi mengundurkan diri atau selesai masa bimbingan.')
+                    ->default(null),
                 DateTimePicker::make('tanggal_daftar')
                     ->required(),
                 DatePicker::make('tanggal_lahir'),

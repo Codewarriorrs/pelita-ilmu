@@ -3,81 +3,106 @@
 namespace App\Filament\Resources\PembayaranResource\Pages;
 
 use App\Filament\Resources\PembayaranResource;
-use App\Models\Pembayaran;
-use App\Models\Siswa;
-use App\Models\User;
-use Filament\Actions\Action;
+use App\Filament\Resources\PembayaranResource\Widgets\PembayaranOverviewWidget;
 use Filament\Actions\CreateAction;
-use Filament\Notifications\Notification;
+use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords;
 
 class ListPembayarans extends ListRecords
 {
+    use ExposesTableToWidgets {
+        getWidgetData as protected getBaseWidgetData;
+    }
+
     protected static string $resource = PembayaranResource::class;
+
+    public string $lastSyncedPeriode = 'BULAN';
+
+    public string $lastSyncedBulan = '';
 
     public function mount(): void
     {
         parent::mount();
-        $this->sinkronkanDataSiswaBulanIni();
+
+        $this->lastSyncedPeriode = $this->getActivePeriodeWaktu();
+        $this->lastSyncedBulan = $this->getActiveBulanRaw();
     }
 
-    public function sinkronkanDataSiswaBulanIni(?int $bulan = null, ?int $tahun = null): int
+    public function updatedTableFilters(mixed $value = null, ?string $key = null): void
     {
-        $bulan = $bulan ?? (int) date('m');
-        $tahun = $tahun ?? (int) date('Y');
-        $adminId = auth()->id() ?? User::where('role', 'ADMIN')->value('id') ?? 1;
+        $periode = (string) ($this->tableFilters['periode_waktu']['value'] ?? 'BULAN');
+        $bulan = (string) ($this->tableFilters['untuk_bulan']['value'] ?? (int) now()->month);
 
-        // Ambil ID siswa yang sudah memiliki data pembayaran di bulan ini dalam 1 query
-        $existingSiswaIds = Pembayaran::where('untuk_bulan', $bulan)
-            ->where('untuk_tahun', $tahun)
-            ->pluck('siswa_id')
-            ->flip()
-            ->all();
+        $periodeChanged = ($key === 'periode_waktu.value')
+            || str_starts_with((string) $key, 'periode_waktu')
+            || ($key === null && $periode !== $this->lastSyncedPeriode);
 
-        $activeSiswa = Siswa::where('status_siswa', 'AKTIF')->get(['id']);
-        $toInsert = [];
-        $now = now();
+        $bulanChanged = ($key === 'untuk_bulan.value')
+            || str_starts_with((string) $key, 'untuk_bulan')
+            || ($key === null && $bulan !== $this->lastSyncedBulan);
 
-        foreach ($activeSiswa as $siswa) {
-            if (! isset($existingSiswaIds[$siswa->id])) {
-                $toInsert[] = [
-                    'siswa_id' => $siswa->id,
-                    'admin_pencatat_id' => $adminId,
-                    'biaya_dibayar' => 0,
-                    'metode_bayar' => 'TUNAI',
-                    'status_bayar' => 'BELUM',
-                    'tanggal_bayar' => null,
-                    'untuk_bulan' => $bulan,
-                    'untuk_tahun' => $tahun,
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ];
-            }
+        if ($periodeChanged && in_array($periode, ['HARI_INI', 'MINGGU_INI', 'SEMUA'], true)) {
+            $this->tableFilters['untuk_bulan']['value'] = 'ALL';
+        } elseif ($bulanChanged && is_numeric($bulan) && (int) $bulan >= 1 && (int) $bulan <= 12) {
+            $this->tableFilters['periode_waktu']['value'] = 'BULAN';
         }
 
-        if (! empty($toInsert)) {
-            Pembayaran::insert($toInsert);
+        $this->lastSyncedPeriode = (string) ($this->tableFilters['periode_waktu']['value'] ?? 'BULAN');
+        $this->lastSyncedBulan = (string) ($this->tableFilters['untuk_bulan']['value'] ?? 'ALL');
+
+        parent::updatedTableFilters();
+    }
+
+    public function getWidgetData(): array
+    {
+        $data = $this->getBaseWidgetData();
+
+        return [
+            ...$data,
+            'tableColumnSearches' => is_array($data['tableColumnSearches'] ?? null) ? $data['tableColumnSearches'] : [],
+            'tableFilters' => is_array($data['tableFilters'] ?? null) ? $data['tableFilters'] : [],
+        ];
+    }
+
+    public function getActivePeriodeWaktu(): string
+    {
+        $value = $this->getTableFilterState('periode_waktu')['value'] ?? null;
+
+        return (filled($value) && in_array((string) $value, ['BULAN', 'HARI_INI', 'MINGGU_INI', 'SEMUA'], true))
+            ? (string) $value
+            : 'BULAN';
+    }
+
+    public function getActiveBulanRaw(): string
+    {
+        $value = $this->getTableFilterState('untuk_bulan')['value'] ?? null;
+
+        return filled($value) ? (string) $value : (string) (int) now()->month;
+    }
+
+    public function getActiveBulan(): ?int
+    {
+        $raw = $this->getActiveBulanRaw();
+
+        if ($raw === 'ALL' || ! is_numeric($raw)) {
+            return null;
         }
 
-        return count($toInsert);
+        $int = (int) $raw;
+
+        return ($int >= 1 && $int <= 12) ? $int : null;
+    }
+
+    public function getActiveTahun(): int
+    {
+        $value = $this->getTableFilterState('untuk_tahun')['value'] ?? null;
+
+        return (filled($value) && is_numeric($value)) ? (int) $value : (int) now()->year;
     }
 
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('sinkronkan_siswa')
-                ->label('Sinkronkan Semua Siswa')
-                ->icon('heroicon-o-arrow-path')
-                ->color('gray')
-                ->tooltip('Pastikan seluruh siswa aktif tercatat di rekap pembayaran bulan ini')
-                ->action(function () {
-                    $count = $this->sinkronkanDataSiswaBulanIni();
-                    Notification::make()
-                        ->title("Sinkronisasi Selesai")
-                        ->body("Data {$count} siswa aktif berhasil disinkronkan ke rekap pembayaran.")
-                        ->success()
-                        ->send();
-                }),
             CreateAction::make()->label('Catat Pembayaran Baru'),
         ];
     }
@@ -85,7 +110,7 @@ class ListPembayarans extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            \App\Filament\Resources\PembayaranResource\Widgets\PembayaranOverviewWidget::class,
+            PembayaranOverviewWidget::class,
         ];
     }
 }

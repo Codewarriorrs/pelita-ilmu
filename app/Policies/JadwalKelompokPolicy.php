@@ -23,7 +23,7 @@ class JadwalKelompokPolicy
 
     public function create(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->isAdmin() || $user->isTentor();
     }
 
     public function update(User $user, JadwalKelompok $jadwalKelompok): bool

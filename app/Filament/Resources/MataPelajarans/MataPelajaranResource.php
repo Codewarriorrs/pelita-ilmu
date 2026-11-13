@@ -41,7 +41,24 @@ class MataPelajaranResource extends Resource
                 TextInput::make('nama_mapel')
                     ->label('Nama Mata Pelajaran')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? trim($state) : $state)
+                    ->unique(table: 'mata_pelajaran', column: 'nama_mapel', ignoreRecord: true)
+                    ->rule(fn (?MataPelajaran $record): \Closure => function (string $attribute, mixed $value, \Closure $fail) use ($record): void {
+                        $normalized = mb_strtolower(trim((string) $value));
+                        if ($normalized === '') {
+                            return;
+                        }
+
+                        $exists = MataPelajaran::query()
+                            ->when($record, fn ($q) => $q->where('id', '!=', $record->id))
+                            ->whereRaw('LOWER(TRIM(nama_mapel)) = ?', [$normalized])
+                            ->exists();
+
+                        if ($exists) {
+                            $fail('Mata pelajaran dengan nama tersebut sudah terdaftar.');
+                        }
+                    }),
             ]);
     }
 

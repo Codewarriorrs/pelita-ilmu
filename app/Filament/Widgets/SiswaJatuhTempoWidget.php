@@ -42,6 +42,17 @@ class SiswaJatuhTempoWidget extends BaseWidget
             ->query(
                 Siswa::query()
                     ->where('status_siswa', 'AKTIF')
+                    ->where(function (Builder $query) use ($bulanSekarang, $tahunSekarang) {
+                        $startOfMonth = Carbon::createFromDate($tahunSekarang, $bulanSekarang, 1)->startOfMonth()->toDateString();
+                        $endOfMonth = Carbon::createFromDate($tahunSekarang, $bulanSekarang, 1)->endOfMonth()->toDateTimeString();
+                        $query->where(function (Builder $q) use ($endOfMonth): void {
+                            $q->whereNull('tanggal_daftar')
+                                ->orWhere('tanggal_daftar', '<=', $endOfMonth);
+                        })->where(function (Builder $q) use ($startOfMonth): void {
+                            $q->whereNull('tanggal_keluar')
+                                ->orWhere('tanggal_keluar', '>=', $startOfMonth);
+                        });
+                    })
                     // 1. Filter Dinamis: Siswa yang belum memiliki record Pembayaran LUNAS di bulan & tahun berjalan
                     ->whereDoesntHave('pembayarans', function (Builder $query) use ($bulanSekarang, $tahunSekarang) {
                         $query->where('status_bayar', 'LUNAS')

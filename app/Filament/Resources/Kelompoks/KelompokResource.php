@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Kelompoks;
 use App\Filament\Resources\Kelompoks\Pages;
 use App\Filament\Resources\Kelompoks\RelationManagers\SiswaRelationManager;
 use App\Models\Kelompok;
+use App\Models\MataPelajaran;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -43,7 +44,24 @@ class KelompokResource extends Resource
                     ->label('Nama Kelompok')
                     ->required()
                     ->placeholder('Contoh: Reguler 10 SMA Mat-1')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? trim($state) : $state)
+                    ->unique(table: 'kelompok', column: 'nama_kelompok', ignoreRecord: true)
+                    ->rule(fn (?Kelompok $record): \Closure => function (string $attribute, mixed $value, \Closure $fail) use ($record): void {
+                        $normalized = mb_strtolower(trim((string) $value));
+                        if ($normalized === '') {
+                            return;
+                        }
+
+                        $exists = Kelompok::query()
+                            ->when($record, fn (Builder $q) => $q->where('id', '!=', $record->id))
+                            ->whereRaw('LOWER(TRIM(nama_kelompok)) = ?', [$normalized])
+                            ->exists();
+
+                        if ($exists) {
+                            $fail('Nama kelompok belajar tersebut sudah terdaftar.');
+                        }
+                    }),
 
                 // 1. Relasi BelongsTo ke Mata Pelajaran
                 Select::make('mapel_id')
@@ -56,7 +74,23 @@ class KelompokResource extends Resource
                             ->label('Nama Mata Pelajaran')
                             ->placeholder('Contoh: Fisika / Kimia / Sosiologi')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? trim($state) : $state)
+                            ->unique(table: 'mata_pelajaran', column: 'nama_mapel')
+                            ->rule(fn (): \Closure => function (string $attribute, mixed $value, \Closure $fail): void {
+                                $normalized = mb_strtolower(trim((string) $value));
+                                if ($normalized === '') {
+                                    return;
+                                }
+
+                                $exists = MataPelajaran::query()
+                                    ->whereRaw('LOWER(TRIM(nama_mapel)) = ?', [$normalized])
+                                    ->exists();
+
+                                if ($exists) {
+                                    $fail('Mata pelajaran dengan nama tersebut sudah terdaftar.');
+                                }
+                            }),
                     ])
                     ->required(),
 

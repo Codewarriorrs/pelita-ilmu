@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use App\Models\MataPelajaran;
@@ -48,9 +49,15 @@ return new class extends Migration
             $mapelMap[$m] = $record->id;
         }
 
-        $tentor1 = User::where('role', 'TENTOR')->first() ?? User::first();
+        $admin = User::where('role', 'ADMIN')->first() ?? User::firstOrCreate(
+            ['email' => 'admin@pelitailmu.id'],
+            ['name' => 'Administrator Pelita Ilmu', 'password' => Hash::make('password'), 'role' => 'ADMIN']
+        );
+        $tentor1 = User::where('role', 'TENTOR')->first() ?? User::firstOrCreate(
+            ['email' => 'tentor@pelitailmu.id'],
+            ['name' => 'Tentor Pelita Ilmu', 'password' => Hash::make('tentor123'), 'role' => 'TENTOR']
+        );
         $tentor2 = User::where('role', 'TENTOR')->skip(1)->first() ?? $tentor1;
-        $admin = User::where('role', 'ADMIN')->first() ?? User::first();
         $now = now();
         $currentMonth = $now->month;
         $currentYear = $now->year;

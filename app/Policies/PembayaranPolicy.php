@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Pembayaran;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
 class PembayaranPolicy
 {
@@ -12,7 +12,7 @@ class PembayaranPolicy
         return $user->isAdmin();
     }
 
-    public function view(User $user, Pembayaran $pembayaran): bool
+    public function view(User $user, Model $pembayaran): bool
     {
         return $user->isAdmin();
     }
@@ -22,12 +22,12 @@ class PembayaranPolicy
         return $user->isAdmin();
     }
 
-    public function update(User $user, Pembayaran $pembayaran): bool
+    public function update(User $user, Model $pembayaran): bool
     {
         return $user->isAdmin();
     }
 
-    public function delete(User $user, Pembayaran $pembayaran): bool
+    public function delete(User $user, Model $pembayaran): bool
     {
         return $user->isAdmin();
     }

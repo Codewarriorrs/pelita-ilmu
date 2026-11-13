@@ -15,10 +15,12 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class SiswaResource extends Resource
 {
@@ -42,7 +44,46 @@ class SiswaResource extends Resource
                 TextInput::make('nama_lengkap')
                     ->label('Nama Lengkap')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? trim($state) : $state)
+                    ->rule(fn (Get $get, ?Siswa $record): \Closure => function (string $attribute, mixed $value, \Closure $fail) use ($get, $record): void {
+                        $normalized = mb_strtolower(trim((string) $value));
+                        if ($normalized === '') {
+                            return;
+                        }
+
+                        $ortuPhone = trim((string) $get('no_telp_ortu'));
+                        $siswaPhone = trim((string) $get('no_telp_siswa'));
+                        $tglLahir = $get('tanggal_lahir');
+
+                        $hasIdentifier = ($ortuPhone !== '' && $ortuPhone !== '-')
+                            || ($siswaPhone !== '' && $siswaPhone !== '-')
+                            || filled($tglLahir);
+
+                        if (! $hasIdentifier) {
+                            return;
+                        }
+
+                        $exists = Siswa::query()
+                            ->when($record, fn (Builder $q) => $q->where('id', '!=', $record->id))
+                            ->whereRaw('LOWER(TRIM(nama_lengkap)) = ?', [$normalized])
+                            ->where(function (Builder $q) use ($ortuPhone, $siswaPhone, $tglLahir): void {
+                                if ($ortuPhone !== '' && $ortuPhone !== '-') {
+                                    $q->orWhere('no_telp_ortu', $ortuPhone);
+                                }
+                                if ($siswaPhone !== '' && $siswaPhone !== '-') {
+                                    $q->orWhere('no_telp_siswa', $siswaPhone);
+                                }
+                                if (filled($tglLahir)) {
+                                    $q->orWhereDate('tanggal_lahir', Carbon::parse($tglLahir)->toDateString());
+                                }
+                            })
+                            ->exists();
+
+                        if ($exists) {
+                            $fail('Siswa dengan nama serta nomor telepon / tanggal lahir tersebut sudah terdaftar.');
+                        }
+                    }),
                 TextInput::make('kelas')
                     ->label('Kelas Siswa')
                     ->placeholder('Contoh: 8 SMP / 5 SD / 10'),
@@ -76,7 +117,18 @@ class SiswaResource extends Resource
                         'NONAKTIF' => 'Nonaktif',
                     ])
                     ->default('AKTIF')
-                    ->required(),
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(function (mixed $state, callable $set, callable $get): void {
+                        if ($state === 'NONAKTIF' && blank($get('tanggal_keluar'))) {
+                            $set('tanggal_keluar', now()->toDateString());
+                        }
+                    }),
+                DatePicker::make('tanggal_keluar')
+                    ->label('Tanggal Keluar / Berhenti')
+                    ->visible(fn (Get $get): bool => $get('status_siswa') === 'NONAKTIF')
+                    ->helperText('Tanggal siswa resmi mengundurkan diri atau selesai masa bimbingan.')
+                    ->default(null),
                 DatePicker::make('tanggal_lahir')
                     ->label('Tanggal Lahir'),
                 TextInput::make('nama_ortu')
