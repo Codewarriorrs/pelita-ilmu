@@ -105,9 +105,23 @@ class DatabaseSeeder extends Seeder
         $rombelList = $this->parseRombels();
 
         $admin = User::where('role', 'ADMIN')->first() ?? User::first();
-        $tentors = User::where('role', 'TENTOR')->get();
-        $tentor1 = $tentors->get(0) ?? $admin;
-        $tentor2 = $tentors->get(1) ?? $tentor1;
+
+        // 4. Buat akun tentor dinamis: Tentor 1 .. Tentor N (1 tentor mengampu 5 kelompok belajar berbeda)
+        $numTentors = max(1, (int) ceil(count($rombelList) / 5));
+        $tentorUsers = [];
+        for ($t = 1; $t <= $numTentors; $t++) {
+            $tentorUser = User::updateOrCreate(
+                ['email' => "tentor{$t}@pelitailmu.id"],
+                [
+                    'name' => "Tentor {$t}",
+                    'password' => Hash::make('password'),
+                    'role' => 'TENTOR',
+                    'tanggal_daftar' => now(),
+                ]
+            );
+            $tentorUser->syncRoles(['TENTOR']);
+            $tentorUsers[] = $tentorUser;
+        }
 
         $now = now();
         $currentMonth = $now->month;
@@ -125,8 +139,10 @@ class DatabaseSeeder extends Seeder
             // Mata Pelajaran
             $mapel = MataPelajaran::firstOrCreate(['nama_mapel' => $mapelName]);
 
-            // Tentor bergantian
-            $tentorId = ($idx % 2 === 0) ? ($tentor1?->id ?? 1) : ($tentor2?->id ?? 1);
+            // 1 tentor memegang 5 rombel yang berbeda secara berurutan
+            $tentorIndex = (int) floor($idx / 5);
+            $assignedTentor = $tentorUsers[$tentorIndex] ?? $tentorUsers[0];
+            $tentorId = $assignedTentor->id;
 
             // Buat Kelompok
             $kelompok = Kelompok::create([

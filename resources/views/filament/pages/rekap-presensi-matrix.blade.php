@@ -148,7 +148,7 @@
         .rp-th-sticky {
             position: sticky;
             top: 0;
-            z-index: 20;
+            z-index: 8;
             background: #f9fafb;
             color: #374151;
             font-weight: 700;
@@ -159,7 +159,7 @@
         .rp-th-sub {
             position: sticky;
             top: 33px;
-            z-index: 19;
+            z-index: 7;
             background: #f3f4f6;
             color: #4b5563;
             font-weight: 600;
@@ -168,7 +168,7 @@
         .rp-col-no {
             position: sticky;
             left: 0;
-            z-index: 10;
+            z-index: 5;
             width: 42px;
             min-width: 42px;
             max-width: 42px;
@@ -179,7 +179,7 @@
         .rp-col-nama {
             position: sticky;
             left: 42px;
-            z-index: 10;
+            z-index: 5;
             min-width: 180px;
             max-width: 220px;
             text-align: left !important;
@@ -197,7 +197,7 @@
             position: sticky;
             top: 0;
             left: 0;
-            z-index: 30;
+            z-index: 12;
             width: 42px;
             min-width: 42px;
             max-width: 42px;
@@ -208,7 +208,7 @@
             position: sticky;
             top: 0;
             left: 42px;
-            z-index: 30;
+            z-index: 12;
             min-width: 180px;
             max-width: 220px;
             text-align: left !important;

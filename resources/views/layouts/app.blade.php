@@ -232,59 +232,59 @@
             </a>
         </div>
 
-        <!-- EASTER EGG GAME MODAL (Neo-Brutalist Arcade + Vector Rocket Runner) -->
-        <div id="easter-egg-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-6 animate-fade-in">
-            <div class="relative w-full max-w-5xl bg-white border-4 border-black rounded-[32px] p-5 sm:p-8 text-void shadow-[12px_12px_0px_0px_rgba(255,229,0,1)] text-center overflow-hidden transition-all transform scale-100">
+        <!-- EASTER EGG GAME MODAL -->
+        <div id="easter-egg-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/80 p-3 sm:p-6">
+            <div class="relative w-full max-w-2xl bg-white border-2 border-black rounded-2xl p-4 sm:p-6 text-void shadow-2xl text-center overflow-hidden transition-all max-h-[95vh] overflow-y-auto">
                 
                 <!-- Close Button -->
-                <button type="button" onclick="closeEasterEgg()" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-stone-100 hover:bg-stone-200 border-3 border-black flex items-center justify-center text-black font-extrabold text-lg shadow-sm active:translate-y-0.5 transition-all z-20">
+                <button type="button" onclick="closeEasterEgg()" class="absolute top-4 right-4 w-9 h-9 rounded-lg bg-stone-100 hover:bg-stone-200 border border-black flex items-center justify-center text-black font-bold text-base transition-all z-20">
                     ✕
                 </button>
 
                 <!-- Header Title -->
                 <div class="flex flex-col items-center justify-center mb-3">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-800 border-2 border-black text-xs font-headline font-black uppercase tracking-wider mb-1">
-                        🚀 PELITA ROCKET RUNNER ⚡
+                    <span class="inline-block px-3 py-1 rounded bg-[#193836] text-[#FFE500] text-[11px] font-headline font-black uppercase tracking-wider mb-1.5">
+                        Pelita Rocket Runner
                     </span>
-                    <h3 class="font-headline text-2xl sm:text-3xl font-black text-[#193836]">
-                        Misi Luar Angkasa Pelita Ilmu!
+                    <h3 class="font-headline text-xl sm:text-2xl font-black text-[#193836]">
+                        Simulasi Pelita Ilmu
                     </h3>
-                    <p class="font-subtitle text-xs sm:text-sm text-stone-600">
-                        Gunakan <kbd class="bg-stone-100 px-2 py-0.5 rounded border border-black font-mono font-bold text-xs">SPASI</kbd> atau <span class="font-bold text-teal-700">TAP LAYAR</span> untuk melompati rintangan buku pelajaran!
+                    <p class="font-subtitle text-xs text-stone-600 mt-1">
+                        Tekan <kbd class="bg-stone-100 px-1.5 py-0.5 rounded border border-black font-mono font-bold text-[11px]">SPASI</kbd> atau sentuh layar untuk melompat.
                     </p>
                 </div>
 
                 <!-- Canvas Game Screen -->
-                <div class="relative rounded-2xl overflow-hidden border-4 border-black bg-[#0B1B19] mb-4 shadow-xl">
+                <div class="relative rounded-xl overflow-hidden border-2 border-black bg-[#0B1B19] mb-3 shadow-md">
                     <canvas id="rocketGameCanvas" width="860" height="320" class="w-full h-auto cursor-pointer block"></canvas>
                     
-                    <div id="gameOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-white p-6 backdrop-blur-xs transition-opacity">
-                        <span id="overlayTitle" class="font-headline text-2xl sm:text-3xl font-black text-[#FFE500] mb-3 drop-shadow-md">
-                            SIAP MELUNCUR? 🚀
+                    <div id="gameOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/75 text-white p-4 transition-opacity">
+                        <span id="overlayTitle" class="font-headline text-xl sm:text-2xl font-black text-[#FFE500] mb-2">
+                            Siap Meluncur
                         </span>
-                        <p class="text-xs text-stone-300 font-subtitle mb-5 max-w-sm">
-                            Kendalikan roket riset Pelita Ilmu menembus angkasa dan raih skor tertinggi!
+                        <p class="text-xs text-stone-300 font-subtitle mb-4 max-w-xs">
+                            Kendalikan roket Pelita Ilmu dan raih skor terbaik.
                         </p>
-                        <button type="button" onclick="startRocketGame()" class="px-8 py-3.5 bg-[#FFE500] hover:bg-yellow-400 text-stone-950 font-headline font-black text-xs sm:text-sm uppercase tracking-wider rounded-xl border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 transition-all cursor-pointer">
-                            MULAI TERBANG SEKARANG 🎮
+                        <button type="button" onclick="startRocketGame()" class="px-6 py-2.5 bg-[#FFE500] hover:bg-yellow-400 text-stone-950 font-headline font-black text-xs uppercase tracking-wider rounded-lg border-2 border-black shadow-md active:translate-y-0.5 transition-all cursor-pointer">
+                            Mulai Game
                         </button>
                     </div>
                 </div>
 
                 <!-- Score Board & Close Action -->
-                <div class="flex items-center justify-between font-headline text-xs sm:text-sm font-extrabold text-[#193836] px-2 mb-3">
-                    <div class="flex items-center gap-2">
-                        <span class="text-stone-500">Skor Sesi:</span>
-                        <span id="gameScore" class="text-lg text-emerald-700 font-black">0</span>
+                <div class="flex items-center justify-between font-headline text-xs font-bold text-[#193836] px-2 mb-3">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-stone-500">Skor:</span>
+                        <span id="gameScore" class="text-base text-emerald-700 font-black">0</span>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-stone-500">Rekor Terbaik:</span>
-                        <span id="gameHighScore" class="text-lg text-amber-600 font-black">0</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-stone-500">Skor Tertinggi:</span>
+                        <span id="gameHighScore" class="text-base text-amber-600 font-black">0</span>
                     </div>
                 </div>
 
-                <button type="button" onclick="closeEasterEgg()" class="w-full py-2.5 bg-[#193836] hover:bg-[#122A28] text-white font-headline font-black rounded-xl text-xs uppercase tracking-wider border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer">
-                    Tutup Game ✕
+                <button type="button" onclick="closeEasterEgg()" class="w-full py-2 bg-[#193836] hover:bg-[#122A28] text-white font-headline font-black rounded-lg text-xs uppercase tracking-wider border border-black transition-all cursor-pointer">
+                    Tutup
                 </button>
             </div>
         </div>
@@ -707,7 +707,7 @@
 
                 const overlay = document.getElementById('gameOverlay');
                 overlay.classList.remove('hidden');
-                document.getElementById('overlayTitle').innerText = 'GAME OVER! SKOR: ' + score;
+                document.getElementById('overlayTitle').innerText = 'Game Selesai. Skor: ' + score;
             }
 
             function createConfetti() {

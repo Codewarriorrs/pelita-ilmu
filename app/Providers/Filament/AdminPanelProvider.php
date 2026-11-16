@@ -68,6 +68,14 @@ class AdminPanelProvider extends PanelProvider
                             display: block !important;
                         }
 
+                        /* ===== SIDEBAR Z-INDEX FIX (Mencegah elemen tabel bocor di mobile) ===== */
+                        .fi-sidebar {
+                            z-index: 100 !important;
+                        }
+                        .fi-sidebar-close-overlay {
+                            z-index: 99 !important;
+                        }
+
                         /* ===== SIDEBAR / TOPBAR BRAND LOGO ===== */
                         .fi-sidebar-header .fi-logo,
                         .fi-sidebar-header img.fi-logo,

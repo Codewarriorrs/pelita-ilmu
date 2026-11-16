@@ -61,9 +61,8 @@
     </div>
     <div class="border-t border-stone-700 py-4 text-center text-xs text-white/75 font-body">
         &copy; {{ date('Y') }} 
-        <button type="button" onclick="triggerEasterEgg()" class="text-white hover:text-highlight font-bold transition-all inline-flex items-center gap-1 group focus:outline-none" title="Klik untuk kejutan Easter Egg! 💡">
+        <button type="button" onclick="triggerEasterEgg()" class="text-white hover:text-highlight font-bold transition-all inline-flex items-center gap-1 group focus:outline-none">
             <span>Pelita Ilmu Bimbel</span>
-            <span class="text-highlight group-hover:scale-125 transition-transform inline-block">💡✨</span>
         </button>. All rights reserved by Pelita Ilmu.
     </div>
 </footer>
