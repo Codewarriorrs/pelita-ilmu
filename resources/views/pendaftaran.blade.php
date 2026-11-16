@@ -364,8 +364,8 @@
                                     class="h-4 w-4 mt-1 text-primary border-black focus:ring-0"
                                 >
                                 <div class="ml-3">
-                                    <span class="text-sm font-headline font-bold block text-void">Hanya Pendaftaran</span>
-                                    <span class="text-xs text-stone-500 font-body mt-0.5 block">Biaya administrasi pendaftaran standar tanpa merchandise kaos bimbel.</span>
+                                    <span class="text-sm font-headline font-bold block text-void">Hanya Pendaftaran (Rp 35.000)</span>
+                                    <span class="text-xs text-stone-500 font-body mt-0.5 block">Biaya administrasi pendaftaran standar tanpa merchandise kaos bimbel: Rp 35.000.</span>
                                 </div>
                             </label>
 
@@ -383,10 +383,10 @@
                                 >
                                 <div class="ml-3">
                                     <div class="flex items-center gap-2">
-                                        <span class="text-sm font-headline font-bold block text-void">Dengan Kaos (+Rp70.000)</span>
+                                        <span class="text-sm font-headline font-bold block text-void">Dengan Kaos (+Rp 70.000 = Rp 105.000)</span>
                                         <span class="text-[10px] font-headline font-black bg-highlight text-void px-2 py-0.5 rounded-full border border-black shadow-sm">SPESIAL</span>
                                     </div>
-                                    <span class="text-xs text-stone-500 font-body mt-0.5 block">Termasuk 1 pcs kaos resmi eksklusif Bimbel Pelita Ilmu.</span>
+                                    <span class="text-xs text-stone-500 font-body mt-0.5 block">Biaya pendaftaran Rp 35.000 + 1 pcs kaos resmi eksklusif Bimbel Pelita Ilmu (Rp 70.000).</span>
                                 </div>
                             </label>
                         </div>

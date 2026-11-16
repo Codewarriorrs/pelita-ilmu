@@ -20,7 +20,22 @@ class DatabaseSeeder extends Seeder
     {
         $this->seedRolesAndPermissions();
         $this->seedUsers();
+        $this->seedRuangans();
         $this->resetSimulasiData();
+    }
+
+    protected function seedRuangans(): void
+    {
+        $rooms = [
+            ['nama_ruangan' => 'Ruang 1 (Utama)', 'kapasitas' => 12, 'fasilitas' => 'AC, Whiteboard, Proyektor'],
+            ['nama_ruangan' => 'Ruang 2 (AC)', 'kapasitas' => 10, 'fasilitas' => 'AC, Whiteboard'],
+            ['nama_ruangan' => 'Ruang 3', 'kapasitas' => 8, 'fasilitas' => 'Kipas Angin, Whiteboard'],
+            ['nama_ruangan' => 'Ruang Privat', 'kapasitas' => 4, 'fasilitas' => 'AC, Meja Bimbingan Privat'],
+        ];
+
+        foreach ($rooms as $r) {
+            \App\Models\Ruangan::firstOrCreate(['nama_ruangan' => $r['nama_ruangan']], $r);
+        }
     }
 
     protected function seedRolesAndPermissions(): void
@@ -306,55 +321,86 @@ class DatabaseSeeder extends Seeder
             $rombel = trim($r['B'] ?? '');
             if (!$rombel || $rombel === 'ROMBEL') continue;
 
-            // Tentukan jenjang, kelas, dan mapel dari nama rombel
+            // Tentukan jenjang, kelas, dan mapel spesifik dari nama rombel asli
+            $upper = strtoupper($rombel);
             $jenjang = 'SD';
             $kelas = '1 SD';
             $mapel = 'Tematik SD';
             $biaya = 150000;
 
-            if (stripos($rombel, 'TK') !== false) {
+            if (str_contains($upper, 'TK')) {
                 $jenjang = 'TK';
                 $kelas = 'TK';
                 $mapel = 'Calistung & Tematik TK';
                 $biaya = 150000;
-            } elseif (preg_match('/KELAS\s*(\d)/i', $rombel, $m)) {
+            } elseif (preg_match('/KELAS\s*([1-6])\b/i', $rombel, $m)) {
                 $num = (int)$m[1];
-                if ($num <= 6) {
-                    $jenjang = 'SD';
-                    $kelas = "{$num} SD";
-                    $mapel = ($num >= 4) ? 'Matematika SD' : 'Tematik SD';
-                    $biaya = 150000;
-                } elseif ($num <= 9) {
-                    $jenjang = 'SMP';
-                    $kelas = "{$num} SMP";
-                    $biaya = 190000;
-                    if (stripos($rombel, 'IPA') !== false) $mapel = 'IPA SMP';
-                    elseif (stripos($rombel, 'ING') !== false) $mapel = 'Bahasa Inggris SMP';
-                    elseif (stripos($rombel, 'IPS') !== false) $mapel = 'IPS SMP';
-                    else $mapel = 'Matematika SMP';
+                $jenjang = 'SD';
+                $kelas = "{$num} SD";
+                $mapel = ($num <= 3) ? 'Tematik SD' : 'Tematik & Matematika SD';
+                $biaya = 150000;
+            } elseif (preg_match('/KELAS\s*([7-9])\b/i', $rombel, $m) || preg_match('/KLS\s*([7-9])\b/i', $rombel, $m)) {
+                $num = (int)$m[1];
+                $jenjang = 'SMP';
+                $kelas = "{$num} SMP";
+                $biaya = 180000;
+
+                if (str_contains($upper, 'IPA')) {
+                    $mapel = "IPA {$num} SMP";
+                } elseif (str_contains($upper, 'IPS')) {
+                    $mapel = "IPS {$num} SMP";
+                } elseif (str_contains($upper, 'TKA MTK')) {
+                    $mapel = "TKA Matematika {$num} SMP";
+                } elseif (str_contains($upper, 'TKA B INDO') || str_contains($upper, 'TKA B. INDO') || str_contains($upper, 'TKA BI')) {
+                    $mapel = "TKA Bahasa Indonesia {$num} SMP";
+                } elseif (str_contains($upper, 'ING') || str_contains($upper, 'B ING')) {
+                    $mapel = "Bahasa Inggris {$num} SMP";
                 } else {
-                    $jenjang = 'SMA';
-                    $kelas = "{$num} SMA";
-                    $biaya = 230000;
-                    if (stripos($rombel, 'FISIKA') !== false) $mapel = 'Fisika SMA';
-                    elseif (stripos($rombel, 'KIM') !== false) $mapel = 'Kimia SMA';
-                    elseif (stripos($rombel, 'BIO') !== false) $mapel = 'Biologi SMA';
-                    elseif (stripos($rombel, 'EKO') !== false) $mapel = 'Ekonomi & Soshum SMA';
-                    elseif (stripos($rombel, 'UTBK') !== false) {
-                        $mapel = 'SNBT / UTBK Intensif';
-                        $biaya = 290000;
-                    } else $mapel = 'Matematika SMA';
+                    $mapel = "Matematika {$num} SMP";
                 }
-            } elseif (stripos($rombel, 'SMK') !== false) {
+            } elseif (str_contains($upper, 'SMK')) {
                 $jenjang = 'SMA';
-                $kelas = '11 SMA';
-                $mapel = 'Bahasa Inggris SMA';
-                $biaya = 230000;
-            } elseif (stripos($rombel, 'UTBK') !== false || stripos($rombel, 'TKA') !== false) {
+                $kelas = 'SMK';
+                $biaya = 200000;
+                if (str_contains($upper, 'MAT.LAN') || str_contains($upper, 'MATLAN')) {
+                    $mapel = 'Matematika Tingkat Lanjut (SMK)';
+                } elseif (str_contains($upper, 'ING')) {
+                    $mapel = 'Bahasa Inggris (SMK)';
+                } else {
+                    $mapel = 'Matematika Wajib (SMK)';
+                }
+            } else {
+                // SMA (Kelas 10, 11, 12)
                 $jenjang = 'SMA';
-                $kelas = '12 SMA';
-                $mapel = 'SNBT / UTBK Intensif';
-                $biaya = 290000;
+                $biaya = 220000;
+                $num = 12;
+                if (preg_match('/(10|11|12)/', $upper, $sm)) {
+                    $num = (int)$sm[1];
+                }
+                $kelas = "{$num} SMA";
+
+                if (str_contains($upper, 'FISIKA')) {
+                    $mapel = "Fisika {$num} SMA";
+                } elseif (str_contains($upper, 'KIMIA') || str_contains($upper, 'KIM')) {
+                    $mapel = "Kimia {$num} SMA";
+                } elseif (str_contains($upper, 'BIOLOGI') || str_contains($upper, 'BIO')) {
+                    $mapel = "Biologi {$num} SMA";
+                } elseif (str_contains($upper, 'SOSIO')) {
+                    $mapel = "Sosiologi {$num} SMA";
+                } elseif (str_contains($upper, 'EKO') || str_contains($upper, 'AKUN')) {
+                    $mapel = "Ekonomi & Akuntansi {$num} SMA";
+                } elseif (str_contains($upper, 'PK&PM') || str_contains($upper, 'UTBK')) {
+                    $mapel = 'UTBK TPS & Literasi (PK & PM)';
+                    $biaya = 280000;
+                } elseif (str_contains($upper, 'MATLAN') || str_contains($upper, 'MAT.LAN') || str_contains($upper, 'MAT.LAM')) {
+                    $mapel = "Matematika Tingkat Lanjut {$num} SMA";
+                } elseif (str_contains($upper, 'B INDO') || str_contains($upper, 'B. INDO') || str_contains($upper, 'INDO')) {
+                    $mapel = "Bahasa Indonesia {$num} SMA";
+                } elseif (str_contains($upper, 'ING') || str_contains($upper, 'B.ING') || str_contains($upper, 'B ING')) {
+                    $mapel = "Bahasa Inggris {$num} SMA";
+                } else {
+                    $mapel = "Matematika Wajib {$num} SMA";
+                }
             }
 
             $slotHari = $hariPool[$i % count($hariPool)];

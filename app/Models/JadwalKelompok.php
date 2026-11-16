@@ -18,6 +18,8 @@ class JadwalKelompok extends Model
     protected $fillable = [
         'kelompok_id',
         'tanggal_sesi',
+        'jam_mulai',
+        'jam_selesai',
         'ruang_kelas',
         'status_sesi',
         'materi_pembahasan',
@@ -28,6 +30,32 @@ class JadwalKelompok extends Model
     protected $casts = [
         'tanggal_sesi' => 'date',
     ];
+
+    /**
+     * Cek apakah waktu sesi sudah tiba sehingga presensi boleh dilakukan.
+     */
+    public function canDoPresensi(): bool
+    {
+        if (! $this->tanggal_sesi) {
+            return false;
+        }
+
+        $sesiDate = $this->tanggal_sesi->toDateString();
+        $jamMulai = $this->jam_mulai ?? $this->kelompok?->jam_mulai ?? '00:00:00';
+        $sesiStartTime = \Illuminate\Support\Carbon::parse("{$sesiDate} {$jamMulai}");
+
+        return now()->gte($sesiStartTime);
+    }
+
+    public function getEffectiveJamMulaiAttribute(): ?string
+    {
+        return $this->jam_mulai ?? $this->kelompok?->jam_mulai;
+    }
+
+    public function getEffectiveJamSelesaiAttribute(): ?string
+    {
+        return $this->jam_selesai ?? $this->kelompok?->jam_selesai;
+    }
 
     public function kelompok(): BelongsTo
     {

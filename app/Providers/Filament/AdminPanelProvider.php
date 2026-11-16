@@ -38,17 +38,12 @@ class AdminPanelProvider extends PanelProvider
             ->darkMode(false)
             ->font('Plus Jakarta Sans')
             ->renderHook(
-                \Filament\View\PanelsRenderHook::USER_MENU_BEFORE,
+                \Filament\View\PanelsRenderHook::GLOBAL_SEARCH_AFTER,
                 fn () => view('filament.components.notification-bell'),
             )
             ->renderHook(
                 \Filament\View\PanelsRenderHook::SIDEBAR_FOOTER,
                 fn () => view('filament.components.sidebar-logout'),
-            )
-            ->renderHook(
-                \Filament\View\PanelsRenderHook::RESOURCE_PAGES_LIST_RECORDS_TABLE_AFTER,
-                fn () => view('filament.resources.pembayaran-resource.components.sticky-scrollbar'),
-                scopes: \App\Filament\Resources\PembayaranResource\Pages\ListPembayarans::class,
             )
             ->renderHook(
                 \Filament\View\PanelsRenderHook::HEAD_START,

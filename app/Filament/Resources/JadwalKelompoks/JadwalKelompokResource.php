@@ -17,9 +17,11 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TimePicker;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -49,6 +51,16 @@ class JadwalKelompokResource extends Resource
                             ? $query->where('tentor_id', auth()->id())
                             : $query
                     )
+                    ->live()
+                    ->afterStateUpdated(function ($state, Set $set) {
+                        if ($state) {
+                            $k = \App\Models\Kelompok::find($state);
+                            if ($k) {
+                                if ($k->jam_mulai) $set('jam_mulai', substr((string) $k->jam_mulai, 0, 5));
+                                if ($k->jam_selesai) $set('jam_selesai', substr((string) $k->jam_selesai, 0, 5));
+                            }
+                        }
+                    })
                     ->rule(fn () => function (string $attribute, mixed $value, \Closure $fail): void {
                         $user = auth()->user();
                         if ($user && $user->isTentor()) {
@@ -97,7 +109,9 @@ class JadwalKelompokResource extends Resource
                         }
 
                         $targetKelompok = \App\Models\Kelompok::find($kelompokId);
-                        if (! $targetKelompok || ! $targetKelompok->jam_mulai || ! $targetKelompok->jam_selesai) {
+                        $targetStart = $get('jam_mulai') ?: ($targetKelompok?->jam_mulai);
+                        $targetEnd = $get('jam_selesai') ?: ($targetKelompok?->jam_selesai);
+                        if (! $targetStart || ! $targetEnd) {
                             return;
                         }
 
@@ -108,15 +122,14 @@ class JadwalKelompokResource extends Resource
                             ->where('status_sesi', '!=', 'BATAL')
                             ->when($record, fn (Builder $q) => $q->where('id', '!=', $record->id))
                             ->get()
-                            ->first(function (JadwalKelompok $other) use ($targetKelompok): bool {
-                                $otherStart = $other->kelompok?->jam_mulai;
-                                $otherEnd = $other->kelompok?->jam_selesai;
+                            ->first(function (JadwalKelompok $other) use ($targetStart, $targetEnd): bool {
+                                $otherStart = $other->jam_mulai ?: ($other->kelompok?->jam_mulai);
+                                $otherEnd = $other->jam_selesai ?: ($other->kelompok?->jam_selesai);
                                 if (! $otherStart || ! $otherEnd) {
                                     return false;
                                 }
 
-                                return $otherStart < $targetKelompok->jam_selesai
-                                    && $otherEnd > $targetKelompok->jam_mulai;
+                                return $otherStart < $targetEnd && $otherEnd > $targetStart;
                             });
 
                         if ($roomConflict) {
@@ -124,14 +137,29 @@ class JadwalKelompokResource extends Resource
                         }
                     }),
 
+                TimePicker::make('jam_mulai')
+                    ->label('Jam Mulai')
+                    ->default('15:30')
+                    ->seconds(false)
+                    ->required(),
+
+                TimePicker::make('jam_selesai')
+                    ->label('Jam Selesai')
+                    ->default('17:00')
+                    ->seconds(false)
+                    ->required(),
+
                 Select::make('ruang_kelas')
                     ->label('Ruang Kelas')
-                    ->options([
-                        'Ruang 1 (Utama)' => 'Ruang 1 (Utama)',
-                        'Ruang 2 (AC)' => 'Ruang 2 (AC)',
-                        'Ruang 3' => 'Ruang 3',
-                        'Ruang Privat' => 'Ruang Privat',
-                    ])
+                    ->options(function () {
+                        $rooms = \App\Models\Ruangan::pluck('nama_ruangan', 'nama_ruangan')->toArray();
+                        return !empty($rooms) ? $rooms : [
+                            'Ruang 1 (Utama)' => 'Ruang 1 (Utama)',
+                            'Ruang 2 (AC)' => 'Ruang 2 (AC)',
+                            'Ruang 3' => 'Ruang 3',
+                            'Ruang Privat' => 'Ruang Privat',
+                        ];
+                    })
                     ->searchable()
                     ->preload(),
 
@@ -185,8 +213,8 @@ class JadwalKelompokResource extends Resource
                 TextColumn::make('jam_sesi')
                     ->label('Waktu / Jam')
                     ->state(function (JadwalKelompok $record): string {
-                        $mulai = $record->kelompok?->jam_mulai ? substr((string) $record->kelompok->jam_mulai, 0, 5) : '-';
-                        $selesai = $record->kelompok?->jam_selesai ? substr((string) $record->kelompok->jam_selesai, 0, 5) : '-';
+                        $mulai = $record->jam_mulai ? substr((string) $record->jam_mulai, 0, 5) : ($record->kelompok?->jam_mulai ? substr((string) $record->kelompok->jam_mulai, 0, 5) : '-');
+                        $selesai = $record->jam_selesai ? substr((string) $record->jam_selesai, 0, 5) : ($record->kelompok?->jam_selesai ? substr((string) $record->kelompok->jam_selesai, 0, 5) : '-');
                         return ($mulai !== '-' && $selesai !== '-') ? "{$mulai} - {$selesai}" : ($record->kelompok?->jadwal_hari ?? '15:30 - 17:00 WIB');
                     })
                     ->icon('heroicon-m-clock')
@@ -211,12 +239,30 @@ class JadwalKelompokResource extends Resource
                 //
             ])
             ->actions([
-                // Action interaktif: Pop-up Modal Presensi Siswa
+                // Action interaktif: Pop-up Modal Presensi Siswa (Terkunci jika belum jam dan harinya)
                 Action::make('presensi')
                     ->iconButton()
                     ->icon('heroicon-o-clipboard-document-check')
-                    ->color('success')
-                    ->tooltip('Isi / Edit Presensi')
+                    ->color(fn (JadwalKelompok $record): string => $record->canDoPresensi() ? 'success' : 'gray')
+                    ->tooltip(function (JadwalKelompok $record): string {
+                        if (! $record->canDoPresensi()) {
+                            $jam = $record->effective_jam_mulai ? substr($record->effective_jam_mulai, 0, 5) : '15:30';
+                            $tgl = $record->tanggal_sesi?->format('d M Y') ?? '-';
+                            return "Presensi terkunci. Sesi baru dibuka pada {$tgl} pk {$jam} WIB.";
+                        }
+                        return 'Isi / Edit Presensi';
+                    })
+                    ->disabled(fn (JadwalKelompok $record): bool => ! $record->canDoPresensi())
+                    ->before(function (Action $action, JadwalKelompok $record): void {
+                        if (! $record->canDoPresensi()) {
+                            Notification::make()
+                                ->title('Presensi Belum Dibuka')
+                                ->body('Presensi hanya dapat dilakukan saat atau setelah jam dan hari sesi belajar tiba.')
+                                ->danger()
+                                ->send();
+                            $action->halt();
+                        }
+                    })
                     ->visible(function (JadwalKelompok $record): bool {
                         $user = auth()->user();
                         if (! $user) {

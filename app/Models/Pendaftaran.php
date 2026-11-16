@@ -90,12 +90,32 @@ class Pendaftaran extends Model
             return '#';
         }
 
-        $nama = $this->nama_lengkap;
-        $namaOrtu = $this->nama_ortu ?: 'Bapak/Ibu';
-        $program = $this->program_belajar ?: $this->minat_program ?: 'Bimbel';
-        $pesan = urlencode("Halo {$namaOrtu}, terima kasih telah mendaftarkan ananda {$nama} di Bimbel Pelita Ilmu untuk program {$program}. Kami ingin mengonfirmasi pendaftaran dan jadwal belajar ananda.");
+        $hour = (int) now()->format('H');
+        $sapaan = match (true) {
+            $hour >= 4 && $hour < 11 => 'Pagi',
+            $hour >= 11 && $hour < 15 => 'Siang',
+            $hour >= 15 && $hour < 18 => 'Sore',
+            default => 'Malam',
+        };
 
-        return "https://wa.me/{$phone}?text={$pesan}";
+        $namaOrtu = $this->nama_ortu ?: 'Bapak/Ibu';
+        $namaSiswa = $this->nama_lengkap;
+        $panggilan = $this->nama_panggilan ?: explode(' ', trim((string) $namaSiswa))[0];
+        $program = $this->program_belajar ?: $this->minat_program ?: 'Bimbel';
+        $tanggalDaftar = $this->tanggal_masuk ? $this->tanggal_masuk->translatedFormat('d F Y') : now()->translatedFormat('d F Y');
+
+        $mapels = is_array($this->pilihan_mapel) ? $this->pilihan_mapel : [];
+        $mapelList = !empty($mapels) ? implode(', ', $mapels) : ($this->program_belajar ?: '-');
+
+        $kaosOrBiasa = !empty($this->ukuran_kaos)
+            ? "Dengan Kaos (Ukuran {$this->ukuran_kaos})"
+            : ($this->paket_pendaftaran ?: 'Pendaftaran Biasa (Tanpa Kaos)');
+
+        $rincian = "• Program: {$program}\n• Mata Pelajaran: {$mapelList}\n• Paket: {$kaosOrBiasa}";
+
+        $pesanTeks = "Selamat {$sapaan} Bapak/Ibu {$namaOrtu}, terima kasih telah mendaftarkan ananda {$namaSiswa} di Bimbel Pelita Ilmu untuk program {$program}. Kami ingin mengonfirmasi pendaftaran dan jadwal belajar ananda {$panggilan} yang baru saja mendaftar pada {$tanggalDaftar}. Apakah benar ananda {$namaSiswa} mendaftar pada Bimbingan Belajar kami dengan rincian sebagai berikut :\n\n{$rincian}\n\nksmi akan verifikasi dan memroses pendaftaran ke proses selanjutnya.\nTerima Kasih!";
+
+        return "https://wa.me/{$phone}?text=" . rawurlencode($pesanTeks);
     }
 
     /**

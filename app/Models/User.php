@@ -59,7 +59,7 @@ class User extends Authenticatable implements FilamentUser
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return in_array($this->role, ['ADMIN', 'TENTOR']);
+        return $this->isAdmin() || $this->isTentor();
     }
 
     /**
@@ -67,7 +67,12 @@ class User extends Authenticatable implements FilamentUser
      */
     public function isAdmin(): bool
     {
-        return ($this->role ?? 'ADMIN') === 'ADMIN';
+        if (strcasecmp((string) ($this->role ?? ''), 'TENTOR') === 0) {
+            return false;
+        }
+
+        return strcasecmp((string) ($this->role ?? 'ADMIN'), 'ADMIN') === 0
+            || (method_exists($this, 'hasRole') && $this->hasRole('ADMIN'));
     }
 
     /**
@@ -75,6 +80,7 @@ class User extends Authenticatable implements FilamentUser
      */
     public function isTentor(): bool
     {
-        return ($this->role ?? '') === 'TENTOR';
+        return strcasecmp((string) ($this->role ?? ''), 'TENTOR') === 0
+            || (method_exists($this, 'hasRole') && $this->hasRole('TENTOR'));
     }
 }

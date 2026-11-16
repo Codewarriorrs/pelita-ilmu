@@ -340,20 +340,86 @@ class PendaftaranResource extends Resource
                         }
 
                         $mapelDisplay = !empty($mapels) ? implode(', ', $mapels) : ($record->program_belajar ?: 'Semua Mapel Pokok');
+                        $tglDaftar = $record->tanggal_masuk ? $record->tanggal_masuk->translatedFormat('d F Y') : '-';
+                        $invNo = 'REG-' . str_pad((string) $record->id, 5, '0', STR_PAD_LEFT);
+                        $hasKaos = !empty($record->ukuran_kaos) || str_contains((string) $record->paket_pendaftaran, 'Dengan Kaos');
+                        $biayaDaftar = 35000;
+                        $biayaKaos = $hasKaos ? 70000 : 0;
+                        $totalBiayaAwal = $biayaDaftar + $biayaKaos;
+                        $biayaDaftarFmt = 'Rp ' . number_format($biayaDaftar, 0, ',', '.');
+                        $biayaKaosFmt = 'Rp ' . number_format($biayaKaos, 0, ',', '.');
+                        $totalAwalFmt = 'Rp ' . number_format($totalBiayaAwal, 0, ',', '.');
+                        $ukuranKaosText = $record->ukuran_kaos ? "Ukuran: {$record->ukuran_kaos}" : 'Tanpa Kaos';
 
                         return [
                             \Filament\Forms\Components\Placeholder::make('info_pendaftar')
-                                ->label('Ringkasan Data Calon Siswa')
+                                ->label('')
                                 ->content(new \Illuminate\Support\HtmlString("
-                                    <div class='p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-xs space-y-1.5'>
-                                        <div><strong>Nama Lengkap:</strong> {$record->nama_lengkap} (" . ($record->kelas ?: 'Kelas belum diatur') . ")</div>
-                                        <div><strong>Asal Sekolah:</strong> " . ($record->asal_sekolah ?: '-') . "</div>
-                                        <div><strong>Tanggal Lahir:</strong> " . ($record->tanggal_lahir ? \Carbon\Carbon::parse($record->tanggal_lahir)->translatedFormat('d F Y') : '-') . "</div>
-                                        <div><strong>Kategori Belajar:</strong> " . ($record->kategori_kelas ?: 'Reguler') . "</div>
-                                        <div><strong>Program / Mapel:</strong> <span class='text-primary-600 font-bold'>{$mapelDisplay}</span></div>
-                                        <div><strong>Nama Orang Tua:</strong> " . ($record->nama_ortu ?: '-') . " (WA: " . ($record->no_telp_ortu ?: $record->nomor_wa ?: '-') . ")</div>
-                                        <div><strong>No. HP Siswa:</strong> " . ($record->no_telp_siswa ?: '-') . "</div>
-                                        <div><strong>Alamat:</strong> " . ($record->alamat_rumah ?: '-') . "</div>
+                                    <div class='bg-white rounded-2xl border-2 border-slate-300 p-5 shadow-sm text-slate-800 font-sans space-y-4'>
+                                        <!-- Header Nota Invoice -->
+                                        <div class='flex items-center justify-between border-b-2 border-dashed border-slate-300 pb-3.5'>
+                                            <div>
+                                                <div class='text-xs font-black tracking-widest uppercase text-emerald-800'>BIMBEL PELITA ILMU</div>
+                                                <div class='text-base font-extrabold text-slate-900'>NOTA RINGKASAN PENDAFTARAN</div>
+                                                <div class='text-[11px] text-slate-500'>Semarang, Jawa Tengah</div>
+                                            </div>
+                                            <div class='text-right'>
+                                                <span class='inline-block bg-slate-900 text-white font-mono text-xs font-bold px-2.5 py-1 rounded-md shadow-sm'>#{$invNo}</span>
+                                                <div class='text-[11px] text-slate-500 mt-1 font-medium'>Tgl: {$tglDaftar}</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Informasi Siswa & Wali -->
+                                        <div class='grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50 p-3.5 rounded-xl border border-slate-200'>
+                                            <div class='space-y-1'>
+                                                <div><span class='text-slate-500 font-medium'>Nama Lengkap:</span> <strong class='text-slate-900'>{$record->nama_lengkap}</strong></div>
+                                                <div><span class='text-slate-500 font-medium'>Panggilan:</span> <span class='text-slate-800 font-semibold'>" . ($record->nama_panggilan ?: '-') . "</span></div>
+                                                <div><span class='text-slate-500 font-medium'>Jenjang / Kelas:</span> <span class='bg-emerald-100 text-emerald-900 font-bold px-1.5 py-0.5 rounded text-[11px]'>" . ($record->kelas ?: '-') . "</span> (" . ($record->kategori_kelas ?: 'Reguler') . ")</div>
+                                                <div><span class='text-slate-500 font-medium'>Asal Sekolah:</span> <span class='text-slate-800'>" . ($record->asal_sekolah ?: '-') . "</span></div>
+                                            </div>
+                                            <div class='space-y-1 sm:border-l sm:border-slate-200 sm:pl-3'>
+                                                <div><span class='text-slate-500 font-medium'>Nama Orang Tua:</span> <strong class='text-slate-900'>" . ($record->nama_ortu ?: '-') . "</strong></div>
+                                                <div><span class='text-slate-500 font-medium'>WhatsApp Wali:</span> <span class='font-mono text-emerald-700 font-bold'>" . ($record->no_telp_ortu ?: $record->nomor_wa ?: '-') . "</span></div>
+                                                <div><span class='text-slate-500 font-medium'>No. HP Murid:</span> <span class='font-mono text-slate-700'>" . ($record->no_telp_siswa ?: '-') . "</span></div>
+                                                <div class='truncate'><span class='text-slate-500 font-medium'>Alamat:</span> <span class='text-slate-800'>" . ($record->alamat_rumah ?: '-') . "</span></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Itemized Invoice Table -->
+                                        <div class='overflow-hidden rounded-xl border border-slate-200'>
+                                            <table class='w-full text-xs text-left'>
+                                                <thead class='bg-slate-100 text-slate-700 font-bold border-b border-slate-200 uppercase tracking-wider text-[10px]'>
+                                                    <tr>
+                                                        <th class='py-2 px-3'>Deskripsi Item / Layanan</th>
+                                                        <th class='py-2 px-3'>Keterangan</th>
+                                                        <th class='py-2 px-3 text-right'>Jumlah</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class='divide-y divide-slate-100 text-slate-800 font-medium'>
+                                                    <tr>
+                                                        <td class='py-2 px-3 font-semibold'>Biaya Administrasi Pendaftaran</td>
+                                                        <td class='py-2 px-3 text-slate-500'>Registrasi standar bimbel</td>
+                                                        <td class='py-2 px-3 text-right font-mono font-bold text-slate-900'>{$biayaDaftarFmt}</td>
+                                                    </tr>" . ($hasKaos ? "
+                                                    <tr>
+                                                        <td class='py-2 px-3 font-semibold'>Merchandise Kaos Eksklusif</td>
+                                                        <td class='py-2 px-3 text-slate-500'>Kaos resmi Pelita Ilmu ({$ukuranKaosText})</td>
+                                                        <td class='py-2 px-3 text-right font-mono font-bold text-slate-900'>{$biayaKaosFmt}</td>
+                                                    </tr>" : "") . "
+                                                    <tr>
+                                                        <td class='py-2 px-3 font-semibold'>Program Bimbingan Belajar</td>
+                                                        <td class='py-2 px-3 text-emerald-700 font-bold'>{$mapelDisplay}</td>
+                                                        <td class='py-2 px-3 text-right text-slate-400 font-italic'>Sesuai SPP</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot class='bg-emerald-50/80 font-bold border-t-2 border-emerald-200 text-emerald-950'>
+                                                    <tr>
+                                                        <td colspan='2' class='py-2.5 px-3 uppercase text-[11px] tracking-wider'>Total Tagihan Pendaftaran Awal</td>
+                                                        <td class='py-2.5 px-3 text-right font-mono text-sm text-emerald-800 font-black'>{$totalAwalFmt}</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
                                     </div>
                                 ")),
 

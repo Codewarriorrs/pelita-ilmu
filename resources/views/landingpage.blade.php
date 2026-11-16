@@ -3,8 +3,8 @@
 @section('title', 'Pelita Ilmu Bimbel - Raih Prestasimu')
 
 @section('content')
-    <!-- HERO SECTION -->
-    <section id="beranda" class="relative bg-primary py-16 lg:py-24 border-b-2 border-black overflow-hidden bubble-bg">
+    <!-- HERO SECTION (Full Height Viewport di Mobile & Desktop) -->
+    <section id="beranda" class="relative bg-primary min-h-[calc(100svh-4rem)] sm:min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 lg:py-20 border-b-2 border-black overflow-hidden bubble-bg">
         <!-- Decorative Background Circles & Floating Dots -->
         <div class="absolute inset-0 pointer-events-none">
             <div class="absolute -top-16 -left-16 h-72 w-72 rounded-full border-4 border-white/20 animate-pulse"></div>
