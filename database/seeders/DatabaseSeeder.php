@@ -180,7 +180,10 @@ class DatabaseSeeder extends Seeder
 
     protected function parseMasterStudents(): array
     {
-        $file = 'C:/Users/DELL/Downloads/Kuliah/Projek Bimbel/PENDATAAN ULANG MURID PELITA ILMU BIMBEL 2026 (Jawaban) (1).xlsx';
+        $file = database_path('data/PENDATAAN ULANG MURID PELITA ILMU BIMBEL 2026 (Jawaban) (1).xlsx');
+        if (!file_exists($file)) {
+            $file = 'C:/Users/DELL/Downloads/Kuliah/Projek Bimbel/PENDATAAN ULANG MURID PELITA ILMU BIMBEL 2026 (Jawaban) (1).xlsx';
+        }
         if (!file_exists($file)) {
             $file = 'C:/Users/DELL/Downloads/PENDATAAN ULANG MURID PELITA ILMU BIMBEL 2026 (Jawaban).xlsx';
         }
@@ -257,7 +260,10 @@ class DatabaseSeeder extends Seeder
 
     protected function parseRombels(): array
     {
-        $file = 'C:/Users/DELL/Downloads/Kuliah/Projek Bimbel/Data Kelompok Siswa All Pelita Ilmu 19092026.xlsx';
+        $file = database_path('data/Data Kelompok Siswa All Pelita Ilmu 19092026.xlsx');
+        if (!file_exists($file)) {
+            $file = 'C:/Users/DELL/Downloads/Kuliah/Projek Bimbel/Data Kelompok Siswa All Pelita Ilmu 19092026.xlsx';
+        }
         $zip = new ZipArchive();
         if ($zip->open($file) !== true) return [];
 
