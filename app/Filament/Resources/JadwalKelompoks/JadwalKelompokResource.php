@@ -19,10 +19,12 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class JadwalKelompokResource extends Resource
 {
@@ -47,6 +49,19 @@ class JadwalKelompokResource extends Resource
                             ? $query->where('tentor_id', auth()->id())
                             : $query
                     )
+                    ->rule(fn () => function (string $attribute, mixed $value, \Closure $fail): void {
+                        $user = auth()->user();
+                        if ($user && $user->isTentor()) {
+                            $ownsKelompok = \App\Models\Kelompok::query()
+                                ->where('id', $value)
+                                ->where('tentor_id', $user->id)
+                                ->exists();
+
+                            if (! $ownsKelompok) {
+                                $fail('Anda hanya dapat membuat jadwal untuk kelompok yang Anda ampu.');
+                            }
+                        }
+                    })
                     ->searchable()
                     ->preload()
                     ->required(),
@@ -54,7 +69,60 @@ class JadwalKelompokResource extends Resource
                 DatePicker::make('tanggal_sesi')
                     ->label('Tanggal Pertemuan')
                     ->default(now())
-                    ->required(),
+                    ->required()
+                    ->rule(fn (Get $get, ?JadwalKelompok $record): \Closure => function (string $attribute, mixed $value, \Closure $fail) use ($get, $record): void {
+                        $kelompokId = (int) $get('kelompok_id');
+                        if (! $kelompokId || blank($value)) {
+                            return;
+                        }
+
+                        $date = Carbon::parse($value)->toDateString();
+
+                        $duplicateSession = JadwalKelompok::query()
+                            ->where('kelompok_id', $kelompokId)
+                            ->whereDate('tanggal_sesi', $date)
+                            ->when($record, fn (Builder $q) => $q->where('id', '!=', $record->id))
+                            ->exists();
+
+                        if ($duplicateSession) {
+                            $fail('Jadwal untuk kelompok ini pada tanggal tersebut sudah terdaftar.');
+
+                            return;
+                        }
+
+                        $ruang = trim((string) $get('ruang_kelas'));
+                        $statusSesi = (string) ($get('status_sesi') ?? 'TERJADWAL');
+                        if ($ruang === '' || $statusSesi === 'BATAL') {
+                            return;
+                        }
+
+                        $targetKelompok = \App\Models\Kelompok::find($kelompokId);
+                        if (! $targetKelompok || ! $targetKelompok->jam_mulai || ! $targetKelompok->jam_selesai) {
+                            return;
+                        }
+
+                        $roomConflict = JadwalKelompok::query()
+                            ->with('kelompok:id,nama_kelompok,jam_mulai,jam_selesai')
+                            ->whereDate('tanggal_sesi', $date)
+                            ->where('ruang_kelas', $ruang)
+                            ->where('status_sesi', '!=', 'BATAL')
+                            ->when($record, fn (Builder $q) => $q->where('id', '!=', $record->id))
+                            ->get()
+                            ->first(function (JadwalKelompok $other) use ($targetKelompok): bool {
+                                $otherStart = $other->kelompok?->jam_mulai;
+                                $otherEnd = $other->kelompok?->jam_selesai;
+                                if (! $otherStart || ! $otherEnd) {
+                                    return false;
+                                }
+
+                                return $otherStart < $targetKelompok->jam_selesai
+                                    && $otherEnd > $targetKelompok->jam_mulai;
+                            });
+
+                        if ($roomConflict) {
+                            $fail("Ruang {$ruang} sudah digunakan oleh {$roomConflict->kelompok?->nama_kelompok} pada tanggal dan jam tersebut.");
+                        }
+                    }),
 
                 Select::make('ruang_kelas')
                     ->label('Ruang Kelas')
@@ -148,14 +216,17 @@ class JadwalKelompokResource extends Resource
                     ->iconButton()
                     ->icon('heroicon-o-clipboard-document-check')
                     ->color('success')
-                    ->tooltip(fn (JadwalKelompok $record) => (!auth()->user()?->isAdmin() && $record->status_sesi === 'SELESAI') ? 'Sesi Sudah Dipresensi' : 'Isi Presensi')
-                    ->disabled(function (JadwalKelompok $record): bool {
+                    ->tooltip('Isi / Edit Presensi')
+                    ->visible(function (JadwalKelompok $record): bool {
                         $user = auth()->user();
-                        if ($user?->isAdmin()) {
+                        if (! $user) {
                             return false;
                         }
-                        // Khusus Tentor: Gabisa presensi lagi kalau sudah SELESAI
-                        return $record->status_sesi === 'SELESAI';
+                        if ($user->isAdmin()) {
+                            return true;
+                        }
+
+                        return $user->isTentor() && $record->kelompok?->tentor_id === $user->id;
                     })
                     ->modalHeading(fn (JadwalKelompok $record) => 'Presensi Sesi: ' . ($record->kelompok?->nama_kelompok ?? '-'))
                     ->modalDescription('Tentukan status kehadiran untuk setiap siswa di kelompok ini.')

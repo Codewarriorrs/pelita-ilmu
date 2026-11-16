@@ -23,6 +23,7 @@ class Siswa extends Model
         'tipe_jatuh_tempo',
         'status_siswa',
         'tanggal_daftar',
+        'tanggal_keluar',
         'tanggal_lahir',
         'alamat_rumah',
         'no_telp_siswa',
@@ -34,10 +35,33 @@ class Siswa extends Model
 
     protected $casts = [
         'tanggal_daftar' => 'date',
+        'tanggal_keluar' => 'date',
         'tanggal_lahir' => 'date',
         'pilihan_mapel' => 'array',
         'biaya_bulanan' => 'decimal:2',
     ];
+
+    /**
+     * Scope siswa yang aktif terdaftar pada rentang periode tertentu.
+     */
+    public function scopeAktifDiPeriode(\Illuminate\Database\Eloquent\Builder $query, ?\Illuminate\Support\Carbon $awalPeriode, ?\Illuminate\Support\Carbon $akhirPeriode): \Illuminate\Database\Eloquent\Builder
+    {
+        if ($akhirPeriode !== null) {
+            $query->where(function (\Illuminate\Database\Eloquent\Builder $q) use ($akhirPeriode): void {
+                $q->whereNull('tanggal_daftar')
+                    ->orWhere('tanggal_daftar', '<=', $akhirPeriode->toDateString());
+            });
+        }
+
+        if ($awalPeriode !== null) {
+            $query->where(function (\Illuminate\Database\Eloquent\Builder $q) use ($awalPeriode): void {
+                $q->whereNull('tanggal_keluar')
+                    ->orWhere('tanggal_keluar', '>=', $awalPeriode->toDateString());
+            });
+        }
+
+        return $query;
+    }
 
     /**
      * Relasi ke Pembayaran.

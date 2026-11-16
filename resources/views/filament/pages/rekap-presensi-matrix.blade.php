@@ -6,9 +6,14 @@
             5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
             9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
         ];
-        $totalSiswaCount = count($data['siswas']);
+        $safeBulan = $data['bulan'];
+        $safeTahun = $data['tahun'];
+        $siswas = $data['siswas'];
+        $totalSiswaCount = method_exists($siswas, 'total') ? $siswas->total() : count($siswas);
+        $rowStartNumber = method_exists($siswas, 'firstItem') ? max(0, ($siswas->firstItem() ?? 1) - 1) : 0;
         $totalMapelCount = count($data['mapelList']);
-        $totalCols = 3 + ($totalMapelCount * 4) + 4;
+        $totalSessionCols = collect($data['sessionsByMapel'])->sum(fn (array $sessions): int => count($sessions));
+        $totalCols = 3 + $totalSessionCols + 4;
     @endphp
 
     <style>
@@ -101,6 +106,18 @@
         .rp-input:focus, .rp-select:focus {
             border-color: #0f766e;
             box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.15);
+        }
+        .rp-empty-schedule-banner {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.75rem 1rem;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 0.65rem;
+            color: #92400e;
+            font-size: 0.8125rem;
+            font-weight: 500;
         }
         .rp-table-wrapper {
             background: #ffffff;
@@ -212,6 +229,7 @@
             color: #1f2937;
             font-weight: 700;
             font-size: 0.725rem;
+            border-right: 2px solid #cbd5e1;
         }
         .rp-th-rekap {
             background: #f9fafb;
@@ -282,19 +300,105 @@
         .rp-total-i { color: #1d4ed8; font-weight: 700; background: #eff6ff; }
         .rp-total-s { color: #b45309; font-weight: 700; background: #fffbeb; }
         .rp-total-a { color: #b91c1c; font-weight: 700; background: #fef2f2; }
+        .rp-pagination-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .rp-pagination-info {
+            font-size: 0.8125rem;
+            color: #4b5563;
+        }
+        .rp-pagination-info strong {
+            color: #111827;
+        }
+        .rp-pagination-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .rp-page-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            height: 2.15rem;
+            padding: 0 0.75rem;
+            font-size: 0.775rem;
+            font-weight: 600;
+            color: #374151;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .rp-page-btn:hover:not(:disabled) {
+            background: #f9fafb;
+            border-color: #9ca3af;
+            color: #111827;
+        }
+        .rp-page-btn-disabled {
+            opacity: 0.45;
+            cursor: not-allowed !important;
+            background: #f3f4f6;
+            color: #9ca3af;
+        }
+        .rp-pagination-numbers {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .rp-num-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.15rem;
+            height: 2.15rem;
+            padding: 0 0.5rem;
+            font-size: 0.775rem;
+            font-weight: 600;
+            color: #374151;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .rp-num-btn:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        .rp-num-btn-active {
+            background: #0f766e !important;
+            border-color: #0f766e !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            box-shadow: 0 1px 2px rgba(15, 118, 110, 0.25);
+        }
+        .rp-dots {
+            padding: 0 0.35rem;
+            color: #9ca3af;
+            font-size: 0.8125rem;
+        }
     </style>
 
     <div class="rp-container">
 
-        <!-- 1. HEADER & FILTER CARD (White, Clean Filament Style) -->
         <div class="rp-card">
             <div class="rp-toolbar">
                 <div class="rp-title-group">
                     <h2>Rekap Presensi Bulanan</h2>
                     <p>
-                        Periode {{ $bulanNamaArray[$this->bulan] ?? '' }} {{ $this->tahun }} &bull; 
-                        <strong>{{ $totalSiswaCount }}</strong> Siswa terdaftar &bull; 
-                        <strong>{{ $totalMapelCount }}</strong> Mata Pelajaran
+                        Periode {{ $bulanNamaArray[$safeBulan] ?? '' }} {{ $safeTahun }} &bull;
+                        <strong>{{ $totalSiswaCount }}</strong> Siswa &bull;
+                        <strong>{{ $totalMapelCount }}</strong> Mata Pelajaran Aktif ({{ $totalSessionCols }} Sesi)
                     </p>
                 </div>
 
@@ -308,15 +412,12 @@
                 </div>
             </div>
 
-            <!-- Filter Controls -->
             <div class="rp-filter-grid">
-                <!-- Search -->
                 <div class="rp-form-group">
                     <label>Cari Siswa</label>
                     <input type="text" wire:model.live.debounce.300ms="searchSiswa" placeholder="Ketik nama siswa..." class="rp-input" />
                 </div>
 
-                <!-- Jenjang -->
                 <div class="rp-form-group">
                     <label>Jenjang</label>
                     <select wire:model.live="jenjang" class="rp-select">
@@ -326,7 +427,6 @@
                     </select>
                 </div>
 
-                <!-- Kelompok -->
                 <div class="rp-form-group">
                     <label>Kelompok Belajar</label>
                     <select wire:model.live="kelompokId" class="rp-select">
@@ -337,7 +437,6 @@
                     </select>
                 </div>
 
-                <!-- Bulan -->
                 <div class="rp-form-group">
                     <label>Bulan</label>
                     <select wire:model.live="bulan" class="rp-select">
@@ -347,7 +446,6 @@
                     </select>
                 </div>
 
-                <!-- Tahun -->
                 <div class="rp-form-group">
                     <label>Tahun</label>
                     <input type="number" wire:model.live="tahun" min="2020" max="2035" class="rp-input" />
@@ -355,43 +453,48 @@
             </div>
         </div>
 
-        <!-- 2. TABLE WRAPPER -->
+        @if($totalMapelCount === 0)
+            <div class="rp-empty-schedule-banner">
+                <span>Belum ada jadwal sesi aktif pada periode <strong>{{ $bulanNamaArray[$safeBulan] ?? '' }} {{ $safeTahun }}</strong> untuk filter yang dipilih. Kolom pertemuan akan otomatis tampil sesuai jadwal yang tercatat.</span>
+            </div>
+        @endif
+
         <div class="rp-table-wrapper">
             <table class="rp-table">
                 <thead>
-                    <!-- Row 1: Main Headers -->
                     <tr>
                         <th rowspan="2" class="rp-th-col-no">#</th>
                         <th rowspan="2" class="rp-th-col-nama">NAMA SISWA</th>
                         <th rowspan="2" class="rp-th-sticky" style="min-width: 90px;">KELAS</th>
-                        @foreach($data['mapelList'] as $m)
-                            <th colspan="4" class="rp-th-sticky rp-th-mapel">
+                        @foreach($data['mapelList'] as $mId => $m)
+                            @php
+                                $colspan = max(1, count($data['sessionsByMapel'][$mId] ?? []));
+                            @endphp
+                            <th colspan="{{ $colspan }}" class="rp-th-sticky rp-th-mapel">
                                 {{ strtoupper($m['nama']) }}
                             </th>
                         @endforeach
                         <th colspan="4" class="rp-th-sticky rp-th-rekap">
-                            REKAP ({{ strtoupper(substr($bulanNamaArray[$this->bulan] ?? '', 0, 3)) }})
+                            REKAP ({{ strtoupper(substr($bulanNamaArray[$safeBulan] ?? '', 0, 3)) }})
                         </th>
                     </tr>
 
-                    <!-- Row 2: Pertemuan 1 - 4 & Rekap H, I, S, A -->
                     <tr>
                         @foreach($data['mapelList'] as $mId => $m)
                             @php
                                 $sessions = $data['sessionsByMapel'][$mId] ?? [];
+                                $lastIdx = count($sessions) - 1;
                             @endphp
-                            @for($p = 0; $p < 4; $p++)
+                            @foreach($sessions as $pIdx => $jadwal)
                                 @php
-                                    $jadwal = $sessions[$p] ?? null;
-                                    $tglLabel = $jadwal ? \Illuminate\Support\Carbon::parse($jadwal->tanggal_sesi)->format('d/m') : '';
+                                    $tglLabel = \Illuminate\Support\Carbon::parse($jadwal->tanggal_sesi)->format('d/m');
+                                    $tooltip = trim(($jadwal->kelompok?->nama_kelompok ?? '') . ' — ' . $tglLabel . ($jadwal->materi_pembahasan ? ' — ' . $jadwal->materi_pembahasan : ''));
                                 @endphp
-                                <th class="rp-th-sub" style="width: 48px; {{ $p === 3 ? 'border-right: 2px solid #cbd5e1;' : '' }}">
-                                    <span>P{{ $p + 1 }}</span>
-                                    @if($tglLabel)
-                                        <div style="font-size: 0.625rem; color: #9ca3af; font-weight: normal; margin-top: 1px;">{{ $tglLabel }}</div>
-                                    @endif
+                                <th class="rp-th-sub" title="{{ $tooltip }}" style="min-width: 50px; {{ $pIdx === $lastIdx ? 'border-right: 2px solid #cbd5e1;' : '' }}">
+                                    <span>P{{ $pIdx + 1 }}</span>
+                                    <div style="font-size: 0.625rem; color: #6b7280; font-weight: normal; margin-top: 1px;">{{ $tglLabel }}</div>
                                 </th>
-                            @endfor
+                            @endforeach
                         @endforeach
 
                         <th class="rp-th-sub" style="width: 38px; color: #15803d; border-left: 2px solid #cbd5e1;">H</th>
@@ -402,7 +505,7 @@
                 </thead>
 
                 <tbody>
-                    @forelse($data['siswas'] as $index => $s)
+                    @forelse($siswas as $index => $s)
                         @php
                             $countH = 0;
                             $countI = 0;
@@ -410,56 +513,49 @@
                             $countA = 0;
                         @endphp
                         <tr class="rp-row">
-                            <!-- Index -->
                             <td class="rp-col-no">
-                                {{ $index + 1 }}
+                                {{ $rowStartNumber + $index + 1 }}
                             </td>
 
-                            <!-- Nama Siswa -->
                             <td class="rp-col-nama" title="{{ $s->nama_lengkap }}">
                                 {{ $s->nama_lengkap }}
                             </td>
 
-                            <!-- Kelas (Plain text, NO nested rectangle pill) -->
                             <td class="rp-col-kelas">
                                 {{ $s->kelas ?: ($s->kategori_kelas ?: '-') }}
                             </td>
 
-                            <!-- Presensi Pertemuan -->
                             @foreach($data['mapelList'] as $mId => $m)
                                 @php
                                     $sessions = $data['sessionsByMapel'][$mId] ?? [];
+                                    $lastIdx = count($sessions) - 1;
                                 @endphp
 
-                                @for($p = 0; $p < 4; $p++)
+                                @foreach($sessions as $pIdx => $jadwal)
                                     @php
-                                        $jadwal = $sessions[$p] ?? null;
                                         $statusHtml = '<span class="rp-status-none">-</span>';
+                                        $st = strtolower($data['presensis'][$s->id][$jadwal->id] ?? '');
 
-                                        if ($jadwal) {
-                                            $st = strtolower($data['presensis'][$s->id][$jadwal->id] ?? '');
-                                            if ($st === 'hadir') {
-                                                $statusHtml = '<span class="rp-status-hadir">HADIR</span>';
-                                                $countH++;
-                                            } elseif ($st === 'sakit') {
-                                                $statusHtml = '<span class="rp-status-sakit">SAKIT</span>';
-                                                $countS++;
-                                            } elseif ($st === 'izin') {
-                                                $statusHtml = '<span class="rp-status-izin">IZIN</span>';
-                                                $countI++;
-                                            } elseif ($st === 'alpa') {
-                                                $statusHtml = '<span class="rp-status-alpa">ALPA</span>';
-                                                $countA++;
-                                            }
+                                        if ($st === 'hadir') {
+                                            $statusHtml = '<span class="rp-status-hadir">HADIR</span>';
+                                            $countH++;
+                                        } elseif ($st === 'sakit') {
+                                            $statusHtml = '<span class="rp-status-sakit">SAKIT</span>';
+                                            $countS++;
+                                        } elseif ($st === 'izin') {
+                                            $statusHtml = '<span class="rp-status-izin">IZIN</span>';
+                                            $countI++;
+                                        } elseif ($st === 'alpa') {
+                                            $statusHtml = '<span class="rp-status-alpa">ALPA</span>';
+                                            $countA++;
                                         }
                                     @endphp
-                                    <td style="padding: 0.25rem 0.15rem; {{ $p === 3 ? 'border-right: 2px solid #cbd5e1;' : '' }}">
+                                    <td style="padding: 0.25rem 0.15rem; {{ $pIdx === $lastIdx ? 'border-right: 2px solid #cbd5e1;' : '' }}">
                                         {!! $statusHtml !!}
                                     </td>
-                                @endfor
+                                @endforeach
                             @endforeach
 
-                            <!-- Rekapitulasi Totals -->
                             <td class="rp-total-h" style="border-left: 2px solid #cbd5e1;">
                                 {{ $countH }}
                             </td>
@@ -489,6 +585,79 @@
                 </tbody>
             </table>
         </div>
+
+        @if(method_exists($siswas, 'hasPages') && $siswas->hasPages())
+            <div class="rp-pagination-container">
+                <div class="rp-pagination-info">
+                    Menampilkan <strong>{{ $siswas->firstItem() }}</strong>–<strong>{{ $siswas->lastItem() }}</strong> dari <strong>{{ $siswas->total() }}</strong> siswa
+                </div>
+
+                <div class="rp-pagination-nav">
+                    @if($siswas->onFirstPage())
+                        <button type="button" class="rp-page-btn rp-page-btn-disabled" disabled>
+                            <svg style="width: 16px; height: 16px; min-width: 16px; max-width: 16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            <span>Sebelumnya</span>
+                        </button>
+                    @else
+                        <button type="button" wire:click="previousPage" class="rp-page-btn">
+                            <svg style="width: 16px; height: 16px; min-width: 16px; max-width: 16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            <span>Sebelumnya</span>
+                        </button>
+                    @endif
+
+                    <div class="rp-pagination-numbers">
+                        @php
+                            $cur = $siswas->currentPage();
+                            $last = $siswas->lastPage();
+                            $startPage = max(1, $cur - 2);
+                            $endPage = min($last, $cur + 2);
+                        @endphp
+
+                        @if($startPage > 1)
+                            <button type="button" wire:click="gotoPage(1)" class="rp-num-btn">1</button>
+                            @if($startPage > 2)
+                                <span class="rp-dots">...</span>
+                            @endif
+                        @endif
+
+                        @for($p = $startPage; $p <= $endPage; $p++)
+                            @if($p === $cur)
+                                <button type="button" class="rp-num-btn rp-num-btn-active">{{ $p }}</button>
+                            @else
+                                <button type="button" wire:click="gotoPage({{ $p }})" class="rp-num-btn">{{ $p }}</button>
+                            @endif
+                        @endfor
+
+                        @if($endPage < $last)
+                            @if($endPage < $last - 1)
+                                <span class="rp-dots">...</span>
+                            @endif
+                            <button type="button" wire:click="gotoPage({{ $last }})" class="rp-num-btn">{{ $last }}</button>
+                        @endif
+                    </div>
+
+                    @if($siswas->hasMorePages())
+                        <button type="button" wire:click="nextPage" class="rp-page-btn">
+                            <span>Berikutnya</span>
+                            <svg style="width: 16px; height: 16px; min-width: 16px; max-width: 16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    @else
+                        <button type="button" class="rp-page-btn rp-page-btn-disabled" disabled>
+                            <span>Berikutnya</span>
+                            <svg style="width: 16px; height: 16px; min-width: 16px; max-width: 16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    @endif
+                </div>
+            </div>
+        @endif
 
     </div>
 </x-filament-panels::page>

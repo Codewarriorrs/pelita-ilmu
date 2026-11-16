@@ -5,15 +5,17 @@ namespace App\Filament\Pages;
 use App\Models\DetailPresensi;
 use App\Models\JadwalKelompok;
 use App\Models\Kelompok;
-use App\Models\MataPelajaran;
 use App\Models\Siswa;
 use Filament\Pages\Page;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Livewire\WithPagination;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class RekapPresensiMatrix extends Page
 {
+    use WithPagination;
+
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-table-cells';
     protected static \UnitEnum|string|null $navigationGroup = 'Presensi';
     protected static ?string $title = 'Rekap Presensi Bulanan (Matrix Format)';
@@ -53,6 +55,42 @@ class RekapPresensiMatrix extends Page
     public function updatedJenjang(): void
     {
         $this->kelompokId = null;
+        $this->resetPage();
+    }
+
+    public function updatedKelompokId(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedBulan(): void
+    {
+        $this->bulan = max(1, min(12, (int) $this->bulan));
+        $this->resetPage();
+    }
+
+    public function updatedTahun(): void
+    {
+        $this->tahun = max(2020, min(2035, (int) $this->tahun));
+        $this->resetPage();
+    }
+
+    public function updatedSearchSiswa(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedJenjangKelas(): void
+    {
+        $this->resetPage();
+    }
+
+    protected function getSafePeriod(): array
+    {
+        $bulan = ($this->bulan >= 1 && $this->bulan <= 12) ? $this->bulan : (int) now()->month;
+        $tahun = ($this->tahun >= 2020 && $this->tahun <= 2035) ? $this->tahun : (int) now()->year;
+
+        return [$bulan, $tahun];
     }
 
     protected function filterKelompokByJenjang(Builder $query, string $jenjang): void
@@ -60,7 +98,7 @@ class RekapPresensiMatrix extends Page
         if ($jenjang === 'TK') {
             $query->where(function ($q) {
                 $q->where('nama_kelompok', 'ILIKE', '%TK%')
-                  ->orWhere('nama_kelompok', 'ILIKE', '%PAUD%');
+                    ->orWhere('nama_kelompok', 'ILIKE', '%PAUD%');
             });
         } elseif ($jenjang === 'SD') {
             $query->where('nama_kelompok', 'ILIKE', '%SD%');
@@ -69,13 +107,13 @@ class RekapPresensiMatrix extends Page
         } elseif ($jenjang === 'SMA') {
             $query->where(function ($q) {
                 $q->where('nama_kelompok', 'ILIKE', '%SMA%')
-                  ->orWhere('nama_kelompok', 'ILIKE', '%SMK%');
+                    ->orWhere('nama_kelompok', 'ILIKE', '%SMK%');
             });
         } elseif ($jenjang === 'UTBK') {
             $query->where(function ($q) {
                 $q->where('nama_kelompok', 'ILIKE', '%UTBK%')
-                  ->orWhere('nama_kelompok', 'ILIKE', '%SNBT%')
-                  ->orWhere('nama_kelompok', 'ILIKE', '%TPA%');
+                    ->orWhere('nama_kelompok', 'ILIKE', '%SNBT%')
+                    ->orWhere('nama_kelompok', 'ILIKE', '%TPA%');
             });
         }
     }
@@ -85,135 +123,131 @@ class RekapPresensiMatrix extends Page
         if ($jenjang === 'TK') {
             $query->where(function ($q) {
                 $q->where('kelas', 'ILIKE', '%TK%')
-                  ->orWhere('kelas', 'ILIKE', '%PAUD%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%TK%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%PAUD%');
+                    ->orWhere('kelas', 'ILIKE', '%PAUD%')
+                    ->orWhere('kategori_kelas', 'ILIKE', '%TK%')
+                    ->orWhere('kategori_kelas', 'ILIKE', '%PAUD%');
             })->where(function ($q) {
                 $q->where(function ($sub) {
                     $sub->whereNull('kelas')
                         ->orWhere(function ($s) {
                             $s->where('kelas', 'NOT ILIKE', '%SD%')
-                              ->where('kelas', 'NOT ILIKE', '%SMP%')
-                              ->where('kelas', 'NOT ILIKE', '%SMA%')
-                              ->where('kelas', 'NOT ILIKE', '%SMK%');
+                                ->where('kelas', 'NOT ILIKE', '%SMP%')
+                                ->where('kelas', 'NOT ILIKE', '%SMA%')
+                                ->where('kelas', 'NOT ILIKE', '%SMK%');
                         });
                 });
             });
         } elseif ($jenjang === 'SD') {
             $query->where(function ($q) {
                 $q->where('kelas', 'ILIKE', '%SD%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%SD%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 1%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 2%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 3%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 4%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 5%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 6%')
-                  ->orWhere('kelas', 'ILIKE', '1 %')
-                  ->orWhere('kelas', 'ILIKE', '2 %')
-                  ->orWhere('kelas', 'ILIKE', '3 %')
-                  ->orWhere('kelas', 'ILIKE', '4 %')
-                  ->orWhere('kelas', 'ILIKE', '5 %')
-                  ->orWhere('kelas', 'ILIKE', '6 %');
+                    ->orWhere('kategori_kelas', 'ILIKE', '%SD%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 1%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 2%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 3%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 4%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 5%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 6%')
+                    ->orWhere('kelas', 'ILIKE', '1 %')
+                    ->orWhere('kelas', 'ILIKE', '2 %')
+                    ->orWhere('kelas', 'ILIKE', '3 %')
+                    ->orWhere('kelas', 'ILIKE', '4 %')
+                    ->orWhere('kelas', 'ILIKE', '5 %')
+                    ->orWhere('kelas', 'ILIKE', '6 %');
             })->where(function ($q) {
                 $q->where(function ($sub) {
                     $sub->whereNull('kelas')
                         ->orWhere(function ($s) {
                             $s->where('kelas', 'NOT ILIKE', '%SMP%')
-                              ->where('kelas', 'NOT ILIKE', '%SMA%')
-                              ->where('kelas', 'NOT ILIKE', '%SMK%')
-                              ->where('kelas', 'NOT ILIKE', '%TK%')
-                              ->where('kelas', 'NOT ILIKE', '%PAUD%');
+                                ->where('kelas', 'NOT ILIKE', '%SMA%')
+                                ->where('kelas', 'NOT ILIKE', '%SMK%')
+                                ->where('kelas', 'NOT ILIKE', '%TK%')
+                                ->where('kelas', 'NOT ILIKE', '%PAUD%');
                         });
                 })->where(function ($sub) {
                     $sub->whereNull('kategori_kelas')
                         ->orWhere(function ($s) {
                             $s->where('kategori_kelas', 'NOT ILIKE', '%SMP%')
-                              ->where('kategori_kelas', 'NOT ILIKE', '%SMA%')
-                              ->where('kategori_kelas', 'NOT ILIKE', '%SMK%');
+                                ->where('kategori_kelas', 'NOT ILIKE', '%SMA%')
+                                ->where('kategori_kelas', 'NOT ILIKE', '%SMK%');
                         });
                 });
             });
         } elseif ($jenjang === 'SMP') {
             $query->where(function ($q) {
                 $q->where('kelas', 'ILIKE', '%SMP%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%SMP%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 7%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 8%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 9%')
-                  ->orWhere('kelas', 'ILIKE', '7 %')
-                  ->orWhere('kelas', 'ILIKE', '8 %')
-                  ->orWhere('kelas', 'ILIKE', '9 %');
+                    ->orWhere('kategori_kelas', 'ILIKE', '%SMP%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 7%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 8%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 9%')
+                    ->orWhere('kelas', 'ILIKE', '7 %')
+                    ->orWhere('kelas', 'ILIKE', '8 %')
+                    ->orWhere('kelas', 'ILIKE', '9 %');
             })->where(function ($q) {
                 $q->where(function ($sub) {
                     $sub->whereNull('kelas')
                         ->orWhere(function ($s) {
                             $s->where('kelas', 'NOT ILIKE', '%SMA%')
-                              ->where('kelas', 'NOT ILIKE', '%SMK%')
-                              ->where('kelas', 'NOT ILIKE', '%SD%')
-                              ->where('kelas', 'NOT ILIKE', '%TK%');
+                                ->where('kelas', 'NOT ILIKE', '%SMK%')
+                                ->where('kelas', 'NOT ILIKE', '%SD%')
+                                ->where('kelas', 'NOT ILIKE', '%TK%');
                         });
                 })->where(function ($sub) {
                     $sub->whereNull('kategori_kelas')
                         ->orWhere(function ($s) {
                             $s->where('kategori_kelas', 'NOT ILIKE', '%SMA%')
-                              ->where('kategori_kelas', 'NOT ILIKE', '%SMK%')
-                              ->where('kategori_kelas', 'NOT ILIKE', '%SD%');
+                                ->where('kategori_kelas', 'NOT ILIKE', '%SMK%')
+                                ->where('kategori_kelas', 'NOT ILIKE', '%SD%');
                         });
                 });
             });
         } elseif ($jenjang === 'SMA') {
             $query->where(function ($q) {
                 $q->where('kelas', 'ILIKE', '%SMA%')
-                  ->orWhere('kelas', 'ILIKE', '%SMK%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%SMA%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%SMK%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 10%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 11%')
-                  ->orWhere('kelas', 'ILIKE', 'Kelas 12%')
-                  ->orWhere('kelas', 'ILIKE', '10 %')
-                  ->orWhere('kelas', 'ILIKE', '11 %')
-                  ->orWhere('kelas', 'ILIKE', '12 %');
+                    ->orWhere('kelas', 'ILIKE', '%SMK%')
+                    ->orWhere('kategori_kelas', 'ILIKE', '%SMA%')
+                    ->orWhere('kategori_kelas', 'ILIKE', '%SMK%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 10%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 11%')
+                    ->orWhere('kelas', 'ILIKE', 'Kelas 12%')
+                    ->orWhere('kelas', 'ILIKE', '10 %')
+                    ->orWhere('kelas', 'ILIKE', '11 %')
+                    ->orWhere('kelas', 'ILIKE', '12 %');
             })->where(function ($q) {
                 $q->where(function ($sub) {
                     $sub->whereNull('kelas')
                         ->orWhere(function ($s) {
                             $s->where('kelas', 'NOT ILIKE', '%SMP%')
-                              ->where('kelas', 'NOT ILIKE', '%SD%')
-                              ->where('kelas', 'NOT ILIKE', '%TK%');
+                                ->where('kelas', 'NOT ILIKE', '%SD%')
+                                ->where('kelas', 'NOT ILIKE', '%TK%');
                         });
                 })->where(function ($sub) {
                     $sub->whereNull('kategori_kelas')
                         ->orWhere(function ($s) {
                             $s->where('kategori_kelas', 'NOT ILIKE', '%SMP%')
-                              ->where('kategori_kelas', 'NOT ILIKE', '%SD%');
+                                ->where('kategori_kelas', 'NOT ILIKE', '%SD%');
                         });
                 });
             });
         } elseif ($jenjang === 'UTBK') {
             $query->where(function ($q) {
                 $q->where('kelas', 'ILIKE', '%UTBK%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%UTBK%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%SNBT%')
-                  ->orWhere('kategori_kelas', 'ILIKE', '%TPA%')
-                  ->orWhere('kelas', 'ILIKE', '%Alumni%')
-                  ->orWhere('kelas', 'ILIKE', '%Gap Year%');
+                    ->orWhere('kategori_kelas', 'ILIKE', '%UTBK%')
+                    ->orWhere('kategori_kelas', 'ILIKE', '%SNBT%')
+                    ->orWhere('kategori_kelas', 'ILIKE', '%TPA%')
+                    ->orWhere('kelas', 'ILIKE', '%Alumni%')
+                    ->orWhere('kelas', 'ILIKE', '%Gap Year%');
             });
         }
     }
 
-    public function getMatrixData(): array
+    public function getMatrixData(bool $paginate = true): array
     {
-        $bulan = $this->bulan;
-        $tahun = $this->tahun;
-        $user = auth()->user();
-        $isTentor = $user?->isTentor();
+        [$bulan, $tahun] = $this->getSafePeriod();
 
         /** @var \App\Models\User|null $user */
         $user = auth()->user();
         $isTentor = $user && $user->isTentor();
 
-        // 1. Dropdown kelompoks (dependent pada Jenjang dan hak akses Tentor)
         $allKelompoksQuery = Kelompok::query()->with(['mapel', 'tentor']);
         if ($isTentor) {
             $allKelompoksQuery->where('tentor_id', $user->id);
@@ -223,49 +257,10 @@ class RekapPresensiMatrix extends Page
         }
         $allKelompoks = $allKelompoksQuery->orderBy('nama_kelompok')->get();
 
-        // Validasi jika kelompokId terpilih bukan anggota kelompok yang tersedia
-        if ($this->kelompokId && !$allKelompoks->pluck('id')->contains($this->kelompokId)) {
+        if ($this->kelompokId && ! $allKelompoks->pluck('id')->contains($this->kelompokId)) {
             $this->kelompokId = null;
         }
 
-        // 2. Fetch kelompoks untuk matriks kolom
-        $kelompokQuery = Kelompok::with('mapel');
-        if ($isTentor) {
-            $kelompokQuery->where('tentor_id', $user->id);
-        }
-        if ($this->kelompokId) {
-            $kelompokQuery->where('id', $this->kelompokId);
-        } elseif ($this->jenjang && $this->jenjang !== 'ALL') {
-            $this->filterKelompokByJenjang($kelompokQuery, $this->jenjang);
-        }
-        $kelompoks = $kelompokQuery->get();
-
-        // Unique mapels or kelompoks to form the matrix columns
-        $mapelList = [];
-        foreach ($kelompoks as $k) {
-            $mapelName = $k->mapel->nama_mapel ?? $k->nama_kelompok;
-            if (!isset($mapelList[$k->mapel_id])) {
-                $mapelList[$k->mapel_id] = [
-                    'id' => $k->mapel_id,
-                    'nama' => $mapelName,
-                    'kelompok_id' => $k->id,
-                ];
-            }
-        }
-
-        // Fallback: if no mapels in kelompoks (hanya untuk Admin bila belum ada filter)
-        if (empty($mapelList) && !$isTentor && ($this->jenjang === 'ALL' || empty($this->jenjang))) {
-            $allMapels = MataPelajaran::all();
-            foreach ($allMapels as $m) {
-                $mapelList[$m->id] = [
-                    'id' => $m->id,
-                    'nama' => $m->nama_mapel,
-                    'kelompok_id' => null,
-                ];
-            }
-        }
-
-        // 3. Fetch sessions (JadwalKelompok) in selected month & year (index-friendly range)
         $startDate = Carbon::createFromDate($tahun, $bulan, 1)->startOfMonth()->toDateString();
         $endDate = Carbon::createFromDate($tahun, $bulan, 1)->endOfMonth()->toDateString();
 
@@ -286,21 +281,27 @@ class RekapPresensiMatrix extends Page
             });
         }
 
-        $jadwals = $jadwalQuery->orderBy('tanggal_sesi', 'asc')->get();
+        $jadwals = $jadwalQuery->orderBy('tanggal_sesi', 'asc')->orderBy('id', 'asc')->get();
 
-        // Group sessions by mapel_id (up to 4 sessions per mapel)
+        $mapelList = [];
         $sessionsByMapel = [];
-        foreach ($mapelList as $mapelId => $mInfo) {
-            $sessionsByMapel[$mapelId] = [];
-        }
 
-        foreach ($jadwals as $j) {
-            $mapelId = $j->kelompok->mapel_id ?? null;
-            if ($mapelId && isset($sessionsByMapel[$mapelId])) {
-                if (count($sessionsByMapel[$mapelId]) < 4) {
-                    $sessionsByMapel[$mapelId][] = $j;
-                }
+        foreach ($jadwals as $jadwal) {
+            $colKey = $jadwal->kelompok?->mapel_id ?? ('kelompok_' . $jadwal->kelompok_id);
+            if (! isset($mapelList[$colKey])) {
+                $colName = $this->kelompokId
+                    ? ($jadwal->kelompok?->mapel?->nama_mapel ?? $jadwal->kelompok?->nama_kelompok ?? 'Kelompok')
+                    : ($jadwal->kelompok?->mapel?->nama_mapel ?? $jadwal->kelompok?->nama_kelompok ?? 'Mapel');
+
+                $mapelList[$colKey] = [
+                    'id' => $colKey,
+                    'nama' => $colName,
+                    'kelompok_id' => $jadwal->kelompok_id,
+                ];
+                $sessionsByMapel[$colKey] = [];
             }
+
+            $sessionsByMapel[$colKey][] = $jadwal;
         }
 
         $siswaQuery = Siswa::query()->with('kelompok');
@@ -321,28 +322,49 @@ class RekapPresensiMatrix extends Page
             });
         }
 
-        if (!empty($this->jenjangKelas)) {
+        if (! empty($this->jenjangKelas)) {
             $val = trim($this->jenjangKelas);
             $siswaQuery->where(function ($q) use ($val) {
                 $q->where('kelas', 'ILIKE', "%{$val}%")
-                  ->orWhere('kategori_kelas', 'ILIKE', "%{$val}%");
+                    ->orWhere('kategori_kelas', 'ILIKE', "%{$val}%");
             });
         }
-        if (!empty(trim($this->searchSiswa))) {
+
+        if (! empty(trim($this->searchSiswa))) {
             $siswaQuery->where('nama_lengkap', 'ILIKE', '%' . trim($this->searchSiswa) . '%');
         }
-        $siswas = $siswaQuery->orderBy('nama_lengkap', 'asc')->get();
 
-        // 5. Get all DetailPresensi for fetched jadwals
-        $allJadwalIds = $jadwals->pluck('id')->toArray();
+        $siswaQuery->where(function (Builder $q) use ($endDate): void {
+            $q->whereNull('tanggal_daftar')
+                ->orWhere('tanggal_daftar', '<=', $endDate);
+        })->where(function (Builder $q) use ($startDate): void {
+            $q->whereNull('tanggal_keluar')
+                ->orWhere('tanggal_keluar', '>=', $startDate);
+        });
+
+        $siswaQuery->orderBy('nama_lengkap', 'asc');
+
+        $siswas = $paginate
+            ? $siswaQuery->paginate(25)
+            : $siswaQuery->get();
+
+        $visibleSiswaIds = $paginate
+            ? $siswas->getCollection()->pluck('id')->all()
+            : $siswas->pluck('id')->all();
+
+        $allJadwalIds = $jadwals->pluck('id')->all();
         $presensis = [];
-        if (!empty($allJadwalIds)) {
-            $dpRecords = DetailPresensi::whereIn('jadwal_id', $allJadwalIds)->get();
+
+        if (! empty($allJadwalIds) && ! empty($visibleSiswaIds)) {
+            $dpRecords = DetailPresensi::query()
+                ->whereIn('jadwal_id', $allJadwalIds)
+                ->whereIn('siswa_id', $visibleSiswaIds)
+                ->get(['siswa_id', 'jadwal_id', 'status_kehadiran']);
+
             foreach ($dpRecords as $dp) {
                 $presensis[$dp->siswa_id][$dp->jadwal_id] = $dp->status_kehadiran;
             }
         }
-
 
         return [
             'mapelList' => $mapelList,
@@ -350,25 +372,27 @@ class RekapPresensiMatrix extends Page
             'siswas' => $siswas,
             'presensis' => $presensis,
             'allKelompoks' => $allKelompoks,
+            'bulan' => $bulan,
+            'tahun' => $tahun,
         ];
     }
 
     public function exportExcel(): StreamedResponse
     {
-        $matrix = $this->getMatrixData();
-        $bulanNama = Carbon::createFromDate($this->tahun, $this->bulan, 1)->translatedFormat('F Y');
+        $matrix = $this->getMatrixData(paginate: false);
+        $bulanNama = Carbon::createFromDate($matrix['tahun'], $matrix['bulan'], 1)->locale('id')->translatedFormat('F Y');
 
-        $filename = "Rekap_Presensi_" . str_replace(' ', '_', $bulanNama) . ".xls";
+        $filename = 'Rekap_Presensi_' . str_replace(' ', '_', $bulanNama) . '.xls';
 
         $headers = [
-            "Content-Type" => "application/vnd.ms-excel",
-            "Content-Disposition" => "attachment; filename=\"$filename\"",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
+            'Content-Type' => 'application/vnd.ms-excel',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
         ];
 
-        $callback = function () use ($matrix, $bulanNama) {
+        $callback = function () use ($matrix, $bulanNama): void {
             echo '<html><head><meta charset="UTF-8"><style>';
             echo 'table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; font-size: 11px; }';
             echo 'th, td { border: 1px solid #cbd5e1; padding: 6px; text-align: center; }';
@@ -382,40 +406,37 @@ class RekapPresensiMatrix extends Page
             echo '.alpa  { background: #dc2626; color: #ffffff; font-weight: bold; }';
             echo '.rekap-cell { font-weight: bold; font-size: 12px; }';
             echo '</style></head><body>';
-            
+
             echo '<table border="1">';
-            
-            // Header Row 1: Title, Mapels, and Rekapitulasi
+
             echo '<tr>';
             echo '<th rowspan="2" style="width: 35px;">NO</th>';
             echo '<th rowspan="2" style="width: 180px; text-align:left;">NAMA SISWA</th>';
             echo '<th rowspan="2" style="width: 85px;">KELAS</th>';
-            
-            foreach ($matrix['mapelList'] as $m) {
-                echo '<th colspan="4" class="th-sub">' . htmlspecialchars(strtoupper($m['nama'])) . '</th>';
+
+            foreach ($matrix['mapelList'] as $mId => $m) {
+                $colspan = max(1, count($matrix['sessionsByMapel'][$mId] ?? []));
+                echo '<th colspan="' . $colspan . '" class="th-sub">' . htmlspecialchars(strtoupper($m['nama'])) . '</th>';
             }
-            
+
             echo '<th colspan="4" class="th-rekap">REKAPITULASI (' . strtoupper($bulanNama) . ')</th>';
             echo '</tr>';
 
-            // Header Row 2: Pertemuan 1..4 per Mapel, and H/I/S/A
             echo '<tr>';
             foreach ($matrix['mapelList'] as $mId => $m) {
                 $sessions = $matrix['sessionsByMapel'][$mId] ?? [];
-                for ($p = 0; $p < 4; $p++) {
-                    $jadwal = $sessions[$p] ?? null;
-                    $tglLabel = $jadwal ? Carbon::parse($jadwal->tanggal_sesi)->format('d/m') : '';
-                    echo '<th style="background:#f1f5f9; color:#334155; font-size:10px; width:55px;">P' . ($p + 1) . ($tglLabel ? '<br><span style="font-weight:normal; font-size:9px;">' . $tglLabel . '</span>' : '') . '</th>';
+                foreach ($sessions as $pIdx => $jadwal) {
+                    $tglLabel = Carbon::parse($jadwal->tanggal_sesi)->format('d/m');
+                    echo '<th style="background:#f1f5f9; color:#334155; font-size:10px; width:55px;">P' . ($pIdx + 1) . '<br><span style="font-weight:normal; font-size:9px;">' . $tglLabel . '</span></th>';
                 }
             }
-            
+
             echo '<th style="background:#dcfce7; color:#15803d; width:40px;">H</th>';
             echo '<th style="background:#dbeafe; color:#1d4ed8; width:40px;">I</th>';
             echo '<th style="background:#fef3c7; color:#b45309; width:40px;">S</th>';
             echo '<th style="background:#fee2e2; color:#b91c1c; width:40px;">A</th>';
             echo '</tr>';
 
-            // Rows: Siswa Data
             $no = 1;
             foreach ($matrix['siswas'] as $s) {
                 $countH = 0;
@@ -430,37 +451,33 @@ class RekapPresensiMatrix extends Page
 
                 foreach ($matrix['mapelList'] as $mId => $m) {
                     $sessions = $matrix['sessionsByMapel'][$mId] ?? [];
-                    for ($p = 0; $p < 4; $p++) {
-                        $jadwal = $sessions[$p] ?? null;
+                    foreach ($sessions as $jadwal) {
                         $statusText = '-';
                         $cssClass = '';
 
-                        if ($jadwal) {
-                            $st = strtolower($matrix['presensis'][$s->id][$jadwal->id] ?? '');
-                            if ($st === 'hadir') {
-                                $statusText = 'H';
-                                $cssClass = 'class="hadir"';
-                                $countH++;
-                            } elseif ($st === 'sakit') {
-                                $statusText = 'S';
-                                $cssClass = 'class="sakit"';
-                                $countS++;
-                            } elseif ($st === 'izin') {
-                                $statusText = 'I';
-                                $cssClass = 'class="izin"';
-                                $countI++;
-                            } elseif ($st === 'alpa') {
-                                $statusText = 'A';
-                                $cssClass = 'class="alpa"';
-                                $countA++;
-                            }
+                        $st = strtolower($matrix['presensis'][$s->id][$jadwal->id] ?? '');
+                        if ($st === 'hadir') {
+                            $statusText = 'H';
+                            $cssClass = 'class="hadir"';
+                            $countH++;
+                        } elseif ($st === 'sakit') {
+                            $statusText = 'S';
+                            $cssClass = 'class="sakit"';
+                            $countS++;
+                        } elseif ($st === 'izin') {
+                            $statusText = 'I';
+                            $cssClass = 'class="izin"';
+                            $countI++;
+                        } elseif ($st === 'alpa') {
+                            $statusText = 'A';
+                            $cssClass = 'class="alpa"';
+                            $countA++;
                         }
 
                         echo '<td ' . $cssClass . '>' . $statusText . '</td>';
                     }
                 }
 
-                // Rekapitulasi cells (H, I, S, A)
                 echo '<td class="rekap-cell" style="color:#15803d;">' . $countH . '</td>';
                 echo '<td class="rekap-cell" style="color:#1d4ed8;">' . $countI . '</td>';
                 echo '<td class="rekap-cell" style="color:#b45309;">' . $countS . '</td>';

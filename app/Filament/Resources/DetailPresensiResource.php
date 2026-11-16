@@ -11,6 +11,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -49,7 +50,24 @@ class DetailPresensiResource extends Resource
                     ->relationship('siswa', 'nama_lengkap')
                     ->searchable()
                     ->preload()
-                    ->required(),
+                    ->required()
+                    ->rule(fn (Get $get, ?DetailPresensi $record): \Closure => function (string $attribute, mixed $value, \Closure $fail) use ($get, $record): void {
+                        $jadwalId = (int) $get('jadwal_id');
+                        $siswaId = (int) $value;
+                        if (! $jadwalId || ! $siswaId) {
+                            return;
+                        }
+
+                        $exists = DetailPresensi::query()
+                            ->where('jadwal_id', $jadwalId)
+                            ->where('siswa_id', $siswaId)
+                            ->when($record, fn (Builder $q) => $q->where('id', '!=', $record->id))
+                            ->exists();
+
+                        if ($exists) {
+                            $fail('Presensi untuk siswa tersebut pada sesi ini sudah tercatat.');
+                        }
+                    }),
 
                 Select::make('status_kehadiran')
                     ->label('Status Kehadiran')

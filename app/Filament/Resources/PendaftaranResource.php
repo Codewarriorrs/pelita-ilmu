@@ -21,6 +21,8 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class PendaftaranResource extends Resource
 {
@@ -367,46 +369,92 @@ class PendaftaranResource extends Resource
                         ];
                     })
                     ->action(function (Pendaftaran $record, array $data): void {
-                        $tipeBelajar = strtoupper($record->kategori_kelas ?? '') === 'PRIVAT' ? 'PRIVAT' : 'KELOMPOK';
+                        $siswa = DB::transaction(function () use ($record, $data): ?Siswa {
+                            $freshRecord = Pendaftaran::query()
+                                ->whereKey($record->id)
+                                ->lockForUpdate()
+                                ->first();
 
-                        // 1. Buat data Siswa Aktif
-                        $siswa = Siswa::create([
-                            'nama_lengkap' => $record->nama_lengkap,
-                            'asal_sekolah' => $record->asal_sekolah,
-                            'kelas' => $record->kelas,
-                            'kategori_kelas' => $record->program_belajar ?: $record->kategori_kelas ?: 'Reguler',
-                            'pilihan_mapel' => $record->pilihan_mapel,
-                            'tipe_belajar' => $tipeBelajar,
-                            'tipe_jatuh_tempo' => 'AWAL BULAN',
-                            'status_siswa' => 'AKTIF',
-                            'tanggal_daftar' => now(),
-                            'tanggal_lahir' => $record->tanggal_lahir,
-                            'alamat_rumah' => $record->alamat_rumah,
-                            'no_telp_siswa' => $record->no_telp_siswa,
-                            'nama_ortu' => $record->nama_ortu,
-                            'no_telp_ortu' => $record->no_telp_ortu ?: $record->nomor_wa,
-                            'biaya_bulanan' => $data['biaya_bulanan'] ?? 0,
-                        ]);
-
-                        // 2. Petakan Siswa ke Kelompok Belajar yang Dipilih
-                        $selectedKelompokIds = [];
-                        foreach ($data as $key => $val) {
-                            if (str_starts_with($key, 'kelompok_mapel_') && !empty($val)) {
-                                $selectedKelompokIds[] = (int) $val;
+                            if (! $freshRecord || $freshRecord->status_tindak_lanjut === 'DITERIMA') {
+                                return null;
                             }
-                        }
-                        if (isset($data['kelompok_ids']) && is_array($data['kelompok_ids'])) {
-                            $selectedKelompokIds = array_merge($selectedKelompokIds, $data['kelompok_ids']);
-                        }
 
-                        $selectedKelompokIds = array_unique(array_filter($selectedKelompokIds));
+                            $normalizedName = mb_strtolower(trim((string) $freshRecord->nama_lengkap));
+                            $ortuPhone = trim((string) ($freshRecord->no_telp_ortu ?: $freshRecord->nomor_wa));
+                            $siswaPhone = trim((string) $freshRecord->no_telp_siswa);
 
-                        if (!empty($selectedKelompokIds)) {
-                            $siswa->kelompok()->syncWithoutDetaching($selectedKelompokIds);
+                            $existingSiswa = Siswa::query()
+                                ->whereRaw('LOWER(TRIM(nama_lengkap)) = ?', [$normalizedName])
+                                ->where(function (Builder $q) use ($ortuPhone, $siswaPhone, $freshRecord): void {
+                                    if ($ortuPhone !== '' && $ortuPhone !== '-') {
+                                        $q->orWhere('no_telp_ortu', $ortuPhone);
+                                    }
+                                    if ($siswaPhone !== '' && $siswaPhone !== '-') {
+                                        $q->orWhere('no_telp_siswa', $siswaPhone);
+                                    }
+                                    if ($freshRecord->tanggal_lahir) {
+                                        $q->orWhereDate('tanggal_lahir', $freshRecord->tanggal_lahir);
+                                    }
+                                })
+                                ->first();
+
+                            $tipeBelajar = strtoupper($freshRecord->kategori_kelas ?? '') === 'PRIVAT' ? 'PRIVAT' : 'KELOMPOK';
+
+                            if ($existingSiswa) {
+                                if ($existingSiswa->status_siswa === 'CALON') {
+                                    $existingSiswa->update(['status_siswa' => 'AKTIF']);
+                                }
+                                $siswa = $existingSiswa;
+                            } else {
+                                $siswa = Siswa::create([
+                                    'nama_lengkap' => trim((string) $freshRecord->nama_lengkap),
+                                    'asal_sekolah' => $freshRecord->asal_sekolah,
+                                    'kelas' => $freshRecord->kelas,
+                                    'kategori_kelas' => $freshRecord->program_belajar ?: $freshRecord->kategori_kelas ?: 'Reguler',
+                                    'pilihan_mapel' => $freshRecord->pilihan_mapel,
+                                    'tipe_belajar' => $tipeBelajar,
+                                    'tipe_jatuh_tempo' => 'AWAL BULAN',
+                                    'status_siswa' => 'AKTIF',
+                                    'tanggal_daftar' => now(),
+                                    'tanggal_lahir' => $freshRecord->tanggal_lahir,
+                                    'alamat_rumah' => $freshRecord->alamat_rumah,
+                                    'no_telp_siswa' => $freshRecord->no_telp_siswa,
+                                    'nama_ortu' => $freshRecord->nama_ortu,
+                                    'no_telp_ortu' => $ortuPhone !== '' ? $ortuPhone : null,
+                                    'biaya_bulanan' => $data['biaya_bulanan'] ?? 0,
+                                ]);
+                            }
+
+                            $selectedKelompokIds = [];
+                            foreach ($data as $key => $val) {
+                                if (str_starts_with($key, 'kelompok_mapel_') && ! empty($val)) {
+                                    $selectedKelompokIds[] = (int) $val;
+                                }
+                            }
+                            if (isset($data['kelompok_ids']) && is_array($data['kelompok_ids'])) {
+                                $selectedKelompokIds = array_merge($selectedKelompokIds, $data['kelompok_ids']);
+                            }
+
+                            $selectedKelompokIds = array_unique(array_filter($selectedKelompokIds));
+
+                            if (! empty($selectedKelompokIds)) {
+                                $siswa->kelompok()->syncWithoutDetaching($selectedKelompokIds);
+                            }
+
+                            $freshRecord->update(['status_tindak_lanjut' => 'DITERIMA']);
+
+                            return $siswa;
+                        });
+
+                        if (! $siswa) {
+                            Notification::make()
+                                ->title('Pendaftaran Sudah Diverifikasi')
+                                ->body("Data {$record->nama_lengkap} sudah berstatus DITERIMA sebelumnya.")
+                                ->warning()
+                                ->send();
+
+                            return;
                         }
-
-                        // 3. Update status pendaftaran menjadi DITERIMA
-                        $record->update(['status_tindak_lanjut' => 'DITERIMA']);
 
                         Notification::make()
                             ->title('Siswa Berhasil Diterima & Terpetakan!')

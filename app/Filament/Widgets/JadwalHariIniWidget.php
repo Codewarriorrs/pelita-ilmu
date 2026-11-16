@@ -43,11 +43,14 @@ class JadwalHariIniWidget extends BaseWidget
                         'bulan_ini' => 'Bulan Ini',
                     ])
                     ->default('hari_ini')
+                    ->selectablePlaceholder(false)
                     ->query(function (Builder $query, array $data) {
                         $value = !empty($data['value']) ? $data['value'] : 'hari_ini';
                         if ($value === 'bulan_ini') {
-                            return $query->whereMonth('tanggal_sesi', Carbon::now()->month)
-                                ->whereYear('tanggal_sesi', Carbon::now()->year);
+                            return $query->whereBetween('tanggal_sesi', [
+                                Carbon::now()->startOfMonth()->toDateString(),
+                                Carbon::now()->endOfMonth()->toDateString(),
+                            ]);
                         }
                         return $query->whereDate('tanggal_sesi', Carbon::today()->toDateString());
                     }),
