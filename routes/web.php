@@ -12,3 +12,13 @@ Route::post('/daftar', [RegistrationController::class, 'store'])->name('daftar.s
 Route::redirect('/admin', '/behindpelita');
 Route::redirect('/adminlogin', '/behindpelita')->name('adminlogin');
 Route::redirect('/login', '/behindpelita')->name('login');
+
+// Direct Excel Download for Rekap Presensi Matrix
+Route::get('/behindpelita/rekap-presensi-matrix/export', \App\Http\Controllers\RekapPresensiExportController::class)
+    ->middleware(['web', 'auth'])
+    ->name('rekap-presensi.export');
+
+// Notification Center Feed for Admin/Tentor
+Route::get('/behindpelita/notifications/feed', \App\Http\Controllers\NotificationFeedController::class)
+    ->middleware(['web', 'auth'])
+    ->name('notifications.feed');

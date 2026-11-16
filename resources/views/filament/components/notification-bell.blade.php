@@ -1,0 +1,202 @@
+<div x-data="pelitaNotificationCenter()" x-init="init()" class="relative inline-flex items-center">
+    <!-- Bell Trigger Button -->
+    <button 
+        type="button" 
+        @click="toggleDropdown()"
+        class="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none"
+        title="Pusat Notifikasi">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+        </svg>
+        <template x-if="unreadCount > 0">
+            <span 
+                x-text="unreadCount" 
+                class="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-black text-white bg-red-600 rounded-full min-w-[18px] h-[18px] shadow-sm animate-pulse">
+            </span>
+        </template>
+    </button>
+
+    <!-- Dropdown Panel -->
+    <div 
+        x-show="isOpen" 
+        @click.away="isOpen = false"
+        x-transition:enter="transition ease-out duration-150"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-100"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        style="display: none;"
+        class="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+        
+        <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-sm text-gray-900">Notifikasi</span>
+                <span x-show="items.length > 0" x-text="items.length" class="text-xs bg-gray-200 text-gray-700 font-semibold px-2 py-0.5 rounded-full"></span>
+            </div>
+            <button 
+                type="button" 
+                @click="markAllRead()"
+                x-show="unreadCount > 0"
+                class="text-xs text-primary-600 hover:text-primary-800 font-semibold focus:outline-none">
+                Tandai sudah dibaca
+            </button>
+        </div>
+
+        <div class="max-h-96 overflow-y-auto divide-y divide-gray-100">
+            <template x-if="items.length === 0">
+                <div class="p-6 text-center text-sm text-gray-500">
+                    <svg class="w-8 h-8 mx-auto text-gray-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    Belum ada notifikasi baru saat ini.
+                </div>
+            </template>
+
+            <template x-for="item in items" :key="item.id">
+                <a 
+                    :href="item.url" 
+                    @click="markAsRead(item.id)"
+                    class="block p-3.5 hover:bg-gray-50 transition-colors">
+                    <div class="flex items-start gap-3">
+                        <span 
+                            class="w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0"
+                            :style="'background-color: ' + item.color">
+                        </span>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold text-gray-900 leading-tight" x-text="item.title"></p>
+                            <p class="text-xs text-gray-600 mt-0.5 line-clamp-2" x-text="item.message"></p>
+                            <span class="text-[10px] text-gray-400 mt-1 block" x-text="item.time"></span>
+                        </div>
+                    </div>
+                </a>
+            </template>
+        </div>
+    </div>
+
+    <!-- Toast Container Kiri Bawah (5 Detik Animasi) -->
+    <div class="fixed bottom-5 left-5 z-50 flex flex-col gap-2 pointer-events-none" style="max-width: 380px;">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div 
+                x-show="toast.visible"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 -translate-x-10"
+                x-transition:enter-end="opacity-100 translate-x-0"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 translate-x-0"
+                x-transition:leave-end="opacity-0 -translate-x-10"
+                class="pointer-events-auto flex items-start gap-3 bg-gray-900 text-white p-3.5 rounded-xl shadow-2xl border-l-4 border-emerald-500 text-xs w-full">
+                <span 
+                    class="w-2.5 h-2.5 rounded-full mt-1 flex-shrink-0"
+                    :style="'background-color: ' + toast.color">
+                </span>
+                <div class="flex-1 min-w-0">
+                    <div class="font-bold text-white text-xs" x-text="toast.title"></div>
+                    <div class="text-gray-300 text-[11px] mt-0.5" x-text="toast.message"></div>
+                </div>
+                <button 
+                    type="button" 
+                    @click="removeToast(toast.id)"
+                    class="text-gray-400 hover:text-white ml-2 flex-shrink-0 focus:outline-none">
+                    &times;
+                </button>
+            </div>
+        </template>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('pelitaNotificationCenter', () => ({
+        isOpen: false,
+        items: [],
+        unreadCount: 0,
+        toasts: [],
+        seenIds: new Set(),
+        pollTimer: null,
+
+        init() {
+            try {
+                const storedSeen = JSON.parse(sessionStorage.getItem('pelita_seen_notif_ids') || '[]');
+                this.seenIds = new Set(storedSeen);
+            } catch (e) {
+                this.seenIds = new Set();
+            }
+
+            this.fetchFeed(true);
+            this.pollTimer = setInterval(() => {
+                this.fetchFeed(false);
+            }, 10000); // Polling setiap 10 detik
+        },
+
+        toggleDropdown() {
+            this.isOpen = !this.isOpen;
+        },
+
+        async fetchFeed(isFirstLoad = false) {
+            try {
+                const res = await fetch('{{ route("notifications.feed") }}', {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+                const newItems = data.items || [];
+
+                this.items = newItems;
+                this.unreadCount = newItems.filter(i => !this.seenIds.has(i.id)).length;
+
+                // Munculkan toast untuk item baru yang belum pernah dilihat
+                newItems.forEach(item => {
+                    if (!this.seenIds.has(item.id)) {
+                        this.showToast(item);
+                        this.seenIds.add(item.id);
+                    }
+                });
+
+                sessionStorage.setItem('pelita_seen_notif_ids', JSON.stringify(Array.from(this.seenIds)));
+            } catch (e) {
+                // Silently ignore network issue
+            }
+        },
+
+        showToast(item) {
+            const toast = {
+                id: item.id + '_' + Date.now(),
+                title: item.title,
+                message: item.message,
+                color: item.color || '#10b981',
+                visible: true,
+            };
+
+            this.toasts.push(toast);
+
+            // Hilang otomatis setelah 5 detik
+            setTimeout(() => {
+                this.removeToast(toast.id);
+            }, 5000);
+        },
+
+        removeToast(id) {
+            const idx = this.toasts.findIndex(t => t.id === id);
+            if (idx !== -1) {
+                this.toasts[idx].visible = false;
+                setTimeout(() => {
+                    this.toasts = this.toasts.filter(t => t.id !== id);
+                }, 300);
+            }
+        },
+
+        markAsRead(id) {
+            this.seenIds.add(id);
+            this.unreadCount = this.items.filter(i => !this.seenIds.has(i.id)).length;
+            sessionStorage.setItem('pelita_seen_notif_ids', JSON.stringify(Array.from(this.seenIds)));
+        },
+
+        markAllRead() {
+            this.items.forEach(i => this.seenIds.add(i.id));
+            this.unreadCount = 0;
+            sessionStorage.setItem('pelita_seen_notif_ids', JSON.stringify(Array.from(this.seenIds)));
+        }
+    }));
+});
+</script>

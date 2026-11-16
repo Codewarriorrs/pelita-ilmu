@@ -84,7 +84,10 @@ class RegistrationRequest extends FormRequest
             $program = $this->input('minat_program', '');
             $mapels = $this->input('mata_pelajaran', []);
 
-            if (preg_match('/(\d+)\s*Mapel/i', $program, $match) || preg_match('/UTBK\s*(\d+)/i', $program, $match)) {
+            if (preg_match('/(\d+)\s*Mapel/i', $program, $match) 
+                || preg_match('/UTBK\+Reg\s*(\d+)/i', $program, $match)
+                || preg_match('/UTBK\s*(\d+)/i', $program, $match)
+                || preg_match('/TKA\s*(\d+)/i', $program, $match)) {
                 $requiredCount = (int) $match[1];
                 $actualCount = is_array($mapels) ? count($mapels) : 0;
 

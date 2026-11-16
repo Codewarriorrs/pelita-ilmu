@@ -668,7 +668,10 @@
         }
 
         function getExactMapelRequired(program) {
-            const match = program.match(/(\d+)\s*Mapel/i) || program.match(/UTBK\s*(\d+)/i) || program.match(/TKA\s*(\d+)/i);
+            const match = program.match(/(\d+)\s*Mapel/i) 
+                || program.match(/UTBK\+Reg\s*(\d+)/i) 
+                || program.match(/UTBK\s*(\d+)/i) 
+                || program.match(/TKA\s*(\d+)/i);
             if (match) return parseInt(match[1]);
             return null; // Otomatis/bebas untuk TK/SD
         }

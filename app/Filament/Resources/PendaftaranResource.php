@@ -210,11 +210,11 @@ class PendaftaranResource extends Resource
                     ->html()
                     ->formatStateUsing(function (Pendaftaran $record): string {
                         $status = $record->status_tindak_lanjut ?: 'BARU';
-                        $badgeClass = match ($status) {
-                            'DITERIMA' => 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800',
-                            'DIHUBUNGI' => 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800',
-                            'BARU' => 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800',
-                            default => 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800',
+                        $badgeStyle = match ($status) {
+                            'DITERIMA' => 'display: inline-block; padding: 3px 10px; font-size: 11px; font-weight: 800; color: #ffffff; background-color: #16a34a; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.03em;',
+                            'DIHUBUNGI' => 'display: inline-block; padding: 3px 10px; font-size: 11px; font-weight: 800; color: #ffffff; background-color: #2563eb; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.03em;',
+                            'BARU' => 'display: inline-block; padding: 3px 10px; font-size: 11px; font-weight: 800; color: #78350f; background-color: #eab308; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.03em;',
+                            default => 'display: inline-block; padding: 3px 10px; font-size: 11px; font-weight: 800; color: #ffffff; background-color: #4b5563; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.03em;',
                         };
                         $label = match ($status) {
                             'DITERIMA' => 'DITERIMA',
@@ -224,7 +224,7 @@ class PendaftaranResource extends Resource
                         };
 
                         $html = '<div class="space-y-1">';
-                        $html .= '<div><span class="' . $badgeClass . '">' . e($label) . '</span></div>';
+                        $html .= '<div><span style="' . $badgeStyle . '">' . e($label) . '</span></div>';
 
                         $tgl = $record->tanggal_masuk ? $record->tanggal_masuk->format('d M Y, H:i') : '-';
                         $html .= '<ul class="space-y-0.5 text-xs text-gray-600 list-disc list-inside">';
