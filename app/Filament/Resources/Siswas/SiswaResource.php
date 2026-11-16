@@ -14,6 +14,8 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
@@ -147,6 +149,14 @@ class SiswaResource extends Resource
                 Textarea::make('alamat_rumah')
                     ->label('Alamat Rumah')
                     ->columnSpanFull(),
+                Select::make('kelompok')
+                    ->label('Kelompok Belajar yang Diikuti')
+                    ->relationship('kelompok', 'nama_kelompok')
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
+                    ->columnSpanFull()
+                    ->visible(fn () => auth()->user()?->isAdmin() ?? true),
                 Textarea::make('keterangan')
                     ->label('Keterangan')
                     ->placeholder('Catatan atau keterangan khusus siswa')
@@ -165,6 +175,14 @@ class SiswaResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
+                TextColumn::make('kelompok.nama_kelompok')
+                    ->label('Kelompok Belajar')
+                    ->badge()
+                    ->color('info')
+                    ->separator(', ')
+                    ->limitList(2)
+                    ->searchable()
+                    ->placeholder('Belum ada kelompok'),
                 TextColumn::make('kelas')
                     ->label('Kelas')
                     ->badge()
@@ -200,6 +218,11 @@ class SiswaResource extends Resource
                     ->placeholder('-'),
             ])
             ->filters([
+                \Filament\Tables\Filters\SelectFilter::make('kelompok')
+                    ->label('Kelompok Belajar')
+                    ->relationship('kelompok', 'nama_kelompok')
+                    ->searchable()
+                    ->preload(),
                 \Filament\Tables\Filters\SelectFilter::make('status_siswa')
                     ->label('Status Siswa')
                     ->options([
@@ -222,6 +245,40 @@ class SiswaResource extends Resource
                     ]),
             ])
             ->actions([
+                \Filament\Actions\Action::make('lihat_kelompok')
+                    ->iconButton()
+                    ->icon('heroicon-o-user-group')
+                    ->color('info')
+                    ->tooltip('Lihat Kelompok Belajar')
+                    ->modalHeading(fn (Siswa $record) => "Kelompok Belajar — {$record->nama_lengkap}")
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Tutup')
+                    ->infolist([
+                        RepeatableEntry::make('kelompok')
+                            ->label('Daftar Kelompok Belajar yang Diikuti')
+                            ->schema([
+                                TextEntry::make('nama_kelompok')
+                                    ->label('Nama Kelompok')
+                                    ->weight('bold'),
+                                TextEntry::make('mapel.nama_mapel')
+                                    ->label('Mata Pelajaran')
+                                    ->badge()
+                                    ->color('primary')
+                                    ->placeholder('-'),
+                                TextEntry::make('tentor.name')
+                                    ->label('Tentor')
+                                    ->placeholder('-'),
+                                TextEntry::make('jadwal_hari')
+                                    ->label('Hari')
+                                    ->placeholder('-'),
+                                TextEntry::make('jam_mulai')
+                                    ->label('Jam Belajar')
+                                    ->formatStateUsing(fn ($record) => filled($record->jam_mulai) ? substr($record->jam_mulai, 0, 5) . ' - ' . substr($record->jam_selesai, 0, 5) : '-')
+                                    ->placeholder('-'),
+                            ])
+                            ->columns(3)
+                            ->placeholder('Siswa ini belum terdaftar di kelompok belajar manapun.'),
+                    ]),
                 \Filament\Actions\Action::make('bayar_spp')
                     ->iconButton()
                     ->icon('heroicon-o-banknotes')
@@ -242,7 +299,7 @@ class SiswaResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
+        $query = parent::getEloquentQuery()->with(['kelompok.mapel', 'kelompok.tentor']);
 
         /** @var \App\Models\User|null $user */
         $user = auth()->user();
