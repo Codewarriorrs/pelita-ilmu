@@ -141,27 +141,72 @@ class JadwalKelompokResource extends Resource
                     ->label('Jam Mulai')
                     ->default('15:30')
                     ->seconds(false)
+                    ->live()
                     ->required(),
 
                 TimePicker::make('jam_selesai')
                     ->label('Jam Selesai')
                     ->default('17:00')
                     ->seconds(false)
+                    ->live()
                     ->required(),
 
                 Select::make('ruang_kelas')
                     ->label('Ruang Kelas')
-                    ->options(function () {
-                        $rooms = \App\Models\Ruangan::pluck('nama_ruangan', 'nama_ruangan')->toArray();
-                        return !empty($rooms) ? $rooms : [
-                            'Ruang 1 (Utama)' => 'Ruang 1 (Utama)',
-                            'Ruang 2 (AC)' => 'Ruang 2 (AC)',
-                            'Ruang 3' => 'Ruang 3',
-                            'Ruang Privat' => 'Ruang Privat',
-                        ];
+                    ->options(function (Get $get, ?JadwalKelompok $record) {
+                        $allRooms = \App\Models\Ruangan::pluck('nama_ruangan', 'nama_ruangan')->toArray();
+                        if (empty($allRooms)) {
+                            $allRooms = [
+                                'Ruang 1 (Utama)' => 'Ruang 1 (Utama)',
+                                'Ruang 2 (AC)' => 'Ruang 2 (AC)',
+                                'Ruang 3' => 'Ruang 3',
+                                'Ruang Privat' => 'Ruang Privat',
+                            ];
+                        }
+
+                        $date = $get('tanggal_sesi') ? Carbon::parse($get('tanggal_sesi'))->toDateString() : null;
+                        $kelompokId = (int) $get('kelompok_id');
+                        $targetKelompok = $kelompokId ? \App\Models\Kelompok::find($kelompokId) : null;
+                        $targetStart = $get('jam_mulai') ?: ($targetKelompok?->jam_mulai);
+                        $targetEnd = $get('jam_selesai') ?: ($targetKelompok?->jam_selesai);
+
+                        if (! $date || ! $targetStart || ! $targetEnd) {
+                            return $allRooms;
+                        }
+
+                        // Cari ruangan yang sedang bentrok/dipakai sesi lain pada tanggal & jam tersebut
+                        $occupiedRooms = JadwalKelompok::query()
+                            ->with('kelompok:id,nama_kelompok,jam_mulai,jam_selesai')
+                            ->whereDate('tanggal_sesi', $date)
+                            ->where('status_sesi', '!=', 'BATAL')
+                            ->when($record, fn (Builder $q) => $q->where('id', '!=', $record->id))
+                            ->get()
+                            ->filter(function (JadwalKelompok $other) use ($targetStart, $targetEnd): bool {
+                                $otherStart = $other->jam_mulai ?: ($other->kelompok?->jam_mulai);
+                                $otherEnd = $other->jam_selesai ?: ($other->kelompok?->jam_selesai);
+                                if (! $otherStart || ! $otherEnd) {
+                                    return false;
+                                }
+
+                                return $otherStart < $targetEnd && $otherEnd > $targetStart;
+                            })
+                            ->pluck('ruang_kelas')
+                            ->filter()
+                            ->toArray();
+
+                        // Saring ruangan yang bentrok sehingga tidak bisa dipilih
+                        $availableRooms = [];
+                        foreach ($allRooms as $rKey => $rLabel) {
+                            if (! in_array($rKey, $occupiedRooms, true)) {
+                                $availableRooms[$rKey] = $rLabel;
+                            }
+                        }
+
+                        return $availableRooms;
                     })
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    ->live(),
 
                 Select::make('status_sesi')
                     ->label('Status Pertemuan')
@@ -171,6 +216,7 @@ class JadwalKelompokResource extends Resource
                         'BATAL'     => 'Batal',
                     ])
                     ->default('TERJADWAL')
+                    ->visibleOn('edit')
                     ->required(),
 
                 TextInput::make('materi_pembahasan')

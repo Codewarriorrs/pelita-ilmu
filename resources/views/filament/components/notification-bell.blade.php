@@ -1,17 +1,75 @@
-<div x-data="pelitaNotificationCenter()" x-init="init()" class="relative inline-flex items-center self-center my-auto mr-2">
+<style>
+    .pelita-bell-wrapper {
+        position: relative !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        align-self: center !important;
+        margin-right: 0.5rem !important;
+        z-index: 50 !important;
+    }
+    .pelita-bell-btn {
+        position: relative !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 2.25rem !important;
+        height: 2.25rem !important;
+        min-width: 2.25rem !important;
+        min-height: 2.25rem !important;
+        border-radius: 9999px !important;
+        background: #f1f5f9 !important;
+        color: #334155 !important;
+        border: 1px solid #cbd5e1 !important;
+        cursor: pointer !important;
+        transition: all 0.15s ease !important;
+        padding: 0 !important;
+    }
+    .pelita-bell-btn:hover {
+        background: #0f766e !important;
+        color: #ffffff !important;
+        border-color: #0f766e !important;
+        transform: scale(1.05) !important;
+    }
+    .pelita-bell-btn svg {
+        width: 1.25rem !important;
+        height: 1.25rem !important;
+        stroke-width: 2.2 !important;
+    }
+    .pelita-bell-badge {
+        position: absolute !important;
+        top: -0.2rem !important;
+        right: -0.2rem !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 1.15rem !important;
+        height: 1.15rem !important;
+        padding: 0 0.25rem !important;
+        font-size: 0.65rem !important;
+        font-weight: 800 !important;
+        color: #ffffff !important;
+        background-color: #dc2626 !important;
+        border-radius: 9999px !important;
+        border: 2px solid #ffffff !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
+    }
+</style>
+
+<div x-data="pelitaNotificationCenter()" x-init="init()" class="pelita-bell-wrapper">
     <!-- Bell Trigger Button -->
     <button 
         type="button" 
         @click="toggleDropdown()"
-        class="relative inline-flex items-center justify-center w-9 h-9 text-slate-600 hover:text-emerald-700 hover:bg-slate-100 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+        class="pelita-bell-btn"
         title="Pusat Notifikasi">
-        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
         </svg>
         <template x-if="unreadCount > 0">
             <span 
                 x-text="unreadCount" 
-                class="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1 text-[10px] font-black text-white bg-red-600 rounded-full min-w-[18px] h-[18px] shadow-sm animate-pulse">
+                class="pelita-bell-badge animate-pulse">
             </span>
         </template>
     </button>

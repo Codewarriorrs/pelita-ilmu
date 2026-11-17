@@ -57,74 +57,112 @@
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            padding: 0.375rem 0.8rem;
-            border-radius: 9999px;
+            padding: 0.35rem 0.75rem;
+            border-radius: 0.5rem;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
             line-height: 1.25;
             cursor: pointer;
-            transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.12s ease;
-            border: 1.5px solid #cbd5e1;
+            transition: all 0.15s ease;
+            border: 1px solid #cbd5e1;
             background: #f8fafc;
             color: #475569;
             user-select: none;
         }
 
         .po-pill-btn:hover {
-            background: #f1f5f9;
+            background: #e2e8f0;
             border-color: #94a3b8;
-            color: #1e293b;
+            color: #0f172a;
         }
 
         .po-pill-btn:focus-visible {
-            outline: 2px solid #10b981;
+            outline: 2px solid #0f766e;
             outline-offset: 2px;
         }
 
         .po-pill-btn--active {
-            background: #ecfdf5;
-            border-color: #10b981;
-            color: #065f46;
-            font-weight: 700;
-            box-shadow: 0 1px 2px rgba(16, 185, 129, 0.12);
+            background: #0f766e !important;
+            border-color: #0f766e !important;
+            color: #ffffff !important;
+            font-weight: 800;
+            box-shadow: 0 1px 3px rgba(15, 118, 110, 0.3);
         }
 
         .po-pill-btn--active:hover {
-            background: #d1fae5;
-            border-color: #059669;
-            color: #064e3b;
+            background: #0d655e !important;
+            border-color: #0d655e !important;
+            color: #ffffff !important;
         }
 
         .po-pill-dot {
             width: 0.45rem;
             height: 0.45rem;
-            border-radius: 9999px;
+            border-radius: 0.25rem;
             background: #94a3b8;
             flex-shrink: 0;
         }
 
         .po-pill-btn--active .po-pill-dot {
-            background: #10b981;
+            background: #ffffff;
         }
 
         .po-reset-btn {
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
-            padding: 0.375rem 0.7rem;
-            border-radius: 9999px;
+            padding: 0.35rem 0.65rem;
+            border-radius: 0.5rem;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
             color: #0f766e;
-            background: transparent;
-            border: 1px dashed #5eead4;
+            background: #f0fdfa;
+            border: 1px solid #99f6e4;
             cursor: pointer;
-            transition: background-color 0.15s ease, color 0.15s ease;
+            transition: all 0.15s ease;
         }
 
         .po-reset-btn:hover {
-            background: #f0fdfa;
+            background: #ccfbf1;
             color: #115e59;
+        }
+
+        .po-quick-filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+        }
+
+        .po-qf-btn {
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.375rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #475569;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.12s ease;
+        }
+
+        .po-qf-btn:hover {
+            color: #0f172a;
+            background: #e2e8f0;
+        }
+
+        .po-qf-btn--active {
+            background: #0f766e;
+            color: #ffffff;
+            box-shadow: 0 1px 2px rgba(15, 118, 110, 0.25);
+        }
+
+        .po-qf-btn--active:hover {
+            background: #0d655e;
+            color: #ffffff;
         }
 
         .po-stats-grid {
@@ -186,6 +224,31 @@
                     </svg>
                     {{ $labelPeriode }}
                 </span>
+
+                <!-- Quick Filter Switcher: Hari Ini, Bulan Ini, Semua Periode -->
+                <div class="po-quick-filter-group" title="Ubah Periode Pemasukan">
+                    <button 
+                        type="button" 
+                        wire:click="setPeriodeFilter('HARI_INI')" 
+                        wire:loading.attr="disabled"
+                        class="po-qf-btn {{ str_contains($labelPeriode, 'Hari Ini') ? 'po-qf-btn--active' : '' }}">
+                        Hari Ini
+                    </button>
+                    <button 
+                        type="button" 
+                        wire:click="setPeriodeFilter('BULAN')" 
+                        wire:loading.attr="disabled"
+                        class="po-qf-btn {{ (!str_contains($labelPeriode, 'Hari Ini') && !str_contains($labelPeriode, 'Semua Periode')) ? 'po-qf-btn--active' : '' }}">
+                        Bulan Ini
+                    </button>
+                    <button 
+                        type="button" 
+                        wire:click="setPeriodeFilter('SEMUA')" 
+                        wire:loading.attr="disabled"
+                        class="po-qf-btn {{ str_contains($labelPeriode, 'Semua Periode') ? 'po-qf-btn--active' : '' }}">
+                        Semua
+                    </button>
+                </div>
             </div>
 
             <div class="po-pill-group" role="group" aria-label="Pilih kartu statistik pembayaran">

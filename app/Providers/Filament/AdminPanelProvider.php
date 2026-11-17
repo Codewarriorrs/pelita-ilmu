@@ -176,22 +176,23 @@ class AdminPanelProvider extends PanelProvider
 
                         /* ===== ACTIVE TABLE FILTER INDICATORS (Filter Aktif) ===== */
                         .fi-ta-filter-indicators .fi-badge {
-                            background-color: #ecfdf5 !important;
-                            border: 1px solid #10b981 !important;
-                            box-shadow: 0 1px 2px rgba(16, 185, 129, 0.12) !important;
+                            background-color: #0f766e !important;
+                            border: 1px solid #0f766e !important;
+                            border-radius: 0.375rem !important;
+                            box-shadow: 0 1px 2px rgba(15, 118, 110, 0.2) !important;
                         }
                         .fi-ta-filter-indicators .fi-badge span,
                         .fi-ta-filter-indicators .fi-badge div {
-                            color: #065f46 !important;
+                            color: #ffffff !important;
                             font-weight: 700 !important;
                         }
                         .fi-ta-filter-indicators .fi-badge button,
                         .fi-ta-filter-indicators .fi-badge svg {
-                            color: #065f46 !important;
+                            color: #ffffff !important;
                             stroke: currentColor !important;
                         }
                         .fi-ta-filter-indicators .fi-badge button:hover svg {
-                            color: #dc2626 !important;
+                            color: #fca5a5 !important;
                         }
 
                         /* ===== ICON BUTTONS ===== */

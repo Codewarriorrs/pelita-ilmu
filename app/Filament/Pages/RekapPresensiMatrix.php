@@ -382,10 +382,10 @@ class RekapPresensiMatrix extends Page
         $matrix = $this->getMatrixData(paginate: false);
         $bulanNama = Carbon::createFromDate($matrix['tahun'], $matrix['bulan'], 1)->locale('id')->translatedFormat('F Y');
 
-        $filename = 'Rekap_Presensi_' . str_replace(' ', '_', $bulanNama) . '.xls';
+        $filename = 'Rekap_Presensi_' . str_replace(' ', '_', $bulanNama) . '.csv';
 
         $headers = [
-            'Content-Type' => 'application/vnd.ms-excel',
+            'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"$filename\"",
             'Pragma' => 'no-cache',
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
@@ -393,49 +393,41 @@ class RekapPresensiMatrix extends Page
         ];
 
         $callback = function () use ($matrix, $bulanNama): void {
-            echo '<html><head><meta charset="UTF-8"><style>';
-            echo 'table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; font-size: 11px; }';
-            echo 'th, td { border: 1px solid #cbd5e1; padding: 6px; text-align: center; }';
-            echo 'th { background: #193836; color: #ffffff; }';
-            echo '.th-sub { background: #0f766e; color: #ffffff; font-size: 10px; }';
-            echo '.th-rekap { background: #fef08a; color: #713f12; font-weight: bold; }';
-            echo '.text-left { text-align: left; }';
-            echo '.hadir { background: #16a34a; color: #ffffff; font-weight: bold; }';
-            echo '.sakit { background: #d97706; color: #ffffff; font-weight: bold; }';
-            echo '.izin  { background: #2563eb; color: #ffffff; font-weight: bold; }';
-            echo '.alpa  { background: #dc2626; color: #ffffff; font-weight: bold; }';
-            echo '.rekap-cell { font-weight: bold; font-size: 12px; }';
-            echo '</style></head><body>';
-
-            echo '<table border="1">';
-
-            echo '<tr>';
-            echo '<th rowspan="2" style="width: 35px;">NO</th>';
-            echo '<th rowspan="2" style="width: 180px; text-align:left;">NAMA SISWA</th>';
-            echo '<th rowspan="2" style="width: 85px;">KELAS</th>';
-
-            foreach ($matrix['mapelList'] as $mId => $m) {
-                $colspan = max(1, count($matrix['sessionsByMapel'][$mId] ?? []));
-                echo '<th colspan="' . $colspan . '" class="th-sub">' . htmlspecialchars(strtoupper($m['nama'])) . '</th>';
+            // Clean output buffers to prevent corrupt files or hung downloads
+            while (ob_get_level() > 0) {
+                ob_end_clean();
             }
 
-            echo '<th colspan="4" class="th-rekap">REKAPITULASI (' . strtoupper($bulanNama) . ')</th>';
-            echo '</tr>';
+            $output = fopen('php://output', 'w');
 
-            echo '<tr>';
+            // Write UTF-8 BOM so Microsoft Excel on Windows opens non-ASCII characters & Indonesian accents correctly
+            fputs($output, "\xEF\xBB\xBF");
+
+            // Header 1: Basic info
+            fputcsv($output, ['REKAPITULASI PRESENSI SISWA - PELITA ILMU']);
+            fputcsv($output, ['PERIODE: ' . strtoupper($bulanNama)]);
+            fputcsv($output, []);
+
+            // Build dynamic headers
+            $headers1 = ['NO', 'NAMA SISWA', 'KELAS'];
             foreach ($matrix['mapelList'] as $mId => $m) {
                 $sessions = $matrix['sessionsByMapel'][$mId] ?? [];
-                foreach ($sessions as $pIdx => $jadwal) {
-                    $tglLabel = Carbon::parse($jadwal->tanggal_sesi)->format('d/m');
-                    echo '<th style="background:#f1f5f9; color:#334155; font-size:10px; width:55px;">P' . ($pIdx + 1) . '<br><span style="font-weight:normal; font-size:9px;">' . $tglLabel . '</span></th>';
+                $count = count($sessions);
+                if ($count === 0) {
+                    $headers1[] = strtoupper($m['nama']);
+                } else {
+                    foreach ($sessions as $pIdx => $jadwal) {
+                        $tglLabel = Carbon::parse($jadwal->tanggal_sesi)->format('d/m');
+                        $headers1[] = strtoupper($m['nama']) . ' - P' . ($pIdx + 1) . ' (' . $tglLabel . ')';
+                    }
                 }
             }
+            $headers1[] = 'TOTAL HADIR (H)';
+            $headers1[] = 'TOTAL IZIN (I)';
+            $headers1[] = 'TOTAL SAKIT (S)';
+            $headers1[] = 'TOTAL ALPA (A)';
 
-            echo '<th style="background:#dcfce7; color:#15803d; width:40px;">H</th>';
-            echo '<th style="background:#dbeafe; color:#1d4ed8; width:40px;">I</th>';
-            echo '<th style="background:#fef3c7; color:#b45309; width:40px;">S</th>';
-            echo '<th style="background:#fee2e2; color:#b91c1c; width:40px;">A</th>';
-            echo '</tr>';
+            fputcsv($output, $headers1);
 
             $no = 1;
             foreach ($matrix['siswas'] as $s) {
@@ -444,48 +436,47 @@ class RekapPresensiMatrix extends Page
                 $countS = 0;
                 $countA = 0;
 
-                echo '<tr>';
-                echo '<td>' . $no++ . '</td>';
-                echo '<td class="text-left">' . htmlspecialchars($s->nama_lengkap) . '</td>';
-                echo '<td>' . htmlspecialchars($s->kelas ?: ($s->kategori_kelas ?: '-')) . '</td>';
+                $row = [
+                    $no++,
+                    $s->nama_lengkap,
+                    $s->kelas ?: ($s->kategori_kelas ?: '-'),
+                ];
 
                 foreach ($matrix['mapelList'] as $mId => $m) {
                     $sessions = $matrix['sessionsByMapel'][$mId] ?? [];
-                    foreach ($sessions as $jadwal) {
-                        $statusText = '-';
-                        $cssClass = '';
-
-                        $st = strtolower($matrix['presensis'][$s->id][$jadwal->id] ?? '');
-                        if ($st === 'hadir') {
-                            $statusText = 'H';
-                            $cssClass = 'class="hadir"';
-                            $countH++;
-                        } elseif ($st === 'sakit') {
-                            $statusText = 'S';
-                            $cssClass = 'class="sakit"';
-                            $countS++;
-                        } elseif ($st === 'izin') {
-                            $statusText = 'I';
-                            $cssClass = 'class="izin"';
-                            $countI++;
-                        } elseif ($st === 'alpa') {
-                            $statusText = 'A';
-                            $cssClass = 'class="alpa"';
-                            $countA++;
+                    if (count($sessions) === 0) {
+                        $row[] = '-';
+                    } else {
+                        foreach ($sessions as $jadwal) {
+                            $st = strtolower($matrix['presensis'][$s->id][$jadwal->id] ?? '');
+                            if ($st === 'hadir') {
+                                $row[] = 'H';
+                                $countH++;
+                            } elseif ($st === 'sakit') {
+                                $row[] = 'S';
+                                $countS++;
+                            } elseif ($st === 'izin') {
+                                $row[] = 'I';
+                                $countI++;
+                            } elseif ($st === 'alpa') {
+                                $row[] = 'A';
+                                $countA++;
+                            } else {
+                                $row[] = '-';
+                            }
                         }
-
-                        echo '<td ' . $cssClass . '>' . $statusText . '</td>';
                     }
                 }
 
-                echo '<td class="rekap-cell" style="color:#15803d;">' . $countH . '</td>';
-                echo '<td class="rekap-cell" style="color:#1d4ed8;">' . $countI . '</td>';
-                echo '<td class="rekap-cell" style="color:#b45309;">' . $countS . '</td>';
-                echo '<td class="rekap-cell" style="color:#b91c1c;">' . $countA . '</td>';
-                echo '</tr>';
+                $row[] = $countH;
+                $row[] = $countI;
+                $row[] = $countS;
+                $row[] = $countA;
+
+                fputcsv($output, $row);
             }
 
-            echo '</table></body></html>';
+            fclose($output);
         };
 
         return new StreamedResponse($callback, 200, $headers);
