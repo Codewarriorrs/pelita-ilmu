@@ -5,7 +5,7 @@
         align-items: center !important;
         justify-content: center !important;
         align-self: center !important;
-        margin-right: 0.5rem !important;
+        margin-right: 0.75rem !important;
         z-index: 50 !important;
     }
     .pelita-bell-btn {
@@ -13,33 +13,28 @@
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        width: 2.25rem !important;
-        height: 2.25rem !important;
-        min-width: 2.25rem !important;
-        min-height: 2.25rem !important;
-        border-radius: 9999px !important;
-        background: #f1f5f9 !important;
-        color: #334155 !important;
-        border: 1px solid #cbd5e1 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
         cursor: pointer !important;
-        transition: all 0.15s ease !important;
-        padding: 0 !important;
+        padding: 0.25rem !important;
+        color: #475569 !important;
+        transition: transform 0.15s ease, color 0.15s ease !important;
     }
     .pelita-bell-btn:hover {
-        background: #0f766e !important;
-        color: #ffffff !important;
-        border-color: #0f766e !important;
-        transform: scale(1.05) !important;
+        color: #0f766e !important;
+        transform: scale(1.1) !important;
     }
     .pelita-bell-btn svg {
-        width: 1.25rem !important;
-        height: 1.25rem !important;
-        stroke-width: 2.2 !important;
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+        stroke-width: 2 !important;
     }
     .pelita-bell-badge {
         position: absolute !important;
-        top: -0.2rem !important;
-        right: -0.2rem !important;
+        top: -0.15rem !important;
+        right: -0.15rem !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -54,10 +49,125 @@
         border: 2px solid #ffffff !important;
         box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
     }
+    .pelita-notif-dropdown {
+        position: absolute !important;
+        top: calc(100% + 0.5rem) !important;
+        right: 0 !important;
+        width: 22rem !important;
+        max-width: 90vw !important;
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 0.75rem !important;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+        overflow: hidden !important;
+        z-index: 99999 !important;
+        font-family: inherit !important;
+        color: #1e293b !important;
+    }
+    .pelita-notif-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 0.75rem 1rem !important;
+        background-color: #f8fafc !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+    }
+    .pelita-notif-header-title {
+        font-size: 0.75rem !important;
+        font-weight: 800 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        color: #0f172a !important;
+    }
+    .pelita-notif-count {
+        background-color: #ccfbf1 !important;
+        color: #0f766e !important;
+        font-size: 0.7rem !important;
+        font-weight: 800 !important;
+        padding: 0.1rem 0.45rem !important;
+        border-radius: 9999px !important;
+        margin-left: 0.35rem !important;
+    }
+    .pelita-notif-mark-btn {
+        font-size: 0.7rem !important;
+        font-weight: 700 !important;
+        color: #0f766e !important;
+        background: transparent !important;
+        border: none !important;
+        cursor: pointer !important;
+    }
+    .pelita-notif-mark-btn:hover {
+        color: #115e59 !important;
+        text-decoration: underline !important;
+    }
+    .pelita-notif-body {
+        max-height: 20rem !important;
+        overflow-y: auto !important;
+    }
+    .pelita-notif-item {
+        display: flex !important;
+        align-items: flex-start !important;
+        gap: 0.75rem !important;
+        padding: 0.75rem 1rem !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        text-decoration: none !important;
+        transition: background-color 0.15s ease !important;
+    }
+    .pelita-notif-item:hover {
+        background-color: #f8fafc !important;
+    }
+    .pelita-notif-dot {
+        width: 0.5rem !important;
+        height: 0.5rem !important;
+        border-radius: 9999px !important;
+        margin-top: 0.35rem !important;
+        flex-shrink: 0 !important;
+    }
+    .pelita-notif-title {
+        font-size: 0.75rem !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        line-height: 1.25 !important;
+        margin-bottom: 0.2rem !important;
+    }
+    .pelita-notif-msg {
+        font-size: 0.7rem !important;
+        color: #475569 !important;
+        line-height: 1.3 !important;
+        margin-bottom: 0.2rem !important;
+    }
+    .pelita-notif-time {
+        font-size: 0.65rem !important;
+        color: #94a3b8 !important;
+    }
+    .pelita-toast-wrapper {
+        position: fixed !important;
+        bottom: 1.25rem !important;
+        left: 1.25rem !important;
+        z-index: 99999 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+        pointer-events: none !important;
+        max-width: 22rem !important;
+    }
+    .pelita-toast-item {
+        pointer-events: auto !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        gap: 0.75rem !important;
+        background-color: #0f172a !important;
+        color: #ffffff !important;
+        padding: 0.75rem 1rem !important;
+        border-radius: 0.75rem !important;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important;
+        border-left: 4px solid #0f766e !important;
+        font-size: 0.75rem !important;
+    }
 </style>
 
 <div x-data="pelitaNotificationCenter()" x-init="init()" class="pelita-bell-wrapper">
-    <!-- Bell Trigger Button -->
+    <!-- Bell Trigger Button: Polos tanpa background dan tanpa border circle -->
     <button 
         type="button" 
         @click="toggleDropdown()"
@@ -69,45 +179,42 @@
         <template x-if="unreadCount > 0">
             <span 
                 x-text="unreadCount" 
-                class="pelita-bell-badge animate-pulse">
+                class="pelita-bell-badge">
             </span>
         </template>
     </button>
 
-    <!-- Dropdown Panel (Pop-out dari lonceng) -->
+    <!-- Dropdown Panel (Pop-out dari lonceng di kanan atas) -->
     <div 
         x-show="isOpen" 
         @click.away="isOpen = false"
         x-transition:enter="transition ease-out duration-150"
-        x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
-        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
         x-transition:leave="transition ease-in duration-100"
-        x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-        x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
         x-cloak
-        style="display: none; z-index: 9999;"
-        class="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden text-slate-800">
+        style="display: none;"
+        class="pelita-notif-dropdown">
         
-        <div class="px-4 py-3 bg-slate-50/90 border-b border-slate-200/80 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <span class="font-extrabold text-xs uppercase tracking-wider text-slate-900">Aktivitas & Notifikasi</span>
-                <span x-show="items.length > 0" x-text="items.length" class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full"></span>
+        <div class="pelita-notif-header">
+            <div style="display: flex; align-items: center;">
+                <span class="pelita-notif-header-title">Aktivitas & Notifikasi</span>
+                <span x-show="items.length > 0" x-text="items.length" class="pelita-notif-count"></span>
             </div>
             <button 
                 type="button" 
                 @click="markAllRead()"
                 x-show="unreadCount > 0"
-                class="text-[11px] text-emerald-700 hover:text-emerald-900 font-bold focus:outline-none">
-                Tandai sudah dibaca
+                class="pelita-notif-mark-btn">
+                Tandai dibaca
             </button>
         </div>
 
-        <div class="max-h-80 overflow-y-auto divide-y divide-slate-100">
+        <div class="pelita-notif-body">
             <template x-if="items.length === 0">
-                <div class="p-8 text-center text-xs text-slate-500">
-                    <svg class="w-8 h-8 mx-auto text-slate-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                    </svg>
+                <div style="padding: 2rem 1rem; text-align: center; color: #64748b; font-size: 0.75rem;">
                     Semua aktivitas sudah up to date.
                 </div>
             </template>
@@ -116,17 +223,15 @@
                 <a 
                     :href="item.url" 
                     @click="markAsRead(item.id)"
-                    class="block p-3.5 hover:bg-slate-50 transition-colors group">
-                    <div class="flex items-start gap-3">
-                        <span 
-                            class="w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0"
-                            :style="'background-color: ' + item.color">
-                        </span>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-xs font-bold text-slate-900 group-hover:text-emerald-800 leading-snug" x-text="item.title"></p>
-                            <p class="text-[11px] text-slate-600 mt-0.5 line-clamp-2" x-text="item.message"></p>
-                            <span class="text-[10px] text-slate-400 mt-1 block" x-text="item.time"></span>
-                        </div>
+                    class="pelita-notif-item">
+                    <span 
+                        class="pelita-notif-dot"
+                        :style="'background-color: ' + item.color">
+                    </span>
+                    <div style="flex: 1; min-width: 0;">
+                        <div class="pelita-notif-title" x-text="item.title"></div>
+                        <div class="pelita-notif-msg" x-text="item.message"></div>
+                        <span class="pelita-notif-time" x-text="item.time"></span>
                     </div>
                 </a>
             </template>
@@ -134,29 +239,29 @@
     </div>
 
     <!-- Toast Container Kiri Bawah (5 Detik Animasi) -->
-    <div class="fixed bottom-5 left-5 z-[9999] flex flex-col gap-2 pointer-events-none" style="max-width: 360px;">
+    <div class="pelita-toast-wrapper">
         <template x-for="toast in toasts" :key="toast.id">
             <div 
                 x-show="toast.visible"
                 x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 -translate-x-8 scale-95"
-                x-transition:enter-end="opacity-100 translate-x-0 scale-100"
+                x-transition:enter-start="opacity-0 -translate-x-8"
+                x-transition:enter-end="opacity-100 translate-x-0"
                 x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 translate-x-0 scale-100"
-                x-transition:leave-end="opacity-0 -translate-x-8 scale-95"
-                class="pointer-events-auto flex items-start gap-3 bg-slate-900/95 backdrop-blur-md text-white p-3.5 rounded-2xl shadow-2xl border-l-4 border-emerald-500 text-xs w-full">
+                x-transition:leave-start="opacity-100 translate-x-0"
+                x-transition:leave-end="opacity-0 -translate-x-8"
+                class="pelita-toast-item">
                 <span 
-                    class="w-2.5 h-2.5 rounded-full mt-1 flex-shrink-0"
+                    class="pelita-notif-dot"
                     :style="'background-color: ' + toast.color">
                 </span>
-                <div class="flex-1 min-w-0">
-                    <div class="font-bold text-white text-xs" x-text="toast.title"></div>
-                    <div class="text-slate-300 text-[11px] mt-0.5 leading-tight" x-text="toast.message"></div>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-weight: 800; font-size: 0.75rem;" x-text="toast.title"></div>
+                    <div style="color: #cbd5e1; font-size: 0.7rem; margin-top: 0.15rem;" x-text="toast.message"></div>
                 </div>
                 <button 
                     type="button" 
                     @click="removeToast(toast.id)"
-                    class="text-slate-400 hover:text-white ml-2 flex-shrink-0 focus:outline-none text-base">
+                    style="color: #94a3b8; background: transparent; border: none; cursor: pointer; font-size: 1rem; line-height: 1;">
                     &times;
                 </button>
             </div>
@@ -204,7 +309,6 @@ document.addEventListener('alpine:init', () => {
                 this.items = newItems;
                 this.unreadCount = newItems.filter(i => !this.seenIds.has(i.id)).length;
 
-                // Tampilkan toast untuk notif yang baru muncul
                 newItems.forEach(item => {
                     if (!this.seenIds.has(item.id)) {
                         this.showToast(item);

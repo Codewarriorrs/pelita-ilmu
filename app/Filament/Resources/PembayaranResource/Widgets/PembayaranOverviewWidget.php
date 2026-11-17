@@ -78,21 +78,7 @@ class PembayaranOverviewWidget extends BaseWidget
 
     public function setPeriodeFilter(string $mode): void
     {
-        $livewire = $this->getTablePageInstance();
-        if ($livewire && isset($livewire->tableFilters)) {
-            if ($mode === 'HARI_INI') {
-                $livewire->tableFilters['periode_waktu']['value'] = 'HARI_INI';
-                $livewire->tableFilters['untuk_bulan']['value'] = 'ALL';
-            } elseif ($mode === 'BULAN') {
-                $livewire->tableFilters['periode_waktu']['value'] = 'BULAN';
-                $livewire->tableFilters['untuk_bulan']['value'] = (int) now()->month;
-                $livewire->tableFilters['untuk_tahun']['value'] = (int) now()->year;
-            } elseif ($mode === 'SEMUA') {
-                $livewire->tableFilters['periode_waktu']['value'] = 'SEMUA';
-                $livewire->tableFilters['untuk_bulan']['value'] = 'ALL';
-            }
-            $livewire->updatedTableFilters();
-        }
+        $this->dispatch('set-periode-filter', mode: $mode);
     }
 
     protected function getColumns(): int | array | null

@@ -41,6 +41,10 @@ class RuanganResource extends Resource
                     ->label('Nama Ruangan')
                     ->required()
                     ->unique(ignoreRecord: true)
+                    ->validationMessages([
+                        'unique' => 'Nama ruangan ini sudah terdaftar. Silakan gunakan nama ruangan lain.',
+                        'required' => 'Nama ruangan wajib diisi.',
+                    ])
                     ->placeholder('Contoh: Ruang 1 (Utama)')
                     ->maxLength(255),
 

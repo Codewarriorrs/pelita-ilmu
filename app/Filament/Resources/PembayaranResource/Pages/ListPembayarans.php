@@ -20,6 +20,24 @@ class ListPembayarans extends ListRecords
 
     public string $lastSyncedBulan = '';
 
+    #[\Livewire\Attributes\On('set-periode-filter')]
+    public function handleSetPeriodeFilter(string $mode): void
+    {
+        if ($mode === 'HARI_INI') {
+            $this->tableFilters['periode_waktu']['value'] = 'HARI_INI';
+            $this->tableFilters['untuk_bulan']['value'] = 'ALL';
+        } elseif ($mode === 'BULAN') {
+            $this->tableFilters['periode_waktu']['value'] = 'BULAN';
+            $this->tableFilters['untuk_bulan']['value'] = (int) now()->month;
+            $this->tableFilters['untuk_tahun']['value'] = (int) now()->year;
+        } elseif ($mode === 'SEMUA') {
+            $this->tableFilters['periode_waktu']['value'] = 'SEMUA';
+            $this->tableFilters['untuk_bulan']['value'] = 'ALL';
+        }
+
+        $this->updatedTableFilters();
+    }
+
     public function mount(): void
     {
         parent::mount();

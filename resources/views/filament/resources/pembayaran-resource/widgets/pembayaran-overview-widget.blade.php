@@ -37,11 +37,11 @@
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            padding: 0.2rem 0.65rem;
-            border-radius: 9999px;
-            background: #ecfdf5;
-            border: 1px solid #10b981;
-            color: #065f46;
+            padding: 0.25rem 0.65rem;
+            border-radius: 0.375rem;
+            background: #0f766e;
+            border: 1px solid #0f766e;
+            color: #ffffff;
             font-size: 0.75rem;
             font-weight: 700;
         }
@@ -58,20 +58,20 @@
             align-items: center;
             gap: 0.4rem;
             padding: 0.35rem 0.75rem;
-            border-radius: 0.5rem;
+            border-radius: 0.375rem;
             font-size: 0.75rem;
             font-weight: 700;
             line-height: 1.25;
             cursor: pointer;
             transition: all 0.15s ease;
             border: 1px solid #cbd5e1;
-            background: #f8fafc;
+            background: #ffffff;
             color: #475569;
             user-select: none;
         }
 
         .po-pill-btn:hover {
-            background: #e2e8f0;
+            background: #f1f5f9;
             border-color: #94a3b8;
             color: #0f172a;
         }
@@ -98,7 +98,7 @@
         .po-pill-dot {
             width: 0.45rem;
             height: 0.45rem;
-            border-radius: 0.25rem;
+            border-radius: 0.15rem;
             background: #94a3b8;
             flex-shrink: 0;
         }
@@ -112,19 +112,20 @@
             align-items: center;
             gap: 0.3rem;
             padding: 0.35rem 0.65rem;
-            border-radius: 0.5rem;
+            border-radius: 0.375rem;
             font-size: 0.75rem;
             font-weight: 700;
-            color: #0f766e;
-            background: #f0fdfa;
-            border: 1px solid #99f6e4;
+            color: #ffffff;
+            background: #0f766e;
+            border: 1px solid #0f766e;
             cursor: pointer;
             transition: all 0.15s ease;
         }
 
         .po-reset-btn:hover {
-            background: #ccfbf1;
-            color: #115e59;
+            background: #0d655e;
+            border-color: #0d655e;
+            color: #ffffff;
         }
 
         .po-quick-filter-group {
@@ -134,12 +135,12 @@
             padding: 0.2rem;
             background: #f1f5f9;
             border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
+            border-radius: 0.375rem;
         }
 
         .po-qf-btn {
             padding: 0.25rem 0.6rem;
-            border-radius: 0.375rem;
+            border-radius: 0.25rem;
             font-size: 0.72rem;
             font-weight: 700;
             color: #475569;
@@ -155,14 +156,14 @@
         }
 
         .po-qf-btn--active {
-            background: #0f766e;
-            color: #ffffff;
+            background: #0f766e !important;
+            color: #ffffff !important;
             box-shadow: 0 1px 2px rgba(15, 118, 110, 0.25);
         }
 
         .po-qf-btn--active:hover {
-            background: #0d655e;
-            color: #ffffff;
+            background: #0d655e !important;
+            color: #ffffff !important;
         }
 
         .po-stats-grid {
