@@ -81,6 +81,11 @@ class PembayaranOverviewWidget extends BaseWidget
         $this->dispatch('set-periode-filter', mode: $mode);
     }
 
+    public function setSpecificMonth(int|string $bulan): void
+    {
+        $this->dispatch('set-specific-month', bulan: (int) $bulan);
+    }
+
     protected function getColumns(): int | array | null
     {
         $count = count($this->getVisibleCards());
@@ -184,7 +189,7 @@ class PembayaranOverviewWidget extends BaseWidget
 
         $pembayaranQuery = Pembayaran::query()
             ->where('status_bayar', 'LUNAS')
-            ->whereHas('siswa', fn (Builder $sq) => $sq->where('status_siswa', '!=', 'CALON'));
+            ->whereHas('siswa', fn (Builder $sq) => $sq->whereNotIn('status_siswa', ['CALON', 'NONAKTIF']));
 
         $applyPeriod($pembayaranQuery);
 
@@ -203,7 +208,7 @@ class PembayaranOverviewWidget extends BaseWidget
         $qris = (float) ($rekapMetode['QRIS'] ?? 0);
         $totalPeriode = $tunai + $transfer + $qris;
 
-        $eligibleSiswaQuery = Siswa::query()->where('status_siswa', '!=', 'CALON');
+        $eligibleSiswaQuery = Siswa::query()->whereNotIn('status_siswa', ['CALON', 'NONAKTIF']);
         if ($cutoffEnd !== null) {
             $eligibleSiswaQuery->where(function (Builder $q) use ($cutoffEnd): void {
                 $q->whereNull('tanggal_daftar')
@@ -262,11 +267,15 @@ class PembayaranOverviewWidget extends BaseWidget
 
     protected function getViewData(): array
     {
+        $ctx = $this->resolveFilterContext();
+
         return [
             ...parent::getViewData(),
             'cardOptions' => self::CARD_OPTIONS,
             'visibleCards' => $this->getVisibleCards(),
-            'labelPeriode' => $this->resolveFilterContext()['label_periode'],
+            'labelPeriode' => $ctx['label_periode'],
+            'currentMonth' => $ctx['bulan'] ?? (int) now()->month,
+            'currentYear' => $ctx['tahun'] ?? (int) now()->year,
         ];
     }
 }

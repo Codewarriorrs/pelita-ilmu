@@ -219,12 +219,28 @@
         <div class="po-toggle-bar">
             <div class="po-toggle-meta">
                 <span class="po-toggle-title">Kartu Ringkasan</span>
-                <span class="po-period-chip">
-                    <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <div class="po-period-chip" style="display: inline-flex; align-items: center; padding: 0.15rem 0.5rem; background: #0f766e; border-radius: 0.375rem; border: 1px solid #0f766e;">
+                    <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="margin-right: 0.25rem; flex-shrink: 0;">
                         <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
                     </svg>
-                    {{ $labelPeriode }}
-                </span>
+                    <select 
+                        wire:change="setSpecificMonth($event.target.value)" 
+                        title="Pilih Bulan untuk Melihat Rekap Pendapatan Bulan Lampau"
+                        style="background: transparent; color: #ffffff; font-size: 0.75rem; font-weight: 800; border: none; outline: none; cursor: pointer; padding: 0.15rem 0.25rem; border-radius: 0.25rem;">
+                        @php
+                            $namaBulan = [
+                                1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+                                5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+                                9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+                            ];
+                        @endphp
+                        @foreach ($namaBulan as $num => $nama)
+                            <option value="{{ $num }}" {{ (int) ($currentMonth ?? now()->month) === $num ? 'selected' : '' }} style="color: #193836; background: #ffffff;">
+                                {{ $nama }} {{ $currentYear ?? now()->year }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
                 <!-- Quick Filter Switcher: Hari Ini, Bulan Ini, Semua Periode -->
                 <div class="po-quick-filter-group" title="Ubah Periode Pemasukan">

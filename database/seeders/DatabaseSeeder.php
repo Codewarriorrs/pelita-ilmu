@@ -128,6 +128,7 @@ class DatabaseSeeder extends Seeder
         $currentYear = $now->year;
 
         $createdSiswaIds = [];
+        $classPointers = [];
 
         foreach ($rombelList as $idx => $rombel) {
             $rombelName = $rombel['nama'];
@@ -154,57 +155,63 @@ class DatabaseSeeder extends Seeder
                 'jam_selesai' => $rombel['jam_selesai'],
             ]);
 
-            // Ambil maksimal 2 siswa untuk kelompok ini dari data murid asli
+            // Ambil maksimal 2 siswa untuk kelompok ini secara rotasi bergantian
             $candidates = $studentsByClass[$kelas] ?? ($studentsByClass[$jenjang] ?? []);
-            $assignedCount = 0;
+            $totalCandidates = count($candidates);
+            $ptr = $classPointers[$kelas] ?? 0;
 
-            foreach ($candidates as $candidate) {
-                if ($assignedCount >= 2) break;
+            if ($totalCandidates > 0) {
+                for ($k = 0; $k < min(2, $totalCandidates); $k++) {
+                    $candidateIndex = ($ptr + $k) % $totalCandidates;
+                    $candidate = $candidates[$candidateIndex];
 
-                // Ambil atau buat siswa
-                $siswa = Siswa::firstOrCreate(
-                    ['nama_lengkap' => $candidate['nama']],
-                    [
-                        'asal_sekolah' => $candidate['asal_sekolah'],
-                        'kelas' => $candidate['kelas_display'],
-                        'kategori_kelas' => $candidate['kategori'] ?? 'Reguler',
-                        'pilihan_mapel' => [$mapelName],
-                        'tipe_belajar' => 'KELOMPOK',
-                        'tipe_jatuh_tempo' => 'AWAL BULAN',
-                        'status_siswa' => 'AKTIF',
-                        'tanggal_daftar' => '2026-10-10',
-                        'alamat_rumah' => $candidate['alamat'] ?: 'Jl. Pelita Ilmu No. 1',
-                        'no_telp_siswa' => $candidate['hp_siswa'] ?: '081200000000',
-                        'nama_ortu' => $candidate['ortu'] ?: 'Orang Tua Siswa',
-                        'no_telp_ortu' => $candidate['hp_ortu'] ?: '081200000000',
-                        'biaya_bulanan' => $biaya,
-                    ]
-                );
+                    // Ambil atau buat siswa
+                    $siswa = Siswa::firstOrCreate(
+                        ['nama_lengkap' => $candidate['nama']],
+                        [
+                            'nama_panggilan' => $candidate['panggilan'] ?? null,
+                            'asal_sekolah' => $candidate['asal_sekolah'],
+                            'kelas' => $candidate['kelas_display'],
+                            'kategori_kelas' => $candidate['kategori'] ?? 'Reguler',
+                            'pilihan_mapel' => [$mapelName],
+                            'tipe_belajar' => 'KELOMPOK',
+                            'tipe_jatuh_tempo' => 'AWAL BULAN',
+                            'status_siswa' => 'AKTIF',
+                            'tanggal_daftar' => '2026-10-10',
+                            'alamat_rumah' => $candidate['alamat'] ?: 'Jl. Pelita Ilmu No. 1',
+                            'no_telp_siswa' => $candidate['hp_siswa'] ?: '081200000000',
+                            'nama_ortu' => $candidate['ortu'] ?: 'Orang Tua Siswa',
+                            'no_telp_ortu' => $candidate['hp_ortu'] ?: '081200000000',
+                            'biaya_bulanan' => $biaya,
+                        ]
+                    );
 
-                // Petakan ke kelompok
-                DB::table('pemetaan_kelompok')->updateOrInsert(
-                    ['siswa_id' => $siswa->id, 'kelompok_id' => $kelompok->id],
-                    ['created_at' => $now, 'updated_at' => $now]
-                );
+                    // Petakan ke kelompok
+                    DB::table('pemetaan_kelompok')->updateOrInsert(
+                        ['siswa_id' => $siswa->id, 'kelompok_id' => $kelompok->id],
+                        ['created_at' => $now, 'updated_at' => $now]
+                    );
 
-                // Sesuaikan tagihan SPP
-                Pembayaran::firstOrCreate(
-                    [
-                        'siswa_id' => $siswa->id,
-                        'untuk_bulan' => $currentMonth,
-                        'untuk_tahun' => $currentYear,
-                    ],
-                    [
-                        'admin_pencatat_id' => $admin?->id ?? 1,
-                        'biaya_dibayar' => $biaya,
-                        'metode_bayar' => 'QRIS',
-                        'status_bayar' => 'LUNAS',
-                        'tanggal_bayar' => $now->toDateString(),
-                        'keterangan' => 'Pelunasan SPP awal bulan (QRIS)',
-                    ]
-                );
+                    // Sesuaikan tagihan SPP
+                    $metode = ($idx % 3 === 0) ? 'QRIS' : (($idx % 2 === 0) ? 'TRANSFER' : 'TUNAI');
+                    Pembayaran::firstOrCreate(
+                        [
+                            'siswa_id' => $siswa->id,
+                            'untuk_bulan' => $currentMonth,
+                            'untuk_tahun' => $currentYear,
+                        ],
+                        [
+                            'admin_pencatat_id' => $admin?->id ?? 1,
+                            'biaya_dibayar' => $biaya,
+                            'metode_bayar' => $metode,
+                            'status_bayar' => 'LUNAS',
+                            'tanggal_bayar' => $now->toDateString(),
+                            'keterangan' => "Pelunasan SPP {$rombelName} ({$metode})",
+                        ]
+                    );
+                }
 
-                $assignedCount++;
+                $classPointers[$kelas] = ($ptr + 2) % $totalCandidates;
             }
         }
     }

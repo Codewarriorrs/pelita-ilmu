@@ -19,11 +19,11 @@
         outline: none !important;
         cursor: pointer !important;
         padding: 0.25rem !important;
-        color: #475569 !important;
+        color: #ffffff !important;
         transition: transform 0.15s ease, color 0.15s ease !important;
     }
     .pelita-bell-btn:hover {
-        color: #0f766e !important;
+        color: #6ee7b7 !important;
         transform: scale(1.1) !important;
     }
     .pelita-bell-btn svg {
@@ -33,8 +33,8 @@
     }
     .pelita-bell-badge {
         position: absolute !important;
-        top: -0.15rem !important;
-        right: -0.15rem !important;
+        top: -0.25rem !important;
+        right: -0.35rem !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -47,18 +47,20 @@
         background-color: #dc2626 !important;
         border-radius: 9999px !important;
         border: 2px solid #ffffff !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.25) !important;
+        pointer-events: none !important;
+        z-index: 10 !important;
     }
     .pelita-notif-dropdown {
         position: absolute !important;
-        top: calc(100% + 0.5rem) !important;
+        top: calc(100% + 0.6rem) !important;
         right: 0 !important;
-        width: 22rem !important;
-        max-width: 90vw !important;
+        width: 23rem !important;
+        max-width: 92vw !important;
         background-color: #ffffff !important;
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 0.75rem !important;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 0.875rem !important;
+        box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.18), 0 8px 12px -6px rgba(0, 0, 0, 0.1) !important;
         overflow: hidden !important;
         z-index: 99999 !important;
         font-family: inherit !important;
@@ -68,28 +70,28 @@
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
-        padding: 0.75rem 1rem !important;
+        padding: 0.85rem 1.15rem !important;
         background-color: #f8fafc !important;
         border-bottom: 1px solid #e2e8f0 !important;
     }
     .pelita-notif-header-title {
-        font-size: 0.75rem !important;
+        font-size: 0.78rem !important;
         font-weight: 800 !important;
         text-transform: uppercase !important;
         letter-spacing: 0.05em !important;
-        color: #0f172a !important;
+        color: #193836 !important;
     }
     .pelita-notif-count {
-        background-color: #ccfbf1 !important;
-        color: #0f766e !important;
+        background-color: #0f766e !important;
+        color: #ffffff !important;
         font-size: 0.7rem !important;
         font-weight: 800 !important;
-        padding: 0.1rem 0.45rem !important;
+        padding: 0.15rem 0.5rem !important;
         border-radius: 9999px !important;
-        margin-left: 0.35rem !important;
+        margin-left: 0.4rem !important;
     }
     .pelita-notif-mark-btn {
-        font-size: 0.7rem !important;
+        font-size: 0.72rem !important;
         font-weight: 700 !important;
         color: #0f766e !important;
         background: transparent !important;
@@ -101,68 +103,158 @@
         text-decoration: underline !important;
     }
     .pelita-notif-body {
-        max-height: 20rem !important;
+        max-height: 22rem !important;
         overflow-y: auto !important;
     }
     .pelita-notif-item {
         display: flex !important;
         align-items: flex-start !important;
+        justify-content: space-between !important;
         gap: 0.75rem !important;
-        padding: 0.75rem 1rem !important;
+        padding: 0.85rem 1.15rem !important;
         border-bottom: 1px solid #f1f5f9 !important;
         text-decoration: none !important;
         transition: background-color 0.15s ease !important;
+        cursor: pointer !important;
     }
     .pelita-notif-item:hover {
         background-color: #f8fafc !important;
     }
-    .pelita-notif-dot {
-        width: 0.5rem !important;
-        height: 0.5rem !important;
-        border-radius: 9999px !important;
-        margin-top: 0.35rem !important;
-        flex-shrink: 0 !important;
+    .pelita-notif-item.is-unread {
+        background-color: #f0fdf4 !important;
+    }
+    .pelita-notif-item.is-unread:hover {
+        background-color: #dcfce7 !important;
+    }
+    .pelita-notif-content {
+        flex: 1 !important;
+        min-width: 0 !important;
     }
     .pelita-notif-title {
-        font-size: 0.75rem !important;
+        font-size: 0.78rem !important;
         font-weight: 800 !important;
-        color: #0f172a !important;
+        color: #193836 !important;
         line-height: 1.25 !important;
         margin-bottom: 0.2rem !important;
     }
     .pelita-notif-msg {
-        font-size: 0.7rem !important;
+        font-size: 0.72rem !important;
         color: #475569 !important;
-        line-height: 1.3 !important;
-        margin-bottom: 0.2rem !important;
+        line-height: 1.35 !important;
+        margin-bottom: 0.25rem !important;
     }
     .pelita-notif-time {
         font-size: 0.65rem !important;
         color: #94a3b8 !important;
+        font-weight: 600 !important;
     }
+    .pelita-notif-delete-btn {
+        background: transparent !important;
+        border: none !important;
+        color: #94a3b8 !important;
+        cursor: pointer !important;
+        padding: 0.25rem !important;
+        font-size: 0.9rem !important;
+        line-height: 1 !important;
+        border-radius: 0.25rem !important;
+        transition: color 0.15s, background-color 0.15s !important;
+    }
+    .pelita-notif-delete-btn:hover {
+        color: #dc2626 !important;
+        background-color: #fee2e2 !important;
+    }
+    .pelita-notif-footer {
+        padding: 0.65rem 1rem !important;
+        background-color: #f8fafc !important;
+        border-top: 1px solid #e2e8f0 !important;
+        text-align: center !important;
+    }
+    .pelita-notif-more-btn {
+        background: transparent !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #0f766e !important;
+        font-weight: 700 !important;
+        font-size: 0.72rem !important;
+        padding: 0.35rem 0.75rem !important;
+        border-radius: 0.375rem !important;
+        cursor: pointer !important;
+        transition: all 0.15s ease !important;
+    }
+    .pelita-notif-more-btn:hover {
+        background-color: #0f766e !important;
+        color: #ffffff !important;
+        border-color: #0f766e !important;
+    }
+
+    /* ===== TOAST PUSH NOTIFICATION (KIRI BAWAH, TIDAK MENUTUPI BUTTON KELUAR) ===== */
     .pelita-toast-wrapper {
         position: fixed !important;
-        bottom: 1.25rem !important;
-        left: 1.25rem !important;
         z-index: 99999 !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: 0.5rem !important;
+        gap: 0.6rem !important;
         pointer-events: none !important;
-        max-width: 22rem !important;
+        max-width: 24rem !important;
+        width: calc(100vw - 2rem) !important;
+    }
+    @media (min-width: 1024px) {
+        .pelita-toast-wrapper {
+            bottom: 1.5rem !important;
+            left: 17.5rem !important; /* Aman di samping area sidebar */
+        }
+    }
+    @media (max-width: 1023px) {
+        .pelita-toast-wrapper {
+            bottom: 5.5rem !important; /* Di atas bar bawah mobile / logout */
+            left: 1rem !important;
+        }
     }
     .pelita-toast-item {
         pointer-events: auto !important;
         display: flex !important;
         align-items: flex-start !important;
         gap: 0.75rem !important;
-        background-color: #0f172a !important;
+        background-color: #193836 !important; /* Dominan warna hijau tema Pelita */
         color: #ffffff !important;
-        padding: 0.75rem 1rem !important;
+        padding: 0.85rem 1.15rem !important;
         border-radius: 0.75rem !important;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important;
-        border-left: 4px solid #0f766e !important;
+        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.35) !important;
+        border-left: 4px solid #10b981 !important;
         font-size: 0.75rem !important;
+        animation: pelitaSlideSmooth 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    @keyframes pelitaSlideSmooth {
+        from {
+            opacity: 0;
+            transform: translateY(16px) scale(0.96);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    .pelita-toast-title {
+        font-weight: 800 !important;
+        font-size: 0.78rem !important;
+        color: #ffffff !important;
+    }
+    .pelita-toast-message {
+        color: #d1fae5 !important;
+        font-size: 0.72rem !important;
+        margin-top: 0.2rem !important;
+        line-height: 1.3 !important;
+    }
+    .pelita-toast-close {
+        color: #94a3b8 !important;
+        background: transparent !important;
+        border: none !important;
+        cursor: pointer !important;
+        font-size: 1.1rem !important;
+        line-height: 1 !important;
+        padding: 0 0.2rem !important;
+    }
+    .pelita-toast-close:hover {
+        color: #ffffff !important;
     }
 </style>
 
@@ -201,7 +293,7 @@
         <div class="pelita-notif-header">
             <div style="display: flex; align-items: center;">
                 <span class="pelita-notif-header-title">Aktivitas & Notifikasi</span>
-                <span x-show="items.length > 0" x-text="items.length" class="pelita-notif-count"></span>
+                <span x-show="visibleItems.length > 0" x-text="visibleItems.length" class="pelita-notif-count"></span>
             </div>
             <button 
                 type="button" 
@@ -213,55 +305,63 @@
         </div>
 
         <div class="pelita-notif-body">
-            <template x-if="items.length === 0">
-                <div style="padding: 2rem 1rem; text-align: center; color: #64748b; font-size: 0.75rem;">
-                    Semua aktivitas sudah up to date.
+            <template x-if="visibleItems.length === 0">
+                <div style="padding: 2.5rem 1rem; text-align: center; color: #64748b; font-size: 0.75rem;">
+                    Tidak ada notifikasi baru saat ini.
                 </div>
             </template>
 
-            <template x-for="item in items" :key="item.id">
-                <a 
-                    :href="item.url" 
-                    @click="markAsRead(item.id)"
-                    class="pelita-notif-item">
-                    <span 
-                        class="pelita-notif-dot"
-                        :style="'background-color: ' + item.color">
-                    </span>
-                    <div style="flex: 1; min-width: 0;">
+            <template x-for="item in visibleItems.slice(0, displayLimit)" :key="item.id">
+                <div 
+                    @click="handleItemClick(item)"
+                    :class="{'pelita-notif-item': true, 'is-unread': !readIds.has(item.id)}">
+                    <div class="pelita-notif-content">
                         <div class="pelita-notif-title" x-text="item.title"></div>
                         <div class="pelita-notif-msg" x-text="item.message"></div>
                         <span class="pelita-notif-time" x-text="item.time"></span>
                     </div>
-                </a>
+                    <button 
+                        type="button" 
+                        @click.stop="deleteNotification(item.id)" 
+                        class="pelita-notif-delete-btn"
+                        title="Hapus notifikasi ini">
+                        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
             </template>
         </div>
+
+        <template x-if="visibleItems.length > displayLimit">
+            <div class="pelita-notif-footer">
+                <button 
+                    type="button" 
+                    @click.stop="displayLimit += 10" 
+                    class="pelita-notif-more-btn">
+                    +10 Notifikasi Terdahulu
+                </button>
+            </div>
+        </template>
     </div>
 
-    <!-- Toast Container Kiri Bawah (5 Detik Animasi) -->
+    <!-- Toast Container Kiri Bawah (Smooth 5 Detik, Tema Dominan, Tanpa Dot) -->
     <div class="pelita-toast-wrapper">
         <template x-for="toast in toasts" :key="toast.id">
             <div 
                 x-show="toast.visible"
-                x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 -translate-x-8"
-                x-transition:enter-end="opacity-100 translate-x-0"
                 x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 translate-x-0"
-                x-transition:leave-end="opacity-0 -translate-x-8"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 translate-y-4"
                 class="pelita-toast-item">
-                <span 
-                    class="pelita-notif-dot"
-                    :style="'background-color: ' + toast.color">
-                </span>
                 <div style="flex: 1; min-width: 0;">
-                    <div style="font-weight: 800; font-size: 0.75rem;" x-text="toast.title"></div>
-                    <div style="color: #cbd5e1; font-size: 0.7rem; margin-top: 0.15rem;" x-text="toast.message"></div>
+                    <div class="pelita-toast-title" x-text="toast.title"></div>
+                    <div class="pelita-toast-message" x-text="toast.message"></div>
                 </div>
                 <button 
                     type="button" 
                     @click="removeToast(toast.id)"
-                    style="color: #94a3b8; background: transparent; border: none; cursor: pointer; font-size: 1rem; line-height: 1;">
+                    class="pelita-toast-close">
                     &times;
                 </button>
             </div>
@@ -273,24 +373,37 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('pelitaNotificationCenter', () => ({
         isOpen: false,
-        items: [],
-        unreadCount: 0,
+        rawItems: [],
+        deletedIds: new Set(),
+        readIds: new Set(),
         toasts: [],
-        seenIds: new Set(),
+        displayLimit: 10,
         pollTimer: null,
+
+        get visibleItems() {
+            return this.rawItems.filter(item => !this.deletedIds.has(String(item.id)));
+        },
+
+        get unreadCount() {
+            return this.visibleItems.filter(item => !this.readIds.has(String(item.id))).length;
+        },
 
         init() {
             try {
-                const storedSeen = JSON.parse(sessionStorage.getItem('pelita_seen_notif_ids') || '[]');
-                this.seenIds = new Set(storedSeen);
+                const storedDeleted = JSON.parse(localStorage.getItem('pelita_deleted_notif_ids') || '[]');
+                this.deletedIds = new Set(storedDeleted.map(String));
+
+                const storedRead = JSON.parse(localStorage.getItem('pelita_read_notif_ids') || '[]');
+                this.readIds = new Set(storedRead.map(String));
             } catch (e) {
-                this.seenIds = new Set();
+                this.deletedIds = new Set();
+                this.readIds = new Set();
             }
 
             this.fetchFeed(true);
             this.pollTimer = setInterval(() => {
                 this.fetchFeed(false);
-            }, 8000);
+            }, 10000);
         },
 
         toggleDropdown() {
@@ -306,17 +419,18 @@ document.addEventListener('alpine:init', () => {
                 const data = await res.json();
                 const newItems = data.items || [];
 
-                this.items = newItems;
-                this.unreadCount = newItems.filter(i => !this.seenIds.has(i.id)).length;
+                // Cek item baru untuk dimunculkan di toast push notif
+                if (!isFirstLoad) {
+                    newItems.forEach(item => {
+                        const idStr = String(item.id);
+                        const alreadyExists = this.rawItems.some(i => String(i.id) === idStr);
+                        if (!alreadyExists && !this.deletedIds.has(idStr)) {
+                            this.showToast(item);
+                        }
+                    });
+                }
 
-                newItems.forEach(item => {
-                    if (!this.seenIds.has(item.id)) {
-                        this.showToast(item);
-                        this.seenIds.add(item.id);
-                    }
-                });
-
-                sessionStorage.setItem('pelita_seen_notif_ids', JSON.stringify(Array.from(this.seenIds)));
+                this.rawItems = newItems;
             } catch (e) {
                 // Ignore silent network issues
             }
@@ -327,7 +441,6 @@ document.addEventListener('alpine:init', () => {
                 id: item.id + '_' + Date.now(),
                 title: item.title,
                 message: item.message,
-                color: item.color || '#10b981',
                 visible: true,
             };
 
@@ -348,16 +461,29 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
+        handleItemClick(item) {
+            this.markAsRead(item.id);
+            if (item.url && item.url !== '#') {
+                window.location.href = item.url;
+            }
+        },
+
         markAsRead(id) {
-            this.seenIds.add(id);
-            this.unreadCount = this.items.filter(i => !this.seenIds.has(i.id)).length;
-            sessionStorage.setItem('pelita_seen_notif_ids', JSON.stringify(Array.from(this.seenIds)));
+            this.readIds.add(String(id));
+            localStorage.setItem('pelita_read_notif_ids', JSON.stringify(Array.from(this.readIds)));
         },
 
         markAllRead() {
-            this.items.forEach(i => this.seenIds.add(i.id));
-            this.unreadCount = 0;
-            sessionStorage.setItem('pelita_seen_notif_ids', JSON.stringify(Array.from(this.seenIds)));
+            this.visibleItems.forEach(i => this.readIds.add(String(i.id)));
+            localStorage.setItem('pelita_read_notif_ids', JSON.stringify(Array.from(this.readIds)));
+        },
+
+        deleteNotification(id) {
+            const idStr = String(id);
+            this.deletedIds.add(idStr);
+            this.readIds.add(idStr);
+            localStorage.setItem('pelita_deleted_notif_ids', JSON.stringify(Array.from(this.deletedIds)));
+            localStorage.setItem('pelita_read_notif_ids', JSON.stringify(Array.from(this.readIds)));
         }
     }));
 });

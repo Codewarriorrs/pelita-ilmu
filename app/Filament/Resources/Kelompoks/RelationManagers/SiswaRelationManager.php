@@ -31,6 +31,7 @@ class SiswaRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->where('siswa.status_siswa', '!=', 'NONAKTIF'))
             ->columns([
                 TextColumn::make('nama_lengkap')
                     ->label('Nama Siswa')
@@ -58,7 +59,7 @@ class SiswaRelationManager extends RelationManager
                     ->label('Tambah Siswa ke Kelompok Ini')
                     ->preloadRecordSelect()
                     ->recordSelectSearchColumns(['nama_lengkap', 'asal_sekolah'])
-                    ->recordSelectOptionsQuery(fn ($query) => $query->select(['siswa.id', 'siswa.nama_lengkap', 'siswa.asal_sekolah', 'siswa.kategori_kelas', 'siswa.status_siswa']))
+                    ->recordSelectOptionsQuery(fn ($query) => $query->where('siswa.status_siswa', '!=', 'NONAKTIF')->select(['siswa.id', 'siswa.nama_lengkap', 'siswa.asal_sekolah', 'siswa.kategori_kelas', 'siswa.status_siswa']))
                     ->visible(fn () => auth()->user()?->isAdmin() ?? true),
             ])
             ->actions([

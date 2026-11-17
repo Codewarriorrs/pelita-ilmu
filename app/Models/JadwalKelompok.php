@@ -32,7 +32,7 @@ class JadwalKelompok extends Model
     ];
 
     /**
-     * Cek apakah waktu sesi sudah tiba sehingga presensi boleh dilakukan.
+     * Cek apakah waktu sesi sudah tiba sehingga presensi boleh dilakukan (WIB / Asia/Jakarta).
      */
     public function canDoPresensi(): bool
     {
@@ -42,9 +42,9 @@ class JadwalKelompok extends Model
 
         $sesiDate = $this->tanggal_sesi->toDateString();
         $jamMulai = $this->jam_mulai ?? $this->kelompok?->jam_mulai ?? '00:00:00';
-        $sesiStartTime = \Illuminate\Support\Carbon::parse("{$sesiDate} {$jamMulai}");
+        $sesiStartTime = \Illuminate\Support\Carbon::parse("{$sesiDate} {$jamMulai}", 'Asia/Jakarta');
 
-        return now()->gte($sesiStartTime);
+        return \Illuminate\Support\Carbon::now('Asia/Jakarta')->gte($sesiStartTime);
     }
 
     public function getEffectiveJamMulaiAttribute(): ?string

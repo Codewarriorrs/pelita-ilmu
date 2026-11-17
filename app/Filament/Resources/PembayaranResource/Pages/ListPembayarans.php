@@ -38,6 +38,18 @@ class ListPembayarans extends ListRecords
         $this->updatedTableFilters();
     }
 
+    #[\Livewire\Attributes\On('set-specific-month')]
+    public function handleSetSpecificMonth(int|string $bulan, int|string|null $tahun = null): void
+    {
+        $this->tableFilters['periode_waktu']['value'] = 'BULAN';
+        $this->tableFilters['untuk_bulan']['value'] = (int) $bulan;
+        if ($tahun) {
+            $this->tableFilters['untuk_tahun']['value'] = (int) $tahun;
+        }
+
+        $this->updatedTableFilters();
+    }
+
     public function mount(): void
     {
         parent::mount();

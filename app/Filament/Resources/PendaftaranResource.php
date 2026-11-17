@@ -355,67 +355,67 @@ class PendaftaranResource extends Resource
                             \Filament\Forms\Components\Placeholder::make('info_pendaftar')
                                 ->label('')
                                 ->content(new \Illuminate\Support\HtmlString("
-                                    <div class='bg-white rounded-2xl border-2 border-slate-300 p-5 shadow-sm text-slate-800 font-sans space-y-4'>
+                                    <div style='background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 20px; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.05); color: #1e293b;'>
                                         <!-- Header Nota Invoice -->
-                                        <div class='flex items-center justify-between border-b-2 border-dashed border-slate-300 pb-3.5'>
+                                        <div style='display: flex; align-items: center; justify-content: space-between; border-bottom: 2px dashed #cbd5e1; padding-bottom: 14px; margin-bottom: 16px;'>
                                             <div>
-                                                <div class='text-xs font-black tracking-widest uppercase text-emerald-800'>BIMBEL PELITA ILMU</div>
-                                                <div class='text-base font-extrabold text-slate-900'>NOTA RINGKASAN PENDAFTARAN</div>
-                                                <div class='text-[11px] text-slate-500'>Semarang, Jawa Tengah</div>
+                                                <div style='font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #0f766e;'>BIMBEL PELITA ILMU</div>
+                                                <div style='font-size: 16px; font-weight: 800; color: #0f172a;'>NOTA RINGKASAN PENDAFTARAN</div>
+                                                <div style='font-size: 11px; color: #64748b;'>Semarang, Jawa Tengah</div>
                                             </div>
-                                            <div class='text-right'>
-                                                <span class='inline-block bg-slate-900 text-white font-mono text-xs font-bold px-2.5 py-1 rounded-md shadow-sm'>#{$invNo}</span>
-                                                <div class='text-[11px] text-slate-500 mt-1 font-medium'>Tgl: {$tglDaftar}</div>
+                                            <div style='text-align: right;'>
+                                                <span style='display: inline-block; background: #0f766e; color: #ffffff; font-family: monospace; font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 6px;'>#{$invNo}</span>
+                                                <div style='font-size: 11px; color: #64748b; margin-top: 4px; font-weight: 600;'>Tgl: {$tglDaftar}</div>
                                             </div>
                                         </div>
 
                                         <!-- Informasi Siswa & Wali -->
-                                        <div class='grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50 p-3.5 rounded-xl border border-slate-200'>
-                                            <div class='space-y-1'>
-                                                <div><span class='text-slate-500 font-medium'>Nama Lengkap:</span> <strong class='text-slate-900'>{$record->nama_lengkap}</strong></div>
-                                                <div><span class='text-slate-500 font-medium'>Panggilan:</span> <span class='text-slate-800 font-semibold'>" . ($record->nama_panggilan ?: '-') . "</span></div>
-                                                <div><span class='text-slate-500 font-medium'>Jenjang / Kelas:</span> <span class='bg-emerald-100 text-emerald-900 font-bold px-1.5 py-0.5 rounded text-[11px]'>" . ($record->kelas ?: '-') . "</span> (" . ($record->kategori_kelas ?: 'Reguler') . ")</div>
-                                                <div><span class='text-slate-500 font-medium'>Asal Sekolah:</span> <span class='text-slate-800'>" . ($record->asal_sekolah ?: '-') . "</span></div>
+                                        <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 12px; margin-bottom: 16px;'>
+                                            <div style='display: flex; flex-direction: column; gap: 4px;'>
+                                                <div><span style='color: #64748b;'>Nama Lengkap:</span> <strong style='color: #0f172a;'>{$record->nama_lengkap}</strong></div>
+                                                <div><span style='color: #64748b;'>Panggilan:</span> <span style='font-weight: 700; color: #1e293b;'>" . ($record->nama_panggilan ?: '-') . "</span></div>
+                                                <div><span style='color: #64748b;'>Jenjang / Kelas:</span> <span style='background: #ccfbf1; color: #0f766e; font-weight: 800; padding: 2px 6px; border-radius: 4px; font-size: 11px;'>" . ($record->kelas ?: '-') . "</span> (" . ($record->kategori_kelas ?: 'Reguler') . ")</div>
+                                                <div><span style='color: #64748b;'>Asal Sekolah:</span> <span style='color: #1e293b;'>" . ($record->asal_sekolah ?: '-') . "</span></div>
                                             </div>
-                                            <div class='space-y-1 sm:border-l sm:border-slate-200 sm:pl-3'>
-                                                <div><span class='text-slate-500 font-medium'>Nama Orang Tua:</span> <strong class='text-slate-900'>" . ($record->nama_ortu ?: '-') . "</strong></div>
-                                                <div><span class='text-slate-500 font-medium'>WhatsApp Wali:</span> <span class='font-mono text-emerald-700 font-bold'>" . ($record->no_telp_ortu ?: $record->nomor_wa ?: '-') . "</span></div>
-                                                <div><span class='text-slate-500 font-medium'>No. HP Murid:</span> <span class='font-mono text-slate-700'>" . ($record->no_telp_siswa ?: '-') . "</span></div>
-                                                <div class='truncate'><span class='text-slate-500 font-medium'>Alamat:</span> <span class='text-slate-800'>" . ($record->alamat_rumah ?: '-') . "</span></div>
+                                            <div style='display: flex; flex-direction: column; gap: 4px;'>
+                                                <div><span style='color: #64748b;'>Nama Orang Tua:</span> <strong style='color: #0f172a;'>" . ($record->nama_ortu ?: '-') . "</strong></div>
+                                                <div><span style='color: #64748b;'>WhatsApp Wali:</span> <span style='font-family: monospace; color: #0f766e; font-weight: 800;'>" . ($record->no_telp_ortu ?: $record->nomor_wa ?: '-') . "</span></div>
+                                                <div><span style='color: #64748b;'>No. HP Murid:</span> <span style='font-family: monospace; color: #334155;'>" . ($record->no_telp_siswa ?: '-') . "</span></div>
+                                                <div style='overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'><span style='color: #64748b;'>Alamat:</span> <span style='color: #1e293b;'>" . ($record->alamat_rumah ?: '-') . "</span></div>
                                             </div>
                                         </div>
 
                                         <!-- Itemized Invoice Table -->
-                                        <div class='overflow-hidden rounded-xl border border-slate-200'>
-                                            <table class='w-full text-xs text-left'>
-                                                <thead class='bg-slate-100 text-slate-700 font-bold border-b border-slate-200 uppercase tracking-wider text-[10px]'>
+                                        <div style='border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden;'>
+                                            <table style='width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;'>
+                                                <thead style='background: #f1f5f9; color: #334155; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;'>
                                                     <tr>
-                                                        <th class='py-2 px-3'>Deskripsi Item / Layanan</th>
-                                                        <th class='py-2 px-3'>Keterangan</th>
-                                                        <th class='py-2 px-3 text-right'>Jumlah</th>
+                                                        <th style='padding: 10px 12px; border-bottom: 1px solid #cbd5e1;'>Deskripsi Layanan</th>
+                                                        <th style='padding: 10px 12px; border-bottom: 1px solid #cbd5e1;'>Rincian / Keterangan</th>
+                                                        <th style='padding: 10px 12px; border-bottom: 1px solid #cbd5e1; text-align: right;'>Jumlah</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class='divide-y divide-slate-100 text-slate-800 font-medium'>
-                                                    <tr>
-                                                        <td class='py-2 px-3 font-semibold'>Biaya Administrasi Pendaftaran</td>
-                                                        <td class='py-2 px-3 text-slate-500'>Registrasi standar bimbel</td>
-                                                        <td class='py-2 px-3 text-right font-mono font-bold text-slate-900'>{$biayaDaftarFmt}</td>
+                                                <tbody>
+                                                    <tr style='border-bottom: 1px solid #e2e8f0;'>
+                                                        <td style='padding: 10px 12px; font-weight: 700; color: #1e293b;'>Biaya Administrasi Pendaftaran</td>
+                                                        <td style='padding: 10px 12px; color: #64748b;'>Registrasi standar bimbel</td>
+                                                        <td style='padding: 10px 12px; text-align: right; font-family: monospace; font-weight: 800; color: #0f172a;'>{$biayaDaftarFmt}</td>
                                                     </tr>" . ($hasKaos ? "
-                                                    <tr>
-                                                        <td class='py-2 px-3 font-semibold'>Merchandise Kaos Eksklusif</td>
-                                                        <td class='py-2 px-3 text-slate-500'>Kaos resmi Pelita Ilmu ({$ukuranKaosText})</td>
-                                                        <td class='py-2 px-3 text-right font-mono font-bold text-slate-900'>{$biayaKaosFmt}</td>
+                                                    <tr style='border-bottom: 1px solid #e2e8f0;'>
+                                                        <td style='padding: 10px 12px; font-weight: 700; color: #1e293b;'>Merchandise Kaos Eksklusif</td>
+                                                        <td style='padding: 10px 12px; color: #64748b;'>Kaos resmi Pelita Ilmu ({$ukuranKaosText})</td>
+                                                        <td style='padding: 10px 12px; text-align: right; font-family: monospace; font-weight: 800; color: #0f172a;'>{$biayaKaosFmt}</td>
                                                     </tr>" : "") . "
-                                                    <tr>
-                                                        <td class='py-2 px-3 font-semibold'>Program Bimbingan Belajar</td>
-                                                        <td class='py-2 px-3 text-emerald-700 font-bold'>{$mapelDisplay}</td>
-                                                        <td class='py-2 px-3 text-right text-slate-400 font-italic'>Sesuai SPP</td>
+                                                    <tr style='border-bottom: 1px solid #e2e8f0;'>
+                                                        <td style='padding: 10px 12px; font-weight: 700; color: #1e293b;'>Program Bimbingan Belajar</td>
+                                                        <td style='padding: 10px 12px; color: #0f766e; font-weight: 700;'>{$mapelDisplay}</td>
+                                                        <td style='padding: 10px 12px; text-align: right; color: #94a3b8; font-style: italic;'>Sesuai SPP</td>
                                                     </tr>
                                                 </tbody>
-                                                <tfoot class='bg-emerald-50/80 font-bold border-t-2 border-emerald-200 text-emerald-950'>
+                                                <tfoot style='background: #f0fdf4; border-top: 2px solid #10b981; font-weight: 800; color: #064e3b;'>
                                                     <tr>
-                                                        <td colspan='2' class='py-2.5 px-3 uppercase text-[11px] tracking-wider'>Total Tagihan Pendaftaran Awal</td>
-                                                        <td class='py-2.5 px-3 text-right font-mono text-sm text-emerald-800 font-black'>{$totalAwalFmt}</td>
+                                                        <td colspan='2' style='padding: 12px; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;'>Total Tagihan Pendaftaran Awal</td>
+                                                        <td style='padding: 12px; text-align: right; font-family: monospace; font-size: 14px; color: #0f766e; font-weight: 900;'>{$totalAwalFmt}</td>
                                                     </tr>
                                                 </tfoot>
                                             </table>

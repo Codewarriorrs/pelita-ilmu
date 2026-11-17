@@ -126,6 +126,7 @@
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             overflow: auto;
             max-height: 68vh;
+            isolation: isolate !important;
         }
         .rp-table {
             width: 100%;

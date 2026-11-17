@@ -70,10 +70,54 @@ class AdminPanelProvider extends PanelProvider
 
                         /* ===== SIDEBAR Z-INDEX FIX (Mencegah elemen tabel bocor di mobile) ===== */
                         .fi-sidebar {
-                            z-index: 100 !important;
+                            z-index: 9999 !important;
                         }
                         .fi-sidebar-close-overlay {
-                            z-index: 99 !important;
+                            z-index: 9998 !important;
+                        }
+
+                        /* ===== TOPBAR / NAVBAR: Dominan Tema #193836 (Ijo) ===== */
+                        .fi-topbar {
+                            background-color: #193836 !important;
+                            border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+                        }
+                        .fi-topbar nav,
+                        .fi-topbar header {
+                            background-color: #193836 !important;
+                        }
+                        .fi-topbar .fi-icon-btn,
+                        .fi-topbar button,
+                        .fi-topbar svg {
+                            color: #ffffff !important;
+                        }
+                        .fi-topbar .fi-topbar-item {
+                            color: #ffffff !important;
+                        }
+                        .fi-topbar input {
+                            background-color: rgba(255, 255, 255, 0.12) !important;
+                            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+                            color: #ffffff !important;
+                        }
+                        .fi-topbar input::placeholder {
+                            color: rgba(255, 255, 255, 0.65) !important;
+                        }
+
+                        /* ===== CHOICES / MULTI-SELECT BADGES (Solid Hijau #0f766e, Kontras Jelas) ===== */
+                        .choices__list--multiple .choices__item,
+                        .fi-fo-select .choices__list--multiple .choices__item,
+                        .fi-select-input-badge,
+                        .fi-fo-tags-entry-badge {
+                            background-color: #0f766e !important;
+                            border: 1px solid #0f766e !important;
+                            color: #ffffff !important;
+                            font-weight: 700 !important;
+                            border-radius: 0.375rem !important;
+                            padding: 0.25rem 0.5rem !important;
+                        }
+                        .choices__list--multiple .choices__item button,
+                        .choices__list--multiple .choices__item .choices__button {
+                            border-left: 1px solid rgba(255, 255, 255, 0.4) !important;
+                            color: #ffffff !important;
                         }
 
                         /* ===== SIDEBAR / TOPBAR BRAND LOGO ===== */
@@ -248,32 +292,73 @@ class AdminPanelProvider extends PanelProvider
                             box-shadow: 0 2px 12px -2px rgba(0,0,0,0.07) !important;
                         }
 
-                        /* ===== MOBILE RESPONSIVE CARDS FOR DASHBOARD TABLES ===== */
+                        /* ===== MOBILE ACCORDION FAQ CARDS FOR TABLES ===== */
                         @media (max-width: 768px) {
                             .fi-ta-header { flex-direction: column !important; align-items: stretch !important; }
                             .fi-ta-header-toolbar { margin-left: 0 !important; width: 100% !important; justify-content: space-between !important; }
                             
-                            /* Transform Filament Table Rows to Mobile Cards */
                             .fi-ta-table { display: block !important; width: 100% !important; }
                             .fi-ta-table > thead { display: none !important; }
-                            .fi-ta-table > tbody { display: flex !important; flex-direction: column !important; gap: 0.85rem !important; padding: 0.75rem 0.5rem !important; }
+                            .fi-ta-table > tbody { display: flex !important; flex-direction: column !important; gap: 0.6rem !important; padding: 0.5rem 0.25rem !important; }
+                            
                             .fi-ta-table > tbody > tr {
+                                position: relative !important;
+                                cursor: pointer !important;
                                 display: flex !important;
                                 flex-direction: column !important;
                                 background: #ffffff !important;
                                 border: 1.5px solid #cbd5e1 !important;
-                                border-radius: 1rem !important;
-                                padding: 1rem !important;
-                                box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.06) !important;
+                                border-radius: 0.75rem !important;
+                                padding: 0.85rem 1rem !important;
+                                box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.05) !important;
+                                transition: all 0.2s ease !important;
                             }
-                            .fi-ta-table > tbody > tr > td {
+                            
+                            /* Chevron Indicator */
+                            .fi-ta-table > tbody > tr::after {
+                                content: "\\25BC";
+                                position: absolute;
+                                right: 1.15rem;
+                                top: 0.95rem;
+                                font-size: 0.75rem;
+                                font-weight: 800;
+                                color: #0f766e;
+                                transition: transform 0.2s ease;
+                            }
+                            .fi-ta-table > tbody > tr.is-expanded::after {
+                                transform: rotate(180deg);
+                            }
+
+                            /* Baris awal: Hanya Nama Lengkap siswa yang muncul */
+                            .fi-ta-table > tbody > tr > td:first-child {
                                 display: block !important;
-                                padding: 0.5rem 0 !important;
-                                border-bottom: 1px dashed #e2e8f0 !important;
-                                font-size: 0.85rem !important;
+                                padding: 0.15rem 1.75rem 0.15rem 0 !important;
+                                border-bottom: none !important;
+                                font-size: 0.95rem !important;
+                                font-weight: 800 !important;
+                                color: #193836 !important;
                                 width: 100% !important;
                             }
-                            .fi-ta-table > tbody > tr > td:last-child {
+
+                            /* Detail lain sembunyi sampai di-klik */
+                            .fi-ta-table > tbody > tr:not(.is-expanded) > td:not(:first-child) {
+                                display: none !important;
+                            }
+
+                            /* Ketika di-klik / expanded: Buka detail ke bawah */
+                            .fi-ta-table > tbody > tr.is-expanded > td:first-child {
+                                border-bottom: 1.5px solid #e2e8f0 !important;
+                                padding-bottom: 0.6rem !important;
+                                margin-bottom: 0.5rem !important;
+                            }
+                            .fi-ta-table > tbody > tr.is-expanded > td:not(:first-child) {
+                                display: block !important;
+                                padding: 0.45rem 0 !important;
+                                border-bottom: 1px dashed #e2e8f0 !important;
+                                font-size: 0.825rem !important;
+                                width: 100% !important;
+                            }
+                            .fi-ta-table > tbody > tr.is-expanded > td:last-child {
                                 border-bottom: none !important;
                                 padding-top: 0.75rem !important;
                                 display: flex !important;
@@ -283,6 +368,17 @@ class AdminPanelProvider extends PanelProvider
                             }
                         }
                     </style>
+                    <script>
+                        document.addEventListener("click", function(e) {
+                            if (window.innerWidth > 768) return;
+                            const row = e.target.closest(".fi-ta-table > tbody > tr");
+                            if (!row) return;
+                            if (e.target.closest("button, a, input, select, textarea, .fi-icon-btn, .fi-btn, .choices")) {
+                                return;
+                            }
+                            row.classList.toggle("is-expanded");
+                        });
+                    </script>
                 ')
             )
             ->colors([

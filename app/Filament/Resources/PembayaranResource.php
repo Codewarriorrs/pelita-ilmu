@@ -282,10 +282,10 @@ class PembayaranResource extends Resource
                 $period = self::resolveActivePeriod($livewire);
 
                 if ($period['is_single_month']) {
-                    return Siswa::query()->where('status_siswa', '!=', 'CALON');
+                    return Siswa::query()->whereNotIn('status_siswa', ['CALON', 'NONAKTIF']);
                 }
 
-                return Pembayaran::query()->whereHas('siswa', fn ($q) => $q->where('status_siswa', '!=', 'CALON'));
+                return Pembayaran::query()->whereHas('siswa', fn ($q) => $q->whereNotIn('status_siswa', ['CALON', 'NONAKTIF']));
             })
             ->recordUrl(null)
             ->modifyQueryUsing(function (Builder $query, mixed $livewire = null): Builder {
