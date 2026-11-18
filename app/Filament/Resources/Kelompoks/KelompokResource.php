@@ -18,6 +18,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -107,6 +108,22 @@ class KelompokResource extends Resource
                     ->preload()
                     ->required(),
 
+                Select::make('jenjang')
+                    ->label('Jenjang')
+                    ->options([
+                        'TK' => 'TK',
+                        'SD' => 'SD',
+                        'SMP' => 'SMP',
+                        'SMA' => 'SMA',
+                    ])
+                    ->placeholder('-- Pilih Jenjang --')
+                    ->searchable(),
+
+                TextInput::make('tingkat_kelas')
+                    ->label('Tingkat Kelas')
+                    ->placeholder('Contoh: Kelas 10 SMA / Kelas 7 SMP')
+                    ->maxLength(100),
+
                 TextInput::make('jadwal_hari')
                     ->label('Jadwal Hari')
                     ->placeholder('Contoh: Senin & Rabu')
@@ -137,6 +154,23 @@ class KelompokResource extends Resource
                     ->label('Mata Pelajaran')
                     ->sortable(),
 
+                TextColumn::make('jenjang')
+                    ->label('Jenjang')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'TK' => 'warning',
+                        'SD' => 'info',
+                        'SMP' => 'primary',
+                        'SMA' => 'success',
+                        default => 'gray',
+                    })
+                    ->sortable(),
+
+                TextColumn::make('tingkat_kelas')
+                    ->label('Kelas')
+                    ->default('-')
+                    ->searchable(),
+
                 TextColumn::make('tentor.name')
                     ->label('Tentor')
                     ->sortable()
@@ -156,7 +190,14 @@ class KelompokResource extends Resource
                     ->alignCenter(),
             ])
             ->filters([
-                //
+                SelectFilter::make('jenjang')
+                    ->label('Filter Jenjang')
+                    ->options([
+                        'TK' => 'TK',
+                        'SD' => 'SD',
+                        'SMP' => 'SMP',
+                        'SMA' => 'SMA',
+                    ]),
             ])
             ->actions([
                 ViewAction::make()->iconButton(),

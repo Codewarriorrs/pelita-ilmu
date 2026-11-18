@@ -15,6 +15,7 @@ class MataPelajaran extends Model
     protected $fillable = [
         'nama_mapel',
         'jenjang',
+        'tingkat_kelas',
     ];
 
     public function kelompok(): HasMany

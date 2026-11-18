@@ -10,10 +10,13 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class MataPelajaranResource extends Resource
@@ -43,23 +46,25 @@ class MataPelajaranResource extends Resource
                     ->label('Nama Mata Pelajaran')
                     ->required()
                     ->maxLength(255)
-                    ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? trim($state) : $state)
-                    ->unique(table: 'mata_pelajaran', column: 'nama_mapel', ignoreRecord: true)
-                    ->rule(fn (?MataPelajaran $record): \Closure => function (string $attribute, mixed $value, \Closure $fail) use ($record): void {
-                        $normalized = mb_strtolower(trim((string) $value));
-                        if ($normalized === '') {
-                            return;
-                        }
+                    ->placeholder('Contoh: Fisika / Matematika Wajib / Geografi')
+                    ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? trim($state) : $state),
 
-                        $exists = MataPelajaran::query()
-                            ->when($record, fn ($q) => $q->where('id', '!=', $record->id))
-                            ->whereRaw('LOWER(TRIM(nama_mapel)) = ?', [$normalized])
-                            ->exists();
+                Select::make('jenjang')
+                    ->label('Jenjang Pendidikan')
+                    ->options([
+                        'TK' => 'TK / PAUD',
+                        'SD' => 'SD (Sekolah Dasar)',
+                        'SMP' => 'SMP (Sekolah Menengah Pertama)',
+                        'SMA' => 'SMA / SMK / UTBK',
+                        'UMUM' => 'Umum / Semua Jenjang',
+                    ])
+                    ->placeholder('-- Pilih Jenjang --')
+                    ->searchable(),
 
-                        if ($exists) {
-                            $fail('Mata pelajaran dengan nama tersebut sudah terdaftar.');
-                        }
-                    }),
+                TextInput::make('tingkat_kelas')
+                    ->label('Tingkat Kelas')
+                    ->placeholder('Contoh: Kelas 10-12 SMA / Kelas 7-9 SMP')
+                    ->maxLength(100),
             ]);
     }
 
@@ -71,7 +76,31 @@ class MataPelajaranResource extends Resource
                 TextColumn::make('nama_mapel')
                     ->label('Nama Mata Pelajaran')
                     ->searchable()
+                    ->sortable()
+                    ->weight('bold'),
+
+                TextColumn::make('jenjang')
+                    ->label('Jenjang')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'TK' => 'warning',
+                        'SD' => 'info',
+                        'SMP' => 'primary',
+                        'SMA' => 'success',
+                        default => 'gray',
+                    })
                     ->sortable(),
+
+                TextColumn::make('tingkat_kelas')
+                    ->label('Tingkat Kelas')
+                    ->default('-')
+                    ->searchable(),
+
+                TextColumn::make('kelompok_count')
+                    ->counts('kelompok')
+                    ->label('Jml Kelompok')
+                    ->alignCenter(),
+
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime('d M Y H:i')
@@ -79,7 +108,15 @@ class MataPelajaranResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('jenjang')
+                    ->label('Filter Jenjang')
+                    ->options([
+                        'TK' => 'TK',
+                        'SD' => 'SD',
+                        'SMP' => 'SMP',
+                        'SMA' => 'SMA',
+                        'UMUM' => 'Umum',
+                    ]),
             ])
             ->actions([
                 EditAction::make(),

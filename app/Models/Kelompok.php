@@ -14,6 +14,8 @@ class Kelompok extends Model
         'nama_kelompok',
         'mapel_id',
         'tentor_id',
+        'jenjang',
+        'tingkat_kelas',
         'jadwal_hari',
         'jam_mulai',
         'jam_selesai',
