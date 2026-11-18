@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\MataPelajarans;
 
 use App\Filament\Resources\MataPelajarans\Pages;
+use App\Filament\Resources\MataPelajarans\RelationManagers;
 use App\Models\MataPelajaran;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -95,7 +96,7 @@ class MataPelajaranResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\KelompokRelationManager::class,
         ];
     }
 

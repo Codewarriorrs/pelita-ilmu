@@ -305,59 +305,36 @@ class PendaftaranResource extends Resource
                                           ->orWhereHas('mapel', fn ($mq) => $mq->where('nama_mapel', 'ILIKE', '%UTBK%'));
                                     });
                                 } else {
-                                    // Pemetaan kata kunci singkatan mapel (indo, ing, mtk, mat, bio, fis, kim, sosio, eko)
-                                    $mapelKeywords = [trim($mapelName)];
-                                    if ($cleanMapel) $mapelKeywords[] = $cleanMapel;
-
                                     $lower = strtolower($mapelName);
-                                    if (str_contains($lower, 'indonesia')) {
-                                        $mapelKeywords[] = 'INDO';
-                                        $mapelKeywords[] = 'B INDO';
-                                        $mapelKeywords[] = 'B. INDO';
-                                    }
-                                    if (str_contains($lower, 'inggris')) {
-                                        $mapelKeywords[] = 'ING';
-                                        $mapelKeywords[] = 'B ING';
-                                        $mapelKeywords[] = 'B. ING';
-                                    }
-                                    if (str_contains($lower, 'matematika')) {
-                                        $mapelKeywords[] = 'MTK';
-                                        $mapelKeywords[] = 'MAT';
-                                        if (str_contains($lower, 'lanjut')) {
-                                            $mapelKeywords[] = 'MAT.LAN';
-                                            $mapelKeywords[] = 'MATLAN';
-                                        }
-                                        if (str_contains($lower, 'wajib')) {
-                                            $mapelKeywords[] = 'MTK W';
-                                            $mapelKeywords[] = 'MAT W';
-                                        }
-                                    }
+                                    $mapelKeywords = [];
+
                                     if (str_contains($lower, 'fisika')) {
-                                        $mapelKeywords[] = 'FIS';
-                                        $mapelKeywords[] = 'FISIKA';
-                                    }
-                                    if (str_contains($lower, 'kimia')) {
-                                        $mapelKeywords[] = 'KIM';
-                                        $mapelKeywords[] = 'KIMIA';
-                                    }
-                                    if (str_contains($lower, 'biologi')) {
-                                        $mapelKeywords[] = 'BIO';
-                                        $mapelKeywords[] = 'BIOLOGI';
-                                    }
-                                    if (str_contains($lower, 'sosiologi')) {
-                                        $mapelKeywords[] = 'SOSIO';
-                                        $mapelKeywords[] = 'SOSIOLOGI';
-                                        $mapelKeywords[] = 'IPS';
-                                    }
-                                    if (str_contains($lower, 'ekonomi')) {
-                                        $mapelKeywords[] = 'EKO';
-                                        $mapelKeywords[] = 'EKONOMI';
-                                        $mapelKeywords[] = 'AKUN';
-                                        $mapelKeywords[] = 'IPS';
-                                    }
-                                    if (str_contains($lower, 'geografi') || str_contains($lower, 'sejarah')) {
-                                        $mapelKeywords[] = 'IPS';
-                                        $mapelKeywords[] = 'SOSIO';
+                                        $mapelKeywords = ['FISIKA', 'FIS'];
+                                    } elseif (str_contains($lower, 'kimia')) {
+                                        $mapelKeywords = ['KIMIA', 'KIM'];
+                                    } elseif (str_contains($lower, 'biologi')) {
+                                        $mapelKeywords = ['BIOLOGI', 'BIO'];
+                                    } elseif (str_contains($lower, 'sosiologi')) {
+                                        $mapelKeywords = ['SOSIOLOGI', 'SOSIO', 'IPS'];
+                                    } elseif (str_contains($lower, 'ekonomi')) {
+                                        $mapelKeywords = ['EKONOMI', 'EKO', 'AKUN', 'IPS'];
+                                    } elseif (str_contains($lower, 'geografi') || str_contains($lower, 'sejarah')) {
+                                        $mapelKeywords = ['IPS', 'SOSIO'];
+                                    } elseif (str_contains($lower, 'indonesia')) {
+                                        $mapelKeywords = ['B. INDO', 'B INDO', 'INDO'];
+                                    } elseif (str_contains($lower, 'inggris')) {
+                                        $mapelKeywords = ['B. ING', 'B ING', 'ING'];
+                                    } elseif (str_contains($lower, 'matematika')) {
+                                        if (str_contains($lower, 'lanjut')) {
+                                            $mapelKeywords = ['MAT.LAN', 'MATLAN'];
+                                        } elseif (str_contains($lower, 'wajib')) {
+                                            $mapelKeywords = ['MAT.W', 'MAT W', 'MTK W'];
+                                        } else {
+                                            $mapelKeywords = ['MAT', 'MTK'];
+                                        }
+                                    } else {
+                                        $mapelKeywords = [trim($mapelName)];
+                                        if ($cleanMapel) $mapelKeywords[] = $cleanMapel;
                                     }
 
                                     $query->where(function ($sub) use ($mapelKeywords) {

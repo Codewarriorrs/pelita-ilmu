@@ -46,10 +46,6 @@ class AdminPanelProvider extends PanelProvider
                 fn () => view('filament.components.onboarding-tour'),
             )
             ->renderHook(
-                \Filament\View\PanelsRenderHook::BODY_END,
-                fn () => view('filament.components.global-loader'),
-            )
-            ->renderHook(
                 \Filament\View\PanelsRenderHook::SIDEBAR_FOOTER,
                 fn () => view('filament.components.sidebar-logout'),
             )
@@ -105,37 +101,56 @@ class AdminPanelProvider extends PanelProvider
                         /* Searchbar Borderless & Clean in Topbar */
                         .fi-topbar .fi-global-search-ctn,
                         .fi-topbar .fi-global-search-field,
+                        .fi-topbar .fi-global-search-field > div,
+                        .fi-topbar .fi-global-search-field .fi-input-wrp,
                         .fi-topbar .fi-input-wrp {
                             border: none !important;
+                            border-color: transparent !important;
                             box-shadow: none !important;
                             outline: none !important;
                             background: transparent !important;
                             --tw-ring-color: transparent !important;
                             --tw-ring-offset-color: transparent !important;
                             --tw-ring-shadow: none !important;
+                            --tw-ring-inset: none !important;
                             ring: none !important;
                         }
+                        .fi-topbar .fi-global-search-field input,
+                        .fi-topbar .fi-input-wrp input,
                         .fi-topbar input {
                             background-color: #ffffff !important;
                             border: none !important;
+                            border-color: transparent !important;
                             outline: none !important;
                             color: #0f172a !important;
                             font-weight: 500 !important;
                             box-shadow: none !important;
                             --tw-ring-shadow: none !important;
+                            --tw-ring-color: transparent !important;
                             border-radius: 0.5rem !important;
                         }
+                        .fi-topbar .fi-global-search-field input:focus,
+                        .fi-topbar .fi-input-wrp input:focus,
                         .fi-topbar input:focus {
                             border: none !important;
+                            border-color: transparent !important;
                             outline: none !important;
                             box-shadow: none !important;
                             --tw-ring-shadow: none !important;
+                            --tw-ring-color: transparent !important;
                             color: #0f172a !important;
                         }
+                        .fi-topbar .fi-global-search-field:focus-within,
                         .fi-topbar .fi-input-wrp:focus-within {
                             border: none !important;
+                            border-color: transparent !important;
                             box-shadow: none !important;
                             --tw-ring-shadow: none !important;
+                            --tw-ring-color: transparent !important;
+                        }
+                        .fi-topbar .fi-global-search-field *,
+                        .fi-topbar .fi-input-wrp * {
+                            border-color: transparent !important;
                         }
                         .fi-topbar input::placeholder {
                             color: #64748b !important;

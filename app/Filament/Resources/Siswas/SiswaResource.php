@@ -235,21 +235,24 @@ class SiswaResource extends Resource
                             return new \Illuminate\Support\HtmlString('<span style="font-size: 11px; color: #94a3b8; font-style: italic;">Belum ada kelompok</span>');
                         }
 
-                        $id = 'accordion-kelompok-' . $record->id;
                         $itemsHtml = '';
                         foreach ($kelompoks as $k) {
-                            $itemsHtml .= '<div style="padding: 2px 0; border-bottom: 1px dashed #f1f5f9; font-size: 11px; color: #334155;">• ' . e($k->nama_kelompok) . '</div>';
+                            $itemsHtml .= '<div style="padding: 4px 6px; border-bottom: 1px dashed #e2e8f0; font-size: 11px; font-weight: 500; color: #1e293b; white-space: nowrap;">' . e($k->nama_kelompok) . '</div>';
                         }
 
                         return new \Illuminate\Support\HtmlString("
-                            <div x-data=\"{ open: false }\" style=\"min-width: 140px;\">
+                            <div x-data=\"{ open: false }\" @click.stop style=\"position: relative; display: inline-block;\">
                                 <button type=\"button\" 
-                                        @click=\"open = !open\" 
-                                        style=\"display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: #0f766e; background-color: #f0fdfa; border: 1px solid #ccfbf1; border-radius: 4px; cursor: pointer; text-align: left;\">
-                                    <span>{$count} Kelompok</span>
-                                    <svg :class=\"{ 'rotate-180': open }\" style=\"width: 12px; height: 12px; transition: transform 0.15s ease;\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\" /></svg>
+                                        @click.stop=\"open = !open\" 
+                                        style=\"display: inline-flex; align-items: center; gap: 5px; padding: 0.2rem 0.6rem; font-size: 0.7rem; font-weight: 800; color: #ffffff; background-color: #0f766e; border: none; border-radius: 0.45rem; cursor: pointer; text-align: left; letter-spacing: 0.03em; box-shadow: 0 1px 2px rgba(15, 118, 110, 0.25);\">
+                                    <span>{$count} KELOMPOK</span>
+                                    <svg :class=\"{ 'rotate-180': open }\" style=\"width: 11px; height: 11px; transition: transform 0.15s ease;\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2.5\" d=\"M19 9l-7 7-7-7\" /></svg>
                                 </button>
-                                <div x-show=\"open\" x-cloak style=\"margin-top: 4px; padding: 4px 6px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); max-height: 120px; overflow-y: auto;\">
+                                <div x-show=\"open\" 
+                                     x-cloak 
+                                     @click.outside=\"open = false\" 
+                                     @click.stop
+                                     style=\"position: absolute; top: calc(100% + 4px); left: 0; z-index: 50; min-width: 170px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.12); max-height: 140px; overflow-y: auto; padding: 4px;\">
                                     {$itemsHtml}
                                 </div>
                             </div>
