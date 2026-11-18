@@ -201,6 +201,32 @@ class AdminPanelProvider extends PanelProvider
                             font-size: 0.8125rem !important;
                             font-weight: 400 !important;
                         }
+
+                        /* Dropdown Hasil Pencarian Global (Selalu dropdown ke bawah input field) */
+                        .fi-topbar .fi-global-search-results-ctn {
+                            position: absolute !important;
+                            top: calc(100% + 0.5rem) !important;
+                            left: 0 !important;
+                            right: auto !important;
+                            bottom: auto !important;
+                            width: 380px !important;
+                            max-width: 90vw !important;
+                            max-height: 420px !important;
+                            overflow-y: auto !important;
+                            z-index: 9999 !important;
+                            border-radius: 0.75rem !important;
+                            background: #ffffff !important;
+                            border: 1px solid #e2e8f0 !important;
+                            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+                        }
+                        @media (max-width: 640px) {
+                            .fi-topbar .fi-global-search-results-ctn {
+                                width: calc(100vw - 2rem) !important;
+                                left: 50% !important;
+                                transform: translateX(-50%) !important;
+                            }
+                        }
+
                         .fi-topbar .pelita-bell-btn {
                             color: #193836 !important;
                         }
