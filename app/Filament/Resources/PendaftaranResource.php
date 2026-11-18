@@ -278,20 +278,43 @@ class PendaftaranResource extends Resource
                             || str_contains(strtoupper((string) $record->kelas), 'TK')
                             || str_contains(strtoupper((string) $record->kelas), 'PAUD');
 
+                        // Ekstrak angka kelas calon siswa, misal "Kelas 10 SMA" -> "10", "Kelas 7 SMP" -> "7"
+                        preg_match('/\b(10|11|12|[1-9]|TK)\b/i', (string) $record->kelas, $km);
+                        $targetKelas = $km[1] ?? null;
+
                         // Cari kelompok belajar: jika SMP/SMA dengan pilihan mapel spesifik
                         if (! $isTkOrSd && ! empty($mapels)) {
                             foreach ($mapels as $idx => $mapelName) {
                                 $cleanMapel = trim(preg_replace('/^(TKA|SD|SMP|SMA|Kelas \d+)\s*/i', '', $mapelName));
 
-                                $options = \App\Models\Kelompok::query()
-                                    ->where(function ($query) use ($mapelName, $cleanMapel) {
+                                $query = \App\Models\Kelompok::query();
+
+                                // Filter tegas per kelas: Murid kelas 10 hanya melihat kelompok kelas 10
+                                if ($targetKelas) {
+                                    $query->where(function ($sub) use ($targetKelas) {
+                                        $sub->where('nama_kelompok', 'ILIKE', "%{$targetKelas}%")
+                                            ->orWhereHas('mapel', fn ($mq) => $mq->where('nama_mapel', 'ILIKE', "%{$targetKelas}%"));
+                                    });
+                                }
+
+                                if (stripos($mapelName, 'UTBK') !== false || stripos($mapelName, 'Penalaran') !== false) {
+                                    $query->where(function ($q) {
+                                        $q->where('nama_kelompok', 'ILIKE', '%UTBK%')
+                                          ->orWhere('nama_kelompok', 'ILIKE', '%PK&PM%')
+                                          ->orWhereHas('mapel', fn ($mq) => $mq->where('nama_mapel', 'ILIKE', '%UTBK%'));
+                                    });
+                                } else {
+                                    $query->where(function ($query) use ($mapelName, $cleanMapel) {
                                         $query->whereHas('mapel', function ($q) use ($mapelName, $cleanMapel) {
                                             $q->where('nama_mapel', 'ILIKE', '%' . trim($mapelName) . '%')
                                               ->orWhere('nama_mapel', 'ILIKE', '%' . $cleanMapel . '%')
                                               ->orWhereRaw('? ILIKE \'%\' || nama_mapel || \'%\'', [trim($mapelName)]);
                                         })->orWhere('nama_kelompok', 'ILIKE', '%' . trim($mapelName) . '%')
                                           ->orWhere('nama_kelompok', 'ILIKE', '%' . $cleanMapel . '%');
-                                    })
+                                    });
+                                }
+
+                                $options = $query
                                     ->with(['mapel', 'tentor'])
                                     ->withCount('siswa')
                                     ->get()
@@ -313,12 +336,20 @@ class PendaftaranResource extends Resource
                                     ->placeholder($hasOptions ? "-- Pilih Kelompok untuk {$mapelName} --" : "Belum ada kelompok tersedia untuk mapel {$mapelName}")
                                     ->required($hasOptions)
                                     ->helperText($hasOptions
-                                        ? "Hanya menampilkan kelompok belajar mapel {$mapelName} dengan kuota tersedia (< 9 siswa)."
-                                        : "Peringatan: Belum ada kelompok belajar untuk mata pelajaran {$mapelName}. Anda dapat membuat kelompok belajar baru di menu Kelompok Belajar.");
+                                        ? "Hanya menampilkan kelompok belajar {$mapelName} kelas {$record->kelas} dengan kuota tersedia (< 9 siswa)."
+                                        : "Peringatan: Belum ada kelompok belajar untuk mata pelajaran {$mapelName} di kelas ini. Anda dapat membuat kelompok belajar baru di menu Kelompok Belajar.");
                             }
                         } else {
                             // Untuk TK & SD (semua mapel) atau program paket tanpa per-mapel
-                            $options = \App\Models\Kelompok::with(['mapel', 'tentor'])
+                            $genQuery = \App\Models\Kelompok::query();
+                            if ($targetKelas) {
+                                $genQuery->where(function ($sub) use ($targetKelas) {
+                                    $sub->where('nama_kelompok', 'ILIKE', "%{$targetKelas}%")
+                                        ->orWhereHas('mapel', fn ($mq) => $mq->where('nama_mapel', 'ILIKE', "%{$targetKelas}%"));
+                                });
+                            }
+
+                            $options = $genQuery->with(['mapel', 'tentor'])
                                 ->withCount('siswa')
                                 ->get()
                                 ->filter(fn ($k) => $k->siswa_count < 9)
@@ -355,12 +386,12 @@ class PendaftaranResource extends Resource
                             \Filament\Forms\Components\Placeholder::make('info_pendaftar')
                                 ->label('')
                                 ->content(new \Illuminate\Support\HtmlString("
-                                    <div style='background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 20px; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.05); color: #1e293b;'>
+                                    <div style='background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 18px; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; color: #1e293b;'>
                                         <!-- Header Nota Invoice -->
-                                        <div style='display: flex; align-items: center; justify-content: space-between; border-bottom: 2px dashed #cbd5e1; padding-bottom: 14px; margin-bottom: 16px;'>
+                                        <div style='display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0f766e; padding-bottom: 12px; margin-bottom: 14px;'>
                                             <div>
-                                                <div style='font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #0f766e;'>BIMBEL PELITA ILMU</div>
-                                                <div style='font-size: 16px; font-weight: 800; color: #0f172a;'>NOTA RINGKASAN PENDAFTARAN</div>
+                                                <div style='font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #0f766e;'>BIMBEL PELITA ILMU</div>
+                                                <div style='font-size: 15px; font-weight: 800; color: #0f172a;'>NOTA RINGKASAN PENDAFTARAN</div>
                                                 <div style='font-size: 11px; color: #64748b;'>Semarang, Jawa Tengah</div>
                                             </div>
                                             <div style='text-align: right;'>
@@ -369,12 +400,12 @@ class PendaftaranResource extends Resource
                                             </div>
                                         </div>
 
-                                        <!-- Informasi Siswa & Wali -->
-                                        <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 12px; margin-bottom: 16px;'>
+                                        <!-- Informasi Siswa & Wali (Tanpa Nested Box, Hanya Section Divider) -->
+                                        <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; font-size: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 14px; margin-bottom: 14px;'>
                                             <div style='display: flex; flex-direction: column; gap: 4px;'>
                                                 <div><span style='color: #64748b;'>Nama Lengkap:</span> <strong style='color: #0f172a;'>{$record->nama_lengkap}</strong></div>
                                                 <div><span style='color: #64748b;'>Panggilan:</span> <span style='font-weight: 700; color: #1e293b;'>" . ($record->nama_panggilan ?: '-') . "</span></div>
-                                                <div><span style='color: #64748b;'>Jenjang / Kelas:</span> <span style='background: #ccfbf1; color: #0f766e; font-weight: 800; padding: 2px 6px; border-radius: 4px; font-size: 11px;'>" . ($record->kelas ?: '-') . "</span> (" . ($record->kategori_kelas ?: 'Reguler') . ")</div>
+                                                <div><span style='color: #64748b;'>Jenjang / Kelas:</span> <strong style='color: #0f766e;'>" . ($record->kelas ?: '-') . "</strong> (" . ($record->kategori_kelas ?: 'Reguler') . ")</div>
                                                 <div><span style='color: #64748b;'>Asal Sekolah:</span> <span style='color: #1e293b;'>" . ($record->asal_sekolah ?: '-') . "</span></div>
                                             </div>
                                             <div style='display: flex; flex-direction: column; gap: 4px;'>
@@ -385,41 +416,39 @@ class PendaftaranResource extends Resource
                                             </div>
                                         </div>
 
-                                        <!-- Itemized Invoice Table -->
-                                        <div style='border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden;'>
-                                            <table style='width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;'>
-                                                <thead style='background: #f1f5f9; color: #334155; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;'>
-                                                    <tr>
-                                                        <th style='padding: 10px 12px; border-bottom: 1px solid #cbd5e1;'>Deskripsi Layanan</th>
-                                                        <th style='padding: 10px 12px; border-bottom: 1px solid #cbd5e1;'>Rincian / Keterangan</th>
-                                                        <th style='padding: 10px 12px; border-bottom: 1px solid #cbd5e1; text-align: right;'>Jumlah</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr style='border-bottom: 1px solid #e2e8f0;'>
-                                                        <td style='padding: 10px 12px; font-weight: 700; color: #1e293b;'>Biaya Administrasi Pendaftaran</td>
-                                                        <td style='padding: 10px 12px; color: #64748b;'>Registrasi standar bimbel</td>
-                                                        <td style='padding: 10px 12px; text-align: right; font-family: monospace; font-weight: 800; color: #0f172a;'>{$biayaDaftarFmt}</td>
-                                                    </tr>" . ($hasKaos ? "
-                                                    <tr style='border-bottom: 1px solid #e2e8f0;'>
-                                                        <td style='padding: 10px 12px; font-weight: 700; color: #1e293b;'>Merchandise Kaos Eksklusif</td>
-                                                        <td style='padding: 10px 12px; color: #64748b;'>Kaos resmi Pelita Ilmu ({$ukuranKaosText})</td>
-                                                        <td style='padding: 10px 12px; text-align: right; font-family: monospace; font-weight: 800; color: #0f172a;'>{$biayaKaosFmt}</td>
-                                                    </tr>" : "") . "
-                                                    <tr style='border-bottom: 1px solid #e2e8f0;'>
-                                                        <td style='padding: 10px 12px; font-weight: 700; color: #1e293b;'>Program Bimbingan Belajar</td>
-                                                        <td style='padding: 10px 12px; color: #0f766e; font-weight: 700;'>{$mapelDisplay}</td>
-                                                        <td style='padding: 10px 12px; text-align: right; color: #94a3b8; font-style: italic;'>Sesuai SPP</td>
-                                                    </tr>
-                                                </tbody>
-                                                <tfoot style='background: #f0fdf4; border-top: 2px solid #10b981; font-weight: 800; color: #064e3b;'>
-                                                    <tr>
-                                                        <td colspan='2' style='padding: 12px; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;'>Total Tagihan Pendaftaran Awal</td>
-                                                        <td style='padding: 12px; text-align: right; font-family: monospace; font-size: 14px; color: #0f766e; font-weight: 900;'>{$totalAwalFmt}</td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
+                                        <!-- Itemized Invoice Table (Tanpa Nested Box) -->
+                                        <table style='width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;'>
+                                            <thead style='background: #f8fafc; color: #334155; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;'>
+                                                <tr>
+                                                    <th style='padding: 8px 10px; border-bottom: 1.5px solid #cbd5e1;'>Deskripsi Layanan</th>
+                                                    <th style='padding: 8px 10px; border-bottom: 1.5px solid #cbd5e1;'>Rincian / Keterangan</th>
+                                                    <th style='padding: 8px 10px; border-bottom: 1.5px solid #cbd5e1; text-align: right;'>Jumlah</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr style='border-bottom: 1px solid #e2e8f0;'>
+                                                    <td style='padding: 8px 10px; font-weight: 700; color: #1e293b;'>Biaya Administrasi Pendaftaran</td>
+                                                    <td style='padding: 8px 10px; color: #64748b;'>Registrasi standar bimbel</td>
+                                                    <td style='padding: 8px 10px; text-align: right; font-family: monospace; font-weight: 800; color: #0f172a;'>{$biayaDaftarFmt}</td>
+                                                </tr>" . ($hasKaos ? "
+                                                <tr style='border-bottom: 1px solid #e2e8f0;'>
+                                                    <td style='padding: 8px 10px; font-weight: 700; color: #1e293b;'>Merchandise Kaos Eksklusif</td>
+                                                    <td style='padding: 8px 10px; color: #64748b;'>Kaos resmi Pelita Ilmu ({$ukuranKaosText})</td>
+                                                    <td style='padding: 8px 10px; text-align: right; font-family: monospace; font-weight: 800; color: #0f172a;'>{$biayaKaosFmt}</td>
+                                                </tr>" : "") . "
+                                                <tr style='border-bottom: 1px solid #e2e8f0;'>
+                                                    <td style='padding: 8px 10px; font-weight: 700; color: #1e293b;'>Program Bimbingan Belajar</td>
+                                                    <td style='padding: 8px 10px; color: #0f766e; font-weight: 700;'>{$mapelDisplay}</td>
+                                                    <td style='padding: 8px 10px; text-align: right; color: #94a3b8; font-style: italic;'>Sesuai SPP</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot style='background: #f0fdf4; border-top: 2px solid #0f766e; font-weight: 800; color: #064e3b;'>
+                                                <tr>
+                                                    <td colspan='2' style='padding: 10px; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;'>Total Tagihan Pendaftaran Awal</td>
+                                                    <td style='padding: 10px; text-align: right; font-family: monospace; font-size: 13px; color: #0f766e; font-weight: 900;'>{$totalAwalFmt}</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
                                     </div>
                                 ")),
 

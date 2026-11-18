@@ -39,6 +39,40 @@ class Pendaftaran extends Model
     ];
 
     /**
+     * Model lifecycle hooks.
+     */
+    protected static function booted(): void
+    {
+        static::updated(function (Pendaftaran $pendaftaran) {
+            if ($pendaftaran->wasChanged('status_tindak_lanjut')) {
+                $oldStatus = $pendaftaran->getOriginal('status_tindak_lanjut');
+                $newStatus = $pendaftaran->status_tindak_lanjut;
+
+                // Jika status sebelumnya DITERIMA tetapi diubah kembali menjadi BARU / DIHUBUNGI
+                if ($oldStatus === 'DITERIMA' && $newStatus !== 'DITERIMA') {
+                    $normName = mb_strtolower(trim((string) $pendaftaran->nama_lengkap));
+                    $phone = trim((string) ($pendaftaran->no_telp_ortu ?: $pendaftaran->nomor_wa ?: $pendaftaran->no_telp_siswa));
+
+                    $siswa = Siswa::query()
+                        ->whereRaw('LOWER(TRIM(nama_lengkap)) = ?', [$normName])
+                        ->when($phone !== '', function ($q) use ($phone) {
+                            $q->where(function ($sub) use ($phone) {
+                                $sub->where('no_telp_ortu', $phone)
+                                    ->orWhere('no_telp_siswa', $phone);
+                            });
+                        })
+                        ->first();
+
+                    if ($siswa) {
+                        $siswa->kelompok()->detach();
+                        $siswa->delete();
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * Parse daftar mata pelajaran (dari array pilihan_mapel atau regex minat_program).
      *
      * @return array<int, string>

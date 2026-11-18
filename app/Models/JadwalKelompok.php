@@ -32,7 +32,7 @@ class JadwalKelompok extends Model
     ];
 
     /**
-     * Cek apakah waktu sesi sudah tiba sehingga presensi boleh dilakukan (WIB / Asia/Jakarta).
+     * Cek apakah waktu sesi sedang berlangsung (dalam rentang jam mulai s.d. jam selesai WIB).
      */
     public function canDoPresensi(): bool
     {
@@ -41,10 +41,42 @@ class JadwalKelompok extends Model
         }
 
         $sesiDate = $this->tanggal_sesi->toDateString();
-        $jamMulai = $this->jam_mulai ?? $this->kelompok?->jam_mulai ?? '00:00:00';
-        $sesiStartTime = \Illuminate\Support\Carbon::parse("{$sesiDate} {$jamMulai}", 'Asia/Jakarta');
+        $jamMulai = $this->effective_jam_mulai ?? '00:00:00';
+        $jamSelesai = $this->effective_jam_selesai ?? '23:59:59';
 
-        return \Illuminate\Support\Carbon::now('Asia/Jakarta')->gte($sesiStartTime);
+        $sesiStartTime = \Illuminate\Support\Carbon::parse("{$sesiDate} {$jamMulai}", 'Asia/Jakarta');
+        $sesiEndTime = \Illuminate\Support\Carbon::parse("{$sesiDate} {$jamSelesai}", 'Asia/Jakarta');
+        $now = \Illuminate\Support\Carbon::now('Asia/Jakarta');
+
+        return $now->gte($sesiStartTime) && $now->lte($sesiEndTime);
+    }
+
+    public function getPresensiStatusText(): string
+    {
+        if (! $this->tanggal_sesi) {
+            return 'Tanggal sesi belum ditentukan';
+        }
+
+        $sesiDate = $this->tanggal_sesi->toDateString();
+        $jamMulai = $this->effective_jam_mulai ?? '00:00:00';
+        $jamSelesai = $this->effective_jam_selesai ?? '23:59:59';
+
+        $sesiStart = \Illuminate\Support\Carbon::parse("{$sesiDate} {$jamMulai}", 'Asia/Jakarta');
+        $sesiEnd = \Illuminate\Support\Carbon::parse("{$sesiDate} {$jamSelesai}", 'Asia/Jakarta');
+        $now = \Illuminate\Support\Carbon::now('Asia/Jakarta');
+
+        if ($now->lt($sesiStart)) {
+            $jam = substr($jamMulai, 0, 5);
+            $tgl = $this->tanggal_sesi->format('d M Y');
+            return "Presensi terkunci. Sesi baru dibuka pada {$tgl} pk {$jam} WIB.";
+        }
+
+        if ($now->gt($sesiEnd)) {
+            $jam = substr($jamSelesai, 0, 5);
+            return "Presensi ditutup. Waktu sesi telah berakhir pada pk {$jam} WIB.";
+        }
+
+        return 'Isi / Edit Presensi (Sesi Sedang Berlangsung)';
     }
 
     public function getEffectiveJamMulaiAttribute(): ?string

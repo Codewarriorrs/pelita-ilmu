@@ -19,11 +19,11 @@
         outline: none !important;
         cursor: pointer !important;
         padding: 0.25rem !important;
-        color: #ffffff !important;
+        color: #193836 !important;
         transition: transform 0.15s ease, color 0.15s ease !important;
     }
     .pelita-bell-btn:hover {
-        color: #6ee7b7 !important;
+        color: #0f766e !important;
         transform: scale(1.1) !important;
     }
     .pelita-bell-btn svg {
@@ -186,27 +186,24 @@
         border-color: #0f766e !important;
     }
 
-    /* ===== TOAST PUSH NOTIFICATION (KIRI BAWAH, TIDAK MENUTUPI BUTTON KELUAR) ===== */
+    /* ===== TOAST PUSH NOTIFICATION (PAS DI LEBAR SIDEBAR, TIDAK MELENCENG KELUAR) ===== */
     .pelita-toast-wrapper {
         position: fixed !important;
         z-index: 99999 !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: 0.6rem !important;
+        gap: 0.5rem !important;
         pointer-events: none !important;
-        max-width: 24rem !important;
-        width: calc(100vw - 2rem) !important;
-    }
-    @media (min-width: 1024px) {
-        .pelita-toast-wrapper {
-            bottom: 1.5rem !important;
-            left: 17.5rem !important; /* Aman di samping area sidebar */
-        }
+        left: 0.75rem !important;
+        bottom: 5.25rem !important;
+        width: auto !important;
+        max-width: calc(16rem - 1.5rem) !important;
     }
     @media (max-width: 1023px) {
         .pelita-toast-wrapper {
-            bottom: 5.5rem !important; /* Di atas bar bawah mobile / logout */
-            left: 1rem !important;
+            bottom: 5rem !important;
+            left: 0.75rem !important;
+            max-width: calc(100vw - 1.5rem) !important;
         }
     }
     .pelita-toast-item {
@@ -403,7 +400,7 @@ document.addEventListener('alpine:init', () => {
             this.fetchFeed(true);
             this.pollTimer = setInterval(() => {
                 this.fetchFeed(false);
-            }, 10000);
+            }, 4000);
         },
 
         toggleDropdown() {
@@ -448,7 +445,7 @@ document.addEventListener('alpine:init', () => {
 
             setTimeout(() => {
                 this.removeToast(toast.id);
-            }, 5000);
+            }, 7000);
         },
 
         removeToast(id) {

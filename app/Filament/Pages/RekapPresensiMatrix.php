@@ -390,6 +390,8 @@ class RekapPresensiMatrix extends Page
             'Pragma' => 'no-cache',
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
             'Expires' => '0',
+            'X-Content-Type-Options' => 'nosniff',
+            'Content-Transfer-Encoding' => 'binary',
         ];
 
         $callback = function () use ($matrix, $bulanNama): void {

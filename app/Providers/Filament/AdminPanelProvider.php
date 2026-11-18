@@ -42,6 +42,10 @@ class AdminPanelProvider extends PanelProvider
                 fn () => view('filament.components.notification-bell'),
             )
             ->renderHook(
+                \Filament\View\PanelsRenderHook::BODY_END,
+                fn () => view('filament.components.onboarding-tour'),
+            )
+            ->renderHook(
                 \Filament\View\PanelsRenderHook::SIDEBAR_FOOTER,
                 fn () => view('filament.components.sidebar-logout'),
             )
@@ -76,30 +80,45 @@ class AdminPanelProvider extends PanelProvider
                             z-index: 9998 !important;
                         }
 
-                        /* ===== TOPBAR / NAVBAR: Dominan Tema #193836 (Ijo) ===== */
+                        /* ===== TOPBAR / NAVBAR: Putih Gradasi Hijau Tosca + Aksen Kuning + Hijau Gelap ===== */
                         .fi-topbar {
-                            background-color: #193836 !important;
-                            border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+                            background: linear-gradient(90deg, #ffffff 0%, #f0fdfa 45%, #e6f4f3 100%) !important;
+                            border-bottom: 2.5px solid #FFE500 !important;
+                            box-shadow: 0 2px 10px rgba(25, 56, 54, 0.06) !important;
                         }
                         .fi-topbar nav,
                         .fi-topbar header {
-                            background-color: #193836 !important;
+                            background: transparent !important;
                         }
                         .fi-topbar .fi-icon-btn,
                         .fi-topbar button,
                         .fi-topbar svg {
-                            color: #ffffff !important;
+                            color: #193836 !important;
                         }
                         .fi-topbar .fi-topbar-item {
-                            color: #ffffff !important;
+                            color: #193836 !important;
                         }
                         .fi-topbar input {
-                            background-color: rgba(255, 255, 255, 0.12) !important;
-                            border: 1px solid rgba(255, 255, 255, 0.25) !important;
-                            color: #ffffff !important;
+                            background-color: #ffffff !important;
+                            border: 1.5px solid #0f766e !important;
+                            color: #0f172a !important;
+                            font-weight: 600 !important;
+                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+                        }
+                        .fi-topbar input:focus {
+                            border-color: #0d9488 !important;
+                            box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.2) !important;
+                            color: #0f172a !important;
                         }
                         .fi-topbar input::placeholder {
-                            color: rgba(255, 255, 255, 0.65) !important;
+                            color: #64748b !important;
+                            font-weight: 500 !important;
+                        }
+                        .fi-topbar .pelita-bell-btn {
+                            color: #193836 !important;
+                        }
+                        .fi-topbar .pelita-bell-btn:hover {
+                            color: #0f766e !important;
                         }
 
                         /* ===== CHOICES / MULTI-SELECT BADGES (Solid Hijau #0f766e, Kontras Jelas) ===== */
@@ -120,13 +139,13 @@ class AdminPanelProvider extends PanelProvider
                             color: #ffffff !important;
                         }
 
-                        /* ===== SIDEBAR / TOPBAR BRAND LOGO ===== */
+                        /* ===== SIDEBAR / TOPBAR BRAND LOGO (Diperbesar) ===== */
                         .fi-sidebar-header .fi-logo,
                         .fi-sidebar-header img.fi-logo,
                         .fi-topbar .fi-logo,
                         .fi-topbar img.fi-logo {
-                            height: 2.75rem !important;
-                            max-height: 2.75rem !important;
+                            height: 3.35rem !important;
+                            max-height: 3.35rem !important;
                             width: auto !important;
                             object-fit: contain !important;
                         }
@@ -294,12 +313,29 @@ class AdminPanelProvider extends PanelProvider
 
                         /* ===== MOBILE ACCORDION FAQ CARDS FOR TABLES ===== */
                         @media (max-width: 768px) {
+                            .fi-ta-header-ctn {
+                                padding: 0.75rem !important;
+                                display: flex !important;
+                                flex-direction: column !important;
+                                align-items: stretch !important;
+                                gap: 0.65rem !important;
+                            }
+                            .fi-ta-search-field {
+                                width: 100% !important;
+                                min-width: 100% !important;
+                                margin: 0 !important;
+                            }
+                            .fi-ta-search-field input {
+                                width: 100% !important;
+                                text-align: left !important;
+                                padding-left: 2.25rem !important;
+                            }
                             .fi-ta-header { flex-direction: column !important; align-items: stretch !important; }
                             .fi-ta-header-toolbar { margin-left: 0 !important; width: 100% !important; justify-content: space-between !important; }
                             
                             .fi-ta-table { display: block !important; width: 100% !important; }
                             .fi-ta-table > thead { display: none !important; }
-                            .fi-ta-table > tbody { display: flex !important; flex-direction: column !important; gap: 0.6rem !important; padding: 0.5rem 0.25rem !important; }
+                            .fi-ta-table > tbody { display: flex !important; flex-direction: column !important; gap: 0.5rem !important; padding: 0.4rem 0.2rem !important; }
                             
                             .fi-ta-table > tbody > tr {
                                 position: relative !important;
@@ -308,9 +344,9 @@ class AdminPanelProvider extends PanelProvider
                                 flex-direction: column !important;
                                 background: #ffffff !important;
                                 border: 1.5px solid #cbd5e1 !important;
-                                border-radius: 0.75rem !important;
-                                padding: 0.85rem 1rem !important;
-                                box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.05) !important;
+                                border-radius: 0.65rem !important;
+                                padding: 0.55rem 0.85rem !important;
+                                box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.05) !important;
                                 transition: all 0.2s ease !important;
                             }
                             
@@ -318,9 +354,9 @@ class AdminPanelProvider extends PanelProvider
                             .fi-ta-table > tbody > tr::after {
                                 content: "\\25BC";
                                 position: absolute;
-                                right: 1.15rem;
-                                top: 0.95rem;
-                                font-size: 0.75rem;
+                                right: 0.85rem;
+                                top: 0.65rem;
+                                font-size: 0.7rem;
                                 font-weight: 800;
                                 color: #0f766e;
                                 transition: transform 0.2s ease;
@@ -332,9 +368,9 @@ class AdminPanelProvider extends PanelProvider
                             /* Baris awal: Hanya Nama Lengkap siswa yang muncul */
                             .fi-ta-table > tbody > tr > td:first-child {
                                 display: block !important;
-                                padding: 0.15rem 1.75rem 0.15rem 0 !important;
+                                padding: 0.1rem 1.5rem 0.1rem 0 !important;
                                 border-bottom: none !important;
-                                font-size: 0.95rem !important;
+                                font-size: 0.875rem !important;
                                 font-weight: 800 !important;
                                 color: #193836 !important;
                                 width: 100% !important;
@@ -348,19 +384,19 @@ class AdminPanelProvider extends PanelProvider
                             /* Ketika di-klik / expanded: Buka detail ke bawah */
                             .fi-ta-table > tbody > tr.is-expanded > td:first-child {
                                 border-bottom: 1.5px solid #e2e8f0 !important;
-                                padding-bottom: 0.6rem !important;
-                                margin-bottom: 0.5rem !important;
+                                padding-bottom: 0.45rem !important;
+                                margin-bottom: 0.4rem !important;
                             }
                             .fi-ta-table > tbody > tr.is-expanded > td:not(:first-child) {
                                 display: block !important;
-                                padding: 0.45rem 0 !important;
+                                padding: 0.35rem 0 !important;
                                 border-bottom: 1px dashed #e2e8f0 !important;
-                                font-size: 0.825rem !important;
+                                font-size: 0.8rem !important;
                                 width: 100% !important;
                             }
                             .fi-ta-table > tbody > tr.is-expanded > td:last-child {
                                 border-bottom: none !important;
-                                padding-top: 0.75rem !important;
+                                padding-top: 0.55rem !important;
                                 display: flex !important;
                                 align-items: center !important;
                                 justify-content: flex-end !important;

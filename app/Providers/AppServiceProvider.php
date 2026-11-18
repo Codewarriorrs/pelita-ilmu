@@ -37,6 +37,13 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(\App\Models\JadwalKelompok::class, \App\Policies\JadwalKelompokPolicy::class);
         Gate::policy(\App\Models\DetailPresensi::class, \App\Policies\DetailPresensiPolicy::class);
 
+        // Listen to Login event to trigger Onboarding Tour on new login sessions
+        \Illuminate\Support\Facades\Event::listen(\Illuminate\Auth\Events\Login::class, function ($event) {
+            if ($event->user && !$event->user->hide_onboarding_tour) {
+                session(['show_onboarding_tour' => true]);
+            }
+        });
+
         if (app()->environment('production') && str_starts_with(config('app.url'), 'https://')) {
             URL::forceScheme('https');
         }

@@ -169,7 +169,6 @@ class DatabaseSeeder extends Seeder
                     $siswa = Siswa::firstOrCreate(
                         ['nama_lengkap' => $candidate['nama']],
                         [
-                            'nama_panggilan' => $candidate['panggilan'] ?? null,
                             'asal_sekolah' => $candidate['asal_sekolah'],
                             'kelas' => $candidate['kelas_display'],
                             'kategori_kelas' => $candidate['kategori'] ?? 'Reguler',
@@ -179,9 +178,9 @@ class DatabaseSeeder extends Seeder
                             'status_siswa' => 'AKTIF',
                             'tanggal_daftar' => '2026-10-10',
                             'alamat_rumah' => $candidate['alamat'] ?: 'Jl. Pelita Ilmu No. 1',
-                            'no_telp_siswa' => $candidate['hp_siswa'] ?: '081200000000',
+                            'no_telp_siswa' => mb_substr(preg_replace('/[^0-9+]/', '', $candidate['hp_siswa'] ?: '081200000000'), 0, 20),
                             'nama_ortu' => $candidate['ortu'] ?: 'Orang Tua Siswa',
-                            'no_telp_ortu' => $candidate['hp_ortu'] ?: '081200000000',
+                            'no_telp_ortu' => mb_substr(preg_replace('/[^0-9+]/', '', $candidate['hp_ortu'] ?: '081200000000'), 0, 20),
                             'biaya_bulanan' => $biaya,
                         ]
                     );
@@ -351,7 +350,7 @@ class DatabaseSeeder extends Seeder
             $mapel = 'Tematik SD';
             $biaya = 150000;
 
-            if (str_contains($upper, 'TK')) {
+            if ((preg_match('/\bTK(\s+[AB])?\b/i', $rombel) || str_contains($upper, 'TK A') || str_contains($upper, 'TK B')) && ! str_contains($upper, 'TKA')) {
                 $jenjang = 'TK';
                 $kelas = 'TK';
                 $mapel = 'Calistung & Tematik TK';
@@ -397,8 +396,8 @@ class DatabaseSeeder extends Seeder
                 $jenjang = 'SMA';
                 $biaya = 220000;
                 $num = 12;
-                if (preg_match('/(10|11|12)/', $upper, $sm)) {
-                    $num = (int)$sm[1];
+                if (preg_match('/(1[0O]|11|12)/', $upper, $sm)) {
+                    $num = ($sm[1] === '1O') ? 10 : (int)$sm[1];
                 }
                 $kelas = "{$num} SMA";
 

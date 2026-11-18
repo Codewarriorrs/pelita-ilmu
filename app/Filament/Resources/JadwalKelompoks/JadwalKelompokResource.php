@@ -290,20 +290,13 @@ class JadwalKelompokResource extends Resource
                     ->iconButton()
                     ->icon('heroicon-o-clipboard-document-check')
                     ->color(fn (JadwalKelompok $record): string => $record->canDoPresensi() ? 'success' : 'gray')
-                    ->tooltip(function (JadwalKelompok $record): string {
-                        if (! $record->canDoPresensi()) {
-                            $jam = $record->effective_jam_mulai ? substr($record->effective_jam_mulai, 0, 5) : '15:30';
-                            $tgl = $record->tanggal_sesi?->format('d M Y') ?? '-';
-                            return "Presensi terkunci. Sesi baru dibuka pada {$tgl} pk {$jam} WIB.";
-                        }
-                        return 'Isi / Edit Presensi';
-                    })
+                    ->tooltip(fn (JadwalKelompok $record): string => $record->getPresensiStatusText())
                     ->disabled(fn (JadwalKelompok $record): bool => ! $record->canDoPresensi())
                     ->before(function (Action $action, JadwalKelompok $record): void {
                         if (! $record->canDoPresensi()) {
                             Notification::make()
-                                ->title('Presensi Belum Dibuka')
-                                ->body('Presensi hanya dapat dilakukan saat atau setelah jam dan hari sesi belajar tiba.')
+                                ->title('Presensi Tidak Tersedia')
+                                ->body($record->getPresensiStatusText())
                                 ->danger()
                                 ->send();
                             $action->halt();

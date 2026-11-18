@@ -47,7 +47,7 @@ class DetailPresensiResource extends Resource
                     ->rule(fn (): \Closure => function (string $attribute, mixed $value, \Closure $fail): void {
                         $jadwal = \App\Models\JadwalKelompok::with('kelompok')->find($value);
                         if ($jadwal && ! $jadwal->canDoPresensi()) {
-                            $fail('Sesi pertemuan belum dimulai. Presensi hanya dapat diisi pada hari dan jam sesi belajar.');
+                            $fail($jadwal->getPresensiStatusText());
                         }
                     }),
 

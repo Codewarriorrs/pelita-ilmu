@@ -7,11 +7,13 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Jalankan seeder reset data simulasi saat deploy CI/CD migrate --force di server
-        Artisan::call('db:seed', [
-            '--class' => 'Database\\Seeders\\DatabaseSeeder',
-            '--force' => true,
-        ]);
+        // Jalankan seeder reset data simulasi jika tabel ruangan sudah siap
+        if (\Illuminate\Support\Facades\Schema::hasTable('ruangan')) {
+            Artisan::call('db:seed', [
+                '--class' => 'Database\\Seeders\\DatabaseSeeder',
+                '--force' => true,
+            ]);
+        }
     }
 
     public function down(): void

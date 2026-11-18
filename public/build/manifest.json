@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-BmldTayD.css",
+    "file": "assets/app-BuBGs0X4.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -13,5 +13,14 @@
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
+  },
+  "resources/js/onboarding.js": {
+    "file": "assets/onboarding-BklARQg6.js",
+    "name": "onboarding",
+    "src": "resources/js/onboarding.js",
+    "isEntry": true,
+    "css": [
+      "assets/onboarding-DoMbIL4H.css"
+    ]
   }
 }

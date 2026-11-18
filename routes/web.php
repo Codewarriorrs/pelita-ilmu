@@ -22,3 +22,14 @@ Route::get('/behindpelita/rekap-presensi-matrix/export', \App\Http\Controllers\R
 Route::get('/behindpelita/notifications/feed', \App\Http\Controllers\NotificationFeedController::class)
     ->middleware(['web', 'auth'])
     ->name('notifications.feed');
+
+// Onboarding Tour Dismiss
+Route::post('/behindpelita/onboarding/dismiss', function (\Illuminate\Http\Request $request) {
+    if (auth()->check()) {
+        auth()->user()->update(['hide_onboarding_tour' => true]);
+        session()->forget('show_onboarding_tour');
+        return response()->json(['success' => true]);
+    }
+    return response()->json(['error' => 'Unauthenticated'], 401);
+})->middleware(['web', 'auth'])->name('onboarding.dismiss');
+

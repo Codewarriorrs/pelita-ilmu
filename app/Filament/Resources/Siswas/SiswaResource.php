@@ -149,13 +149,64 @@ class SiswaResource extends Resource
                 Textarea::make('alamat_rumah')
                     ->label('Alamat Rumah')
                     ->columnSpanFull(),
+                \Filament\Forms\Components\Placeholder::make('daftar_kelompok_table')
+                    ->label('Daftar Kelompok Belajar yang Diikuti')
+                    ->content(function (?Siswa $record): \Illuminate\Support\HtmlString {
+                        if (! $record) {
+                            return new \Illuminate\Support\HtmlString('<div style="font-size: 12px; color: #64748b; font-style: italic;">Kelompok belajar dapat ditentukan setelah data siswa disimpan.</div>');
+                        }
+
+                        $record->loadMissing(['kelompok.mapel', 'kelompok.tentor']);
+                        $kelompoks = $record->kelompok;
+
+                        if ($kelompoks->isEmpty()) {
+                            return new \Illuminate\Support\HtmlString('<div style="padding: 10px 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; font-size: 12px; color: #64748b;">Siswa belum terdaftar di kelompok belajar manapun.</div>');
+                        }
+
+                        $rows = '';
+                        foreach ($kelompoks as $i => $k) {
+                            $no = $i + 1;
+                            $namaKel = htmlspecialchars($k->nama_kelompok);
+                            $mapel = htmlspecialchars($k->mapel?->nama_mapel ?? '-');
+                            $hari = htmlspecialchars($k->jadwal_hari ?? '-');
+                            $jam = ($k->jam_mulai ? substr($k->jam_mulai, 0, 5) : '') . ($k->jam_selesai ? ' - ' . substr($k->jam_selesai, 0, 5) : '');
+                            $tentor = htmlspecialchars($k->tentor?->name ?? 'Belum ada tentor');
+
+                            $rows .= "<tr style='border-bottom: 1px solid #e2e8f0;'>
+                                <td style='padding: 8px 12px; font-weight: 600; text-align: center; width: 40px;'>{$no}</td>
+                                <td style='padding: 8px 12px; font-weight: 700; color: #193836;'>{$namaKel}</td>
+                                <td style='padding: 8px 12px; color: #0f766e; font-weight: 600;'>{$mapel}</td>
+                                <td style='padding: 8px 12px; color: #475569;'>{$hari} {$jam}</td>
+                                <td style='padding: 8px 12px; color: #334155;'>{$tentor}</td>
+                            </tr>";
+                        }
+
+                        return new \Illuminate\Support\HtmlString("
+                            <div style='border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #ffffff;'>
+                                <table style='width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;'>
+                                    <thead style='background: #f1f5f9; color: #334155; font-size: 11px; text-transform: uppercase;'>
+                                        <tr>
+                                            <th style='padding: 8px 12px; text-align: center;'>#</th>
+                                            <th style='padding: 8px 12px;'>Nama Kelompok</th>
+                                            <th style='padding: 8px 12px;'>Mata Pelajaran</th>
+                                            <th style='padding: 8px 12px;'>Jadwal Belajar</th>
+                                            <th style='padding: 8px 12px;'>Tentor Pengampu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>{$rows}</tbody>
+                                </table>
+                            </div>
+                        ");
+                    })
+                    ->columnSpanFull(),
                 Select::make('kelompok')
-                    ->label('Kelompok Belajar yang Diikuti')
+                    ->label('Ubah / Tempatkan Kelompok Belajar')
                     ->relationship('kelompok', 'nama_kelompok')
                     ->multiple()
                     ->preload()
                     ->searchable()
                     ->columnSpanFull()
+                    ->helperText('Pilih kelompok belajar yang diikuti oleh siswa.')
                     ->visible(fn () => auth()->user()?->isAdmin() ?? true),
                 Textarea::make('keterangan')
                     ->label('Keterangan')

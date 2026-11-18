@@ -29,6 +29,7 @@ class User extends Authenticatable implements FilamentUser
         'password',
         'role',
         'tanggal_daftar',
+        'hide_onboarding_tour',
     ];
 
     /**
@@ -51,6 +52,7 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'hide_onboarding_tour' => 'boolean',
         ];
     }
 
