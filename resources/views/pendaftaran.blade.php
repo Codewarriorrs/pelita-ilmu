@@ -383,10 +383,10 @@
                                 >
                                 <div class="ml-3">
                                     <div class="flex items-center gap-2">
-                                        <span class="text-sm font-headline font-bold block text-void">Dengan Kaos (+Rp 70.000 = Rp 105.000)</span>
+                                        <span class="text-sm font-headline font-bold block text-void">Dengan Kaos (Total Rp 70.000)</span>
                                         <span class="text-[10px] font-headline font-black bg-highlight text-void px-2 py-0.5 rounded-full border border-black shadow-sm">SPESIAL</span>
                                     </div>
-                                    <span class="text-xs text-stone-500 font-body mt-0.5 block">Biaya pendaftaran Rp 35.000 + 1 pcs kaos resmi eksklusif Bimbel Pelita Ilmu (Rp 70.000).</span>
+                                    <span class="text-xs text-stone-500 font-body mt-0.5 block">Total Rp 70.000 mendapatkan 1 pcs kaos resmi eksklusif Bimbel Pelita Ilmu &amp; GRATIS biaya pendaftaran.</span>
                                 </div>
                             </label>
                         </div>

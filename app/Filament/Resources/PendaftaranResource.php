@@ -428,7 +428,7 @@ class PendaftaranResource extends Resource
                         $tglDaftar = $record->tanggal_masuk ? $record->tanggal_masuk->translatedFormat('d F Y') : '-';
                         $invNo = 'REG-' . str_pad((string) $record->id, 5, '0', STR_PAD_LEFT);
                         $hasKaos = !empty($record->ukuran_kaos) || str_contains((string) $record->paket_pendaftaran, 'Dengan Kaos');
-                        $biayaDaftar = 35000;
+                        $biayaDaftar = $hasKaos ? 0 : 35000;
                         $biayaKaos = $hasKaos ? 70000 : 0;
                         $totalBiayaAwal = $biayaDaftar + $biayaKaos;
                         $biayaDaftarFmt = 'Rp ' . number_format($biayaDaftar, 0, ',', '.');
@@ -482,12 +482,12 @@ class PendaftaranResource extends Resource
                                             <tbody>
                                                 <tr style='border-bottom: 1px solid #e2e8f0;'>
                                                     <td style='padding: 8px 10px; font-weight: 600; color: #1e293b;'>Biaya Administrasi Pendaftaran</td>
-                                                    <td style='padding: 8px 10px; color: #64748b;'>Registrasi standar bimbel</td>
+                                                    <td style='padding: 8px 10px; color: #64748b;'>" . ($hasKaos ? 'Gratis (Termasuk dalam Paket Kaos)' : 'Registrasi standar bimbel') . "</td>
                                                     <td style='padding: 8px 10px; text-align: right; font-family: \"Courier New\", monospace; font-weight: 700; color: #0f172a;'>{$biayaDaftarFmt}</td>
                                                 </tr>" . ($hasKaos ? "
                                                 <tr style='border-bottom: 1px solid #e2e8f0;'>
-                                                    <td style='padding: 8px 10px; font-weight: 600; color: #1e293b;'>Merchandise Kaos Eksklusif</td>
-                                                    <td style='padding: 8px 10px; color: #64748b;'>Kaos resmi Pelita Ilmu ({$ukuranKaosText})</td>
+                                                    <td style='padding: 8px 10px; font-weight: 600; color: #1e293b;'>Paket Kaos Eksklusif Bimbel</td>
+                                                    <td style='padding: 8px 10px; color: #64748b;'>Kaos resmi Pelita Ilmu ({$ukuranKaosText}) + Free Registrasi</td>
                                                     <td style='padding: 8px 10px; text-align: right; font-family: \"Courier New\", monospace; font-weight: 700; color: #0f172a;'>{$biayaKaosFmt}</td>
                                                 </tr>" : "") . "
                                                 <tr style='border-bottom: 1px solid #e2e8f0;'>
