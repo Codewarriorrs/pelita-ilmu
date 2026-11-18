@@ -470,8 +470,8 @@ class AdminPanelProvider extends PanelProvider
                     </style>
                     <script>
                         document.addEventListener("DOMContentLoaded", function() {
-                            if (window.location.pathname.includes('/siswas')) {
-                                document.body.classList.add('page-siswa');
+                            if (window.location.pathname.includes("/siswas")) {
+                                document.body.classList.add("page-siswa");
                             }
                         });
                         document.addEventListener("click", function(e) {
