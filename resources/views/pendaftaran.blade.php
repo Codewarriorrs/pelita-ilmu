@@ -226,13 +226,15 @@
 
                         <!-- DINAMIS MATA PELAJARAN -->
                         <div id="mapel-container" class="md:col-span-2 hidden pt-3">
-                            <div class="flex items-center justify-between mb-2">
-                                <label class="block text-xs sm:text-sm font-bold text-void font-subtitle">
+                            <div>
+                                <label class="block text-xs sm:text-sm font-bold text-void font-subtitle mb-1.5">
                                     Pilih Mata Pelajaran <span class="text-rose-500">*</span>
                                 </label>
-                                <span id="mapel-limit-badge" class="bg-primary text-white text-[11px] font-bold px-3 py-1 rounded-full border border-black shadow-sm font-body">
-                                    Terpilih: 0 / 3
-                                </span>
+                                <div class="mb-3">
+                                    <span id="mapel-limit-badge" class="inline-flex items-center bg-primary text-white text-[11px] font-bold px-3 py-1 rounded-full border border-black shadow-sm font-body">
+                                        Terpilih: 0 / 3
+                                    </span>
+                                </div>
                             </div>
                             <p id="mapel-info-text" class="text-xs text-stone-600 mb-3 font-body">
                                 Silakan centang mata pelajaran yang ingin diambil sesuai kuota paket program:
