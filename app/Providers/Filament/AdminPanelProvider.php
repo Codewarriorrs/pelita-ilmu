@@ -46,6 +46,10 @@ class AdminPanelProvider extends PanelProvider
                 fn () => view('filament.components.onboarding-tour'),
             )
             ->renderHook(
+                \Filament\View\PanelsRenderHook::BODY_END,
+                fn () => view('filament.components.global-loader'),
+            )
+            ->renderHook(
                 \Filament\View\PanelsRenderHook::SIDEBAR_FOOTER,
                 fn () => view('filament.components.sidebar-logout'),
             )
@@ -100,14 +104,14 @@ class AdminPanelProvider extends PanelProvider
                         }
                         .fi-topbar input {
                             background-color: #ffffff !important;
-                            border: 1.5px solid #0f766e !important;
+                            border: 1px solid #cbd5e1 !important;
                             color: #0f172a !important;
-                            font-weight: 600 !important;
-                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+                            font-weight: 500 !important;
+                            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
                         }
                         .fi-topbar input:focus {
-                            border-color: #0d9488 !important;
-                            box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.2) !important;
+                            border-color: #94a3b8 !important;
+                            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.05) !important;
                             color: #0f172a !important;
                         }
                         .fi-topbar input::placeholder {

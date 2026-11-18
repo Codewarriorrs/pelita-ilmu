@@ -442,7 +442,7 @@ class PembayaranResource extends Resource
                         if ($record instanceof Siswa) {
                             $payment = self::resolveRowPayment($record);
                             if ((! $payment || $payment->status_bayar !== 'LUNAS') && (float) $record->biaya_bulanan > 0) {
-                                return 'Tagihan: Rp ' . number_format((float) $record->biaya_bulanan, 0, ',', '.');
+                                return 'Rp ' . number_format((float) $record->biaya_bulanan, 0, ',', '.');
                             }
                         }
 

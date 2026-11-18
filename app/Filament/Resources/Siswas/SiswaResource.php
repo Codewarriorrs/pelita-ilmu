@@ -226,14 +226,35 @@ class SiswaResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
-                TextColumn::make('kelompok.nama_kelompok')
+                TextColumn::make('kelompok_list')
                     ->label('Kelompok Belajar')
-                    ->badge()
-                    ->color('info')
-                    ->separator(', ')
-                    ->limitList(2)
-                    ->searchable()
-                    ->placeholder('Belum ada kelompok'),
+                    ->state(function (Siswa $record): \Illuminate\Support\HtmlString {
+                        $kelompoks = $record->kelompok;
+                        $count = $kelompoks->count();
+                        if ($count === 0) {
+                            return new \Illuminate\Support\HtmlString('<span style="font-size: 11px; color: #94a3b8; font-style: italic;">Belum ada kelompok</span>');
+                        }
+
+                        $id = 'accordion-kelompok-' . $record->id;
+                        $itemsHtml = '';
+                        foreach ($kelompoks as $k) {
+                            $itemsHtml .= '<div style="padding: 2px 0; border-bottom: 1px dashed #f1f5f9; font-size: 11px; color: #334155;">• ' . e($k->nama_kelompok) . '</div>';
+                        }
+
+                        return new \Illuminate\Support\HtmlString("
+                            <div x-data=\"{ open: false }\" style=\"min-width: 140px;\">
+                                <button type=\"button\" 
+                                        @click=\"open = !open\" 
+                                        style=\"display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: #0f766e; background-color: #f0fdfa; border: 1px solid #ccfbf1; border-radius: 4px; cursor: pointer; text-align: left;\">
+                                    <span>{$count} Kelompok</span>
+                                    <svg :class=\"{ 'rotate-180': open }\" style=\"width: 12px; height: 12px; transition: transform 0.15s ease;\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\" /></svg>
+                                </button>
+                                <div x-show=\"open\" x-cloak style=\"margin-top: 4px; padding: 4px 6px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); max-height: 120px; overflow-y: auto;\">
+                                    {$itemsHtml}
+                                </div>
+                            </div>
+                        ");
+                    }),
                 TextColumn::make('kelas')
                     ->label('Kelas')
                     ->badge()

@@ -428,14 +428,38 @@
                     </select>
                 </div>
 
-                <div class="rp-form-group">
+                <div class="rp-form-group" x-data="{
+                    open: false,
+                    search: '',
+                    selectedId: @entangle('kelompokId'),
+                    options: {{ collect($data['allKelompoks'])->map(fn ($k) => ['id' => $k->id, 'name' => $k->nama_kelompok])->toJson() }},
+                    get selectedName() {
+                        if (!this.selectedId) return 'Semua Kelompok';
+                        const opt = this.options.find(o => o.id == this.selectedId);
+                        return opt ? opt.name : 'Semua Kelompok';
+                    },
+                    get filteredOptions() {
+                        if (!this.search.trim()) return this.options;
+                        return this.options.filter(o => o.name.toLowerCase().includes(this.search.toLowerCase()));
+                    }
+                }" @click.outside="open = false" style="position: relative;">
                     <label>Kelompok Belajar</label>
-                    <select wire:model.live="kelompokId" class="rp-select">
-                        <option value="">Semua Kelompok</option>
-                        @foreach($data['allKelompoks'] as $k)
-                            <option value="{{ $k->id }}">{{ $k->nama_kelompok }}</option>
-                        @endforeach
-                    </select>
+                    <button type="button" @click="open = !open" class="rp-select" style="text-align: left; display: flex; align-items: center; justify-content: space-between; cursor: pointer; background: #ffffff;">
+                        <span x-text="selectedName" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></span>
+                        <svg style="width: 14px; height: 14px; color: #6b7280; flex-shrink: 0;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="open" x-cloak style="position: absolute; top: 100%; left: 0; right: 0; z-index: 50; margin-top: 4px; background: #ffffff; border: 1px solid #d1d5db; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); max-height: 240px; overflow-y: auto; padding: 4px;">
+                        <input type="text" x-model="search" placeholder="Cari nama kelompok..." style="width: 100%; padding: 6px 10px; font-size: 0.775rem; border: 1px solid #e5e7eb; border-radius: 0.375rem; margin-bottom: 4px; outline: none;" @click.stop />
+                        <div @click="selectedId = null; open = false;" style="padding: 6px 10px; font-size: 0.775rem; cursor: pointer; border-radius: 0.25rem;" :style="!selectedId ? 'background: #f0fdfa; font-weight: 600; color: #0f766e;' : 'color: #374151;'">
+                            Semua Kelompok
+                        </div>
+                        <template x-for="opt in filteredOptions" :key="opt.id">
+                            <div @click="selectedId = opt.id; open = false;" style="padding: 6px 10px; font-size: 0.775rem; cursor: pointer; border-radius: 0.25rem;" :style="selectedId == opt.id ? 'background: #f0fdfa; font-weight: 600; color: #0f766e;' : 'color: #374151;'" x-text="opt.name">
+                            </div>
+                        </template>
+                    </div>
                 </div>
 
                 <div class="rp-form-group">

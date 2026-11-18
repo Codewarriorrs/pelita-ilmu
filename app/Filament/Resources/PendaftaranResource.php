@@ -301,16 +301,64 @@ class PendaftaranResource extends Resource
                                     $query->where(function ($q) {
                                         $q->where('nama_kelompok', 'ILIKE', '%UTBK%')
                                           ->orWhere('nama_kelompok', 'ILIKE', '%PK&PM%')
+                                          ->orWhere('nama_kelompok', 'ILIKE', '%TKA%')
                                           ->orWhereHas('mapel', fn ($mq) => $mq->where('nama_mapel', 'ILIKE', '%UTBK%'));
                                     });
                                 } else {
-                                    $query->where(function ($query) use ($mapelName, $cleanMapel) {
-                                        $query->whereHas('mapel', function ($q) use ($mapelName, $cleanMapel) {
-                                            $q->where('nama_mapel', 'ILIKE', '%' . trim($mapelName) . '%')
-                                              ->orWhere('nama_mapel', 'ILIKE', '%' . $cleanMapel . '%')
-                                              ->orWhereRaw('? ILIKE \'%\' || nama_mapel || \'%\'', [trim($mapelName)]);
-                                        })->orWhere('nama_kelompok', 'ILIKE', '%' . trim($mapelName) . '%')
-                                          ->orWhere('nama_kelompok', 'ILIKE', '%' . $cleanMapel . '%');
+                                    // Pemetaan kata kunci singkatan mapel (indo, ing, mtk, mat, bio, fis, kim, sosio, eko)
+                                    $mapelKeywords = [trim($mapelName)];
+                                    if ($cleanMapel) $mapelKeywords[] = $cleanMapel;
+
+                                    $lower = strtolower($mapelName);
+                                    if (str_contains($lower, 'indonesia')) {
+                                        $mapelKeywords[] = 'INDO';
+                                        $mapelKeywords[] = 'B INDO';
+                                        $mapelKeywords[] = 'B. INDO';
+                                    }
+                                    if (str_contains($lower, 'inggris')) {
+                                        $mapelKeywords[] = 'ING';
+                                        $mapelKeywords[] = 'B ING';
+                                        $mapelKeywords[] = 'B. ING';
+                                    }
+                                    if (str_contains($lower, 'matematika')) {
+                                        $mapelKeywords[] = 'MTK';
+                                        $mapelKeywords[] = 'MAT';
+                                        if (str_contains($lower, 'lanjut')) {
+                                            $mapelKeywords[] = 'MAT.LAN';
+                                            $mapelKeywords[] = 'MATLAN';
+                                        }
+                                        if (str_contains($lower, 'wajib')) {
+                                            $mapelKeywords[] = 'MTK W';
+                                            $mapelKeywords[] = 'MAT W';
+                                        }
+                                    }
+                                    if (str_contains($lower, 'fisika')) {
+                                        $mapelKeywords[] = 'FIS';
+                                        $mapelKeywords[] = 'FISIKA';
+                                    }
+                                    if (str_contains($lower, 'kimia')) {
+                                        $mapelKeywords[] = 'KIM';
+                                        $mapelKeywords[] = 'KIMIA';
+                                    }
+                                    if (str_contains($lower, 'biologi')) {
+                                        $mapelKeywords[] = 'BIO';
+                                        $mapelKeywords[] = 'BIOLOGI';
+                                    }
+                                    if (str_contains($lower, 'sosiologi')) {
+                                        $mapelKeywords[] = 'SOSIO';
+                                        $mapelKeywords[] = 'SOSIOLOGI';
+                                    }
+                                    if (str_contains($lower, 'ekonomi')) {
+                                        $mapelKeywords[] = 'EKO';
+                                        $mapelKeywords[] = 'EKONOMI';
+                                        $mapelKeywords[] = 'AKUN';
+                                    }
+
+                                    $query->where(function ($sub) use ($mapelKeywords) {
+                                        foreach ($mapelKeywords as $kw) {
+                                            $sub->orWhere('nama_kelompok', 'ILIKE', "%{$kw}%")
+                                                ->orWhereHas('mapel', fn ($mq) => $mq->where('nama_mapel', 'ILIKE', "%{$kw}%"));
+                                        }
                                     });
                                 }
 
@@ -386,7 +434,7 @@ class PendaftaranResource extends Resource
                             \Filament\Forms\Components\Placeholder::make('info_pendaftar')
                                 ->label('')
                                 ->content(new \Illuminate\Support\HtmlString("
-                                    <div style='background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 18px; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; color: #1e293b;'>
+                                    <div style='background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 18px; font-family: \"Plus Jakarta Sans\", system-ui, -apple-system, sans-serif; color: #1e293b;'>
                                         <!-- Header Nota Invoice -->
                                         <div style='display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0f766e; padding-bottom: 12px; margin-bottom: 14px;'>
                                             <div>
@@ -395,7 +443,7 @@ class PendaftaranResource extends Resource
                                                 <div style='font-size: 11px; color: #64748b;'>Semarang, Jawa Tengah</div>
                                             </div>
                                             <div style='text-align: right;'>
-                                                <span style='display: inline-block; background: #0f766e; color: #ffffff; font-family: monospace; font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 6px;'>#{$invNo}</span>
+                                                <span style='display: inline-block; background: #0f766e; color: #ffffff; font-family: \"Courier New\", monospace; font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 4px;'>#{$invNo}</span>
                                                 <div style='font-size: 11px; color: #64748b; margin-top: 4px; font-weight: 600;'>Tgl: {$tglDaftar}</div>
                                             </div>
                                         </div>
@@ -410,8 +458,8 @@ class PendaftaranResource extends Resource
                                             </div>
                                             <div style='display: flex; flex-direction: column; gap: 4px;'>
                                                 <div><span style='color: #64748b;'>Nama Orang Tua:</span> <strong style='color: #0f172a;'>" . ($record->nama_ortu ?: '-') . "</strong></div>
-                                                <div><span style='color: #64748b;'>WhatsApp Wali:</span> <span style='font-family: monospace; color: #0f766e; font-weight: 800;'>" . ($record->no_telp_ortu ?: $record->nomor_wa ?: '-') . "</span></div>
-                                                <div><span style='color: #64748b;'>No. HP Murid:</span> <span style='font-family: monospace; color: #334155;'>" . ($record->no_telp_siswa ?: '-') . "</span></div>
+                                                <div><span style='color: #64748b;'>WhatsApp Wali:</span> <span style='font-family: \"Courier New\", monospace; color: #0f766e; font-weight: 700;'>" . ($record->no_telp_ortu ?: $record->nomor_wa ?: '-') . "</span></div>
+                                                <div><span style='color: #64748b;'>No. HP Murid:</span> <span style='font-family: \"Courier New\", monospace; color: #334155;'>" . ($record->no_telp_siswa ?: '-') . "</span></div>
                                                 <div style='overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'><span style='color: #64748b;'>Alamat:</span> <span style='color: #1e293b;'>" . ($record->alamat_rumah ?: '-') . "</span></div>
                                             </div>
                                         </div>
@@ -420,32 +468,32 @@ class PendaftaranResource extends Resource
                                         <table style='width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;'>
                                             <thead style='background: #f8fafc; color: #334155; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;'>
                                                 <tr>
-                                                    <th style='padding: 8px 10px; border-bottom: 1.5px solid #cbd5e1;'>Deskripsi Layanan</th>
-                                                    <th style='padding: 8px 10px; border-bottom: 1.5px solid #cbd5e1;'>Rincian / Keterangan</th>
-                                                    <th style='padding: 8px 10px; border-bottom: 1.5px solid #cbd5e1; text-align: right;'>Jumlah</th>
+                                                    <th style='padding: 8px 10px; border-bottom: 1px solid #cbd5e1;'>Deskripsi Layanan</th>
+                                                    <th style='padding: 8px 10px; border-bottom: 1px solid #cbd5e1;'>Rincian / Keterangan</th>
+                                                    <th style='padding: 8px 10px; border-bottom: 1px solid #cbd5e1; text-align: right;'>Jumlah</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr style='border-bottom: 1px solid #e2e8f0;'>
-                                                    <td style='padding: 8px 10px; font-weight: 700; color: #1e293b;'>Biaya Administrasi Pendaftaran</td>
+                                                    <td style='padding: 8px 10px; font-weight: 600; color: #1e293b;'>Biaya Administrasi Pendaftaran</td>
                                                     <td style='padding: 8px 10px; color: #64748b;'>Registrasi standar bimbel</td>
-                                                    <td style='padding: 8px 10px; text-align: right; font-family: monospace; font-weight: 800; color: #0f172a;'>{$biayaDaftarFmt}</td>
+                                                    <td style='padding: 8px 10px; text-align: right; font-family: \"Courier New\", monospace; font-weight: 700; color: #0f172a;'>{$biayaDaftarFmt}</td>
                                                 </tr>" . ($hasKaos ? "
                                                 <tr style='border-bottom: 1px solid #e2e8f0;'>
-                                                    <td style='padding: 8px 10px; font-weight: 700; color: #1e293b;'>Merchandise Kaos Eksklusif</td>
+                                                    <td style='padding: 8px 10px; font-weight: 600; color: #1e293b;'>Merchandise Kaos Eksklusif</td>
                                                     <td style='padding: 8px 10px; color: #64748b;'>Kaos resmi Pelita Ilmu ({$ukuranKaosText})</td>
-                                                    <td style='padding: 8px 10px; text-align: right; font-family: monospace; font-weight: 800; color: #0f172a;'>{$biayaKaosFmt}</td>
+                                                    <td style='padding: 8px 10px; text-align: right; font-family: \"Courier New\", monospace; font-weight: 700; color: #0f172a;'>{$biayaKaosFmt}</td>
                                                 </tr>" : "") . "
                                                 <tr style='border-bottom: 1px solid #e2e8f0;'>
-                                                    <td style='padding: 8px 10px; font-weight: 700; color: #1e293b;'>Program Bimbingan Belajar</td>
-                                                    <td style='padding: 8px 10px; color: #0f766e; font-weight: 700;'>{$mapelDisplay}</td>
+                                                    <td style='padding: 8px 10px; font-weight: 600; color: #1e293b;'>Program Bimbingan Belajar</td>
+                                                    <td style='padding: 8px 10px; color: #0f766e; font-weight: 600;'>{$mapelDisplay}</td>
                                                     <td style='padding: 8px 10px; text-align: right; color: #94a3b8; font-style: italic;'>Sesuai SPP</td>
                                                 </tr>
                                             </tbody>
-                                            <tfoot style='background: #f0fdf4; border-top: 2px solid #0f766e; font-weight: 800; color: #064e3b;'>
+                                            <tfoot style='background: #f8fafc; border-top: 1.5px solid #0f766e; font-weight: 700; color: #0f172a;'>
                                                 <tr>
                                                     <td colspan='2' style='padding: 10px; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;'>Total Tagihan Pendaftaran Awal</td>
-                                                    <td style='padding: 10px; text-align: right; font-family: monospace; font-size: 13px; color: #0f766e; font-weight: 900;'>{$totalAwalFmt}</td>
+                                                    <td style='padding: 10px; text-align: right; font-family: \"Courier New\", monospace; font-size: 13px; color: #0f766e; font-weight: 800;'>{$totalAwalFmt}</td>
                                                 </tr>
                                             </tfoot>
                                         </table>

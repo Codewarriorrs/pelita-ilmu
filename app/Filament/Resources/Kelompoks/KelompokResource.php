@@ -153,8 +153,7 @@ class KelompokResource extends Resource
                 TextColumn::make('siswa_count')
                     ->counts('siswa')
                     ->label('Jml Siswa')
-                    ->badge()
-                    ->color('info'),
+                    ->alignCenter(),
             ])
             ->filters([
                 //

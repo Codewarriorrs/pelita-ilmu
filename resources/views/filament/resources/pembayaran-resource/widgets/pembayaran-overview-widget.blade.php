@@ -12,24 +12,24 @@
             align-items: center;
             justify-content: space-between;
             gap: 0.75rem 1rem;
-            padding: 0.75rem 1rem;
+            padding: 0.85rem 1.15rem;
             background: #ffffff;
-            border: 1px solid rgba(25, 56, 54, 0.12);
-            border-radius: 0.875rem;
-            box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
         }
 
         .po-toggle-meta {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.65rem;
         }
 
         .po-toggle-title {
-            font-size: 0.8125rem;
+            font-size: 0.875rem;
             font-weight: 700;
-            color: #193836;
+            color: #0f172a;
             letter-spacing: -0.01em;
         }
 
@@ -37,8 +37,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            padding: 0.25rem 0.65rem;
-            border-radius: 0.375rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 0.5rem;
             background: #0f766e;
             border: 1px solid #0f766e;
             color: #ffffff;
@@ -50,17 +50,17 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
 
         .po-pill-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.35rem 0.75rem;
-            border-radius: 0.375rem;
+            gap: 0.35rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 0.5rem;
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 600;
             line-height: 1.25;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -71,7 +71,7 @@
         }
 
         .po-pill-btn:hover {
-            background: #f1f5f9;
+            background: #f8fafc;
             border-color: #94a3b8;
             color: #0f172a;
         }
@@ -85,20 +85,20 @@
             background: #0f766e !important;
             border-color: #0f766e !important;
             color: #ffffff !important;
-            font-weight: 800;
-            box-shadow: 0 1px 3px rgba(15, 118, 110, 0.3);
+            font-weight: 700;
+            box-shadow: 0 1px 2px rgba(15, 118, 110, 0.2);
         }
 
         .po-pill-btn--active:hover {
-            background: #0d655e !important;
-            border-color: #0d655e !important;
+            background: #115e59 !important;
+            border-color: #115e59 !important;
             color: #ffffff !important;
         }
 
         .po-pill-dot {
             width: 0.45rem;
             height: 0.45rem;
-            border-radius: 0.15rem;
+            border-radius: 0.125rem;
             background: #94a3b8;
             flex-shrink: 0;
         }
@@ -112,52 +112,53 @@
             align-items: center;
             gap: 0.3rem;
             padding: 0.35rem 0.65rem;
-            border-radius: 0.375rem;
+            border-radius: 0.5rem;
             font-size: 0.75rem;
-            font-weight: 700;
-            color: #ffffff;
-            background: #0f766e;
-            border: 1px solid #0f766e;
+            font-weight: 600;
+            color: #0f766e;
+            background: #f0fdfa;
+            border: 1px solid #ccfbf1;
             cursor: pointer;
             transition: all 0.15s ease;
         }
 
         .po-reset-btn:hover {
-            background: #0d655e;
-            border-color: #0d655e;
-            color: #ffffff;
+            background: #ccfbf1;
+            color: #115e59;
         }
 
         .po-quick-filter-group {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
+            gap: 0.25rem;
             padding: 0.2rem;
-            background: #f1f5f9;
+            background: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 0.375rem;
+            border-radius: 0.5rem;
         }
 
         .po-qf-btn {
-            padding: 0.25rem 0.6rem;
-            border-radius: 0.25rem;
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: #475569;
+            padding: 0.25rem 0.65rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
             background: transparent;
             border: none;
             cursor: pointer;
-            transition: all 0.12s ease;
+            transition: all 0.15s ease;
         }
 
         .po-qf-btn:hover {
             color: #0f172a;
-            background: #e2e8f0;
+            background: #f1f5f9;
         }
 
         .po-qf-btn--active {
             background: #0f766e !important;
             color: #ffffff !important;
+            box-shadow: 0 1px 2px rgba(15, 118, 110, 0.2);
+        }
             box-shadow: 0 1px 2px rgba(15, 118, 110, 0.25);
         }
 

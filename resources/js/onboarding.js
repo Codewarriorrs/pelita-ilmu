@@ -18,11 +18,11 @@ window.initPelitaOnboarding = function (steps, force = false) {
     const driverObj = driver({
         animate: true,
         allowClose: true,
-        overlayOpacity: 0.6,
+        overlayOpacity: 0.55,
         stagePadding: 6,
-        nextBtnText: 'Lanjut &rarr;',
-        prevBtnText: '&larr; Kembali',
-        doneBtnText: 'Selesai ✨',
+        nextBtnText: 'Lanjut',
+        prevBtnText: 'Kembali',
+        doneBtnText: 'Selesai',
         onHighlightStarted: (element, step, options) => {
             // Auto open mobile sidebar if target is inside sidebar and mobile viewport
             if (window.innerWidth < 1024 && step.element && step.element.includes('a[href*=')) {
@@ -35,17 +35,16 @@ window.initPelitaOnboarding = function (steps, force = false) {
         },
         steps: validSteps.map((step, idx) => {
             const isWelcome = !step.element || step.element === '#onboarding-welcome' || !document.querySelector(step.element);
-            const isLast = idx === totalSteps - 1;
 
             const popoverContent = `
                 <div class="pelita-tour-body">
-                    <p class="text-sm text-slate-600 leading-relaxed">${step.description}</p>
-                    <div class="pelita-tour-footer mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                    <p class="pelita-tour-text">${step.description}</p>
+                    <div class="pelita-tour-meta">
+                        <span class="pelita-tour-badge">
                             ${idx + 1} dari ${totalSteps}
                         </span>
-                        <label class="flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer hover:text-slate-800 select-none">
-                            <input type="checkbox" id="pelita-tour-never-show" class="w-3.5 h-3.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                        <label class="pelita-tour-checkbox-label">
+                            <input type="checkbox" id="pelita-tour-never-show" class="pelita-tour-checkbox">
                             <span>Jangan tampilkan lagi</span>
                         </label>
                     </div>
