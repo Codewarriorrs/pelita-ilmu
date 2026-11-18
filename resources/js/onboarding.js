@@ -25,11 +25,28 @@ window.initPelitaOnboarding = function (steps, force = false) {
         doneBtnText: 'Selesai',
         onHighlightStarted: (element, step, options) => {
             // Auto open mobile sidebar if target is inside sidebar and mobile viewport
-            if (window.innerWidth < 1024 && step.element && step.element.includes('a[href*=')) {
-                const sidebarToggle = document.querySelector('button[x-on\\:click*="sidebar"], button[aria-label*="sidebar"], .fi-topbar button');
-                const sidebar = document.querySelector('.fi-sidebar');
-                if (sidebar && sidebar.classList.contains('-translate-x-full') && sidebarToggle) {
-                    sidebarToggle.click();
+            if (window.innerWidth < 1024) {
+                const isSidebarTarget = step.element && (
+                    step.element.includes('a[href*=') ||
+                    step.element.includes('.fi-sidebar') ||
+                    step.element.includes('#pelita-tour-btn')
+                );
+
+                if (isSidebarTarget) {
+                    // Cek apakah Alpine store sidebar sudah terbuka
+                    if (window.Alpine && window.Alpine.store('sidebar') && !window.Alpine.store('sidebar').isOpen) {
+                        window.Alpine.store('sidebar').open();
+                    } else {
+                        const openBtn = document.querySelector('.fi-topbar-open-sidebar-btn, button[x-on\\:click*="sidebar.open"]');
+                        if (openBtn && openBtn.offsetParent !== null) {
+                            openBtn.click();
+                        }
+                    }
+                } else {
+                    // Jika target di luar sidebar (topbar/konten), tutup sidebar jika sedang terbuka
+                    if (window.Alpine && window.Alpine.store('sidebar') && window.Alpine.store('sidebar').isOpen) {
+                        window.Alpine.store('sidebar').close();
+                    }
                 }
             }
         },

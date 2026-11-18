@@ -375,11 +375,12 @@ class AdminPanelProvider extends PanelProvider
                             .fi-ta-header { flex-direction: column !important; align-items: stretch !important; }
                             .fi-ta-header-toolbar { margin-left: 0 !important; width: 100% !important; justify-content: space-between !important; }
                             
-                            .fi-ta-table { display: block !important; width: 100% !important; }
-                            .fi-ta-table > thead { display: none !important; }
-                            .fi-ta-table > tbody { display: flex !important; flex-direction: column !important; gap: 0.5rem !important; padding: 0.4rem 0.2rem !important; }
+                            /* Khusus tabel siswa yang dijadikan accordion */
+                            .page-siswa .fi-ta-table { display: block !important; width: 100% !important; }
+                            .page-siswa .fi-ta-table > thead { display: none !important; }
+                            .page-siswa .fi-ta-table > tbody { display: flex !important; flex-direction: column !important; gap: 0.5rem !important; padding: 0.4rem 0.2rem !important; }
                             
-                            .fi-ta-table > tbody > tr {
+                            .page-siswa .fi-ta-table > tbody > tr {
                                 position: relative !important;
                                 cursor: pointer !important;
                                 display: flex !important;
@@ -393,7 +394,7 @@ class AdminPanelProvider extends PanelProvider
                             }
                             
                             /* Chevron Indicator */
-                            .fi-ta-table > tbody > tr::after {
+                            .page-siswa .fi-ta-table > tbody > tr::after {
                                 content: "\\25BC";
                                 position: absolute;
                                 right: 0.85rem;
@@ -403,12 +404,12 @@ class AdminPanelProvider extends PanelProvider
                                 color: #0f766e;
                                 transition: transform 0.2s ease;
                             }
-                            .fi-ta-table > tbody > tr.is-expanded::after {
+                            .page-siswa .fi-ta-table > tbody > tr.is-expanded::after {
                                 transform: rotate(180deg);
                             }
 
                             /* Baris awal: Hanya Nama Lengkap siswa yang muncul */
-                            .fi-ta-table > tbody > tr > td:first-child {
+                            .page-siswa .fi-ta-table > tbody > tr > td:first-child {
                                 display: block !important;
                                 padding: 0.1rem 1.5rem 0.1rem 0 !important;
                                 border-bottom: none !important;
@@ -419,24 +420,24 @@ class AdminPanelProvider extends PanelProvider
                             }
 
                             /* Detail lain sembunyi sampai di-klik */
-                            .fi-ta-table > tbody > tr:not(.is-expanded) > td:not(:first-child) {
+                            .page-siswa .fi-ta-table > tbody > tr:not(.is-expanded) > td:not(:first-child) {
                                 display: none !important;
                             }
 
                             /* Ketika di-klik / expanded: Buka detail ke bawah */
-                            .fi-ta-table > tbody > tr.is-expanded > td:first-child {
+                            .page-siswa .fi-ta-table > tbody > tr.is-expanded > td:first-child {
                                 border-bottom: 1.5px solid #e2e8f0 !important;
                                 padding-bottom: 0.45rem !important;
                                 margin-bottom: 0.4rem !important;
                             }
-                            .fi-ta-table > tbody > tr.is-expanded > td:not(:first-child) {
+                            .page-siswa .fi-ta-table > tbody > tr.is-expanded > td:not(:first-child) {
                                 display: block !important;
                                 padding: 0.35rem 0 !important;
                                 border-bottom: 1px dashed #e2e8f0 !important;
                                 font-size: 0.8rem !important;
                                 width: 100% !important;
                             }
-                            .fi-ta-table > tbody > tr.is-expanded > td:last-child {
+                            .page-siswa .fi-ta-table > tbody > tr.is-expanded > td:last-child {
                                 border-bottom: none !important;
                                 padding-top: 0.55rem !important;
                                 display: flex !important;
@@ -447,9 +448,14 @@ class AdminPanelProvider extends PanelProvider
                         }
                     </style>
                     <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            if (window.location.pathname.includes('/siswas')) {
+                                document.body.classList.add('page-siswa');
+                            }
+                        });
                         document.addEventListener("click", function(e) {
                             if (window.innerWidth > 768) return;
-                            const row = e.target.closest(".fi-ta-table > tbody > tr");
+                            const row = e.target.closest(".page-siswa .fi-ta-table > tbody > tr");
                             if (!row) return;
                             if (e.target.closest("button, a, input, select, textarea, .fi-icon-btn, .fi-btn, .choices")) {
                                 return;
