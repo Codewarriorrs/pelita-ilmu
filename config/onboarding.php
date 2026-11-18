@@ -61,10 +61,10 @@ return [
             'align' => 'start',
         ],
         [
-            'element' => '.fi-ta-record-action, .fi-ta-actions button:has(svg), .fi-ta-table tbody tr:first-child .fi-ta-actions',
+            'element' => '.fi-ta-table tbody tr:first-child .fi-ta-actions, .fi-ta-actions',
             'title' => 'Aksi Presensi & Kehadiran',
-            'description' => 'Klik ikon checklist pada sesi yang sedang berlangsung untuk membuka formulir absensi dan mencatat kehadiran siswa (Hadir, Izin, Sakit, Alpa).',
-            'side' => 'left',
+            'description' => 'Klik ikon checklist (lembar centang) pada baris sesi untuk membuka formulir absensi dan mencatat kehadiran siswa (Hadir, Izin, Sakit, Alpa).',
+            'side' => 'top',
             'align' => 'center',
         ],
     ],

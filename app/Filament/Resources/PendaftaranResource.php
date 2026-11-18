@@ -359,29 +359,7 @@ class PendaftaranResource extends Resource
                                     })
                                     ->all();
 
-                                // Fallback jika kelompok khusus mapel belum ada di rombel kelas ini: tampilkan seluruh kelompok kelas ini yang tersedia
-                                if (empty($options) && $targetKelas) {
-                                    $fallbackQuery = \App\Models\Kelompok::query()
-                                        ->where(function ($sub) use ($targetKelas) {
-                                            $sub->where('nama_kelompok', 'ILIKE', "%{$targetKelas}%")
-                                                ->orWhereHas('mapel', fn ($mq) => $mq->where('nama_mapel', 'ILIKE', "%{$targetKelas}%"));
-                                        });
-
-                                    $options = $fallbackQuery
-                                        ->with(['mapel', 'tentor'])
-                                        ->withCount('siswa')
-                                        ->get()
-                                        ->filter(fn ($k) => $k->siswa_count < 9)
-                                        ->mapWithKeys(function ($k) {
-                                            $sisa = 9 - $k->siswa_count;
-                                            $mapelTitle = $k->mapel?->nama_mapel ?? '-';
-                                            $tentorName = $k->tentor?->name ?? 'Belum ada tentor';
-                                            $jadwal = $k->jadwal_hari ? " ({$k->jadwal_hari})" : '';
-                                            return [$k->id => "{$k->nama_kelompok} [{$mapelTitle}]{$jadwal} — {$k->siswa_count}/9 Siswa — Tentor: {$tentorName}"];
-                                        })
-                                        ->all();
-                                }
-
+                                // 2. Tidak memakai fallback yang menampilkan SEMUA kelompok acak jika mapel belum ada
                                 $hasOptions = !empty($options);
 
                                 $kelompokFields[] = Select::make("kelompok_mapel_{$idx}")
