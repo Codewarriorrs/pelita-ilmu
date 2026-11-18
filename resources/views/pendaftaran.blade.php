@@ -520,7 +520,7 @@
             ],
             'SD': [
                 { value: 'SD Kelas 1-5', label: 'SD Kelas 1–5 — Semua Mapel Pokok & Tematik (Rp 195.000/bln)', kelasFilter: ['Kelas 1 SD', 'Kelas 2 SD', 'Kelas 3 SD', 'Kelas 4 SD', 'Kelas 5 SD'] },
-                { value: 'SD Kelas 6', label: 'SD Kelas 6 — Persiapan US + Intensif (Rp 225.000/bln)', kelasFilter: ['Kelas 6 SD'] },
+                { value: 'SD Kelas 6', label: 'SD Kelas 6 — Persiapan US + Intensif 4 Pertemuan (Rp 250.000/bln)', kelasFilter: ['Kelas 6 SD'] },
                 { value: 'SD Kelas 6 TKA', label: 'SD Kelas 6 — Hanya TKA / Persiapan SMP (Rp 210.000/bln)', kelasFilter: ['Kelas 6 SD'] }
             ],
             'SMP': [
@@ -528,8 +528,8 @@
                 { value: 'SMP 2 Mapel', label: 'SMP — 2 Mata Pelajaran (Rp 180.000/bln)' },
                 { value: 'SMP 3 Mapel', label: 'SMP — 3 Mata Pelajaran (Rp 240.000/bln)' },
                 { value: 'SMP 4 Mapel', label: 'SMP — 4 Mata Pelajaran (Rp 290.000/bln)' },
-                { value: 'SMP 5 Mapel', label: 'SMP — 5 Mata Pelajaran (Rp 330.000/bln)' },
-                { value: 'SMP 6 Mapel', label: 'SMP — 6 Mata Pelajaran (Rp 360.000/bln)' },
+                { value: 'SMP 5 Mapel', label: 'SMP — 5 Mata Pelajaran (Rp 340.000/bln)' },
+                { value: 'SMP 6 Mapel', label: 'SMP — 6 Mata Pelajaran (Rp 390.000/bln)' },
                 { value: 'SMP TKA 1 Mapel', label: 'SMP — 1 TKA (Khusus TKA Saja) (Rp 130.000/bln)' },
                 { value: 'SMP TKA 2 Mapel', label: 'SMP — 2 TKA (Khusus TKA Saja) (Rp 210.000/bln)' }
             ],
@@ -537,9 +537,9 @@
                 { value: 'SMA 1 Mapel', label: 'SMA — 1 Mata Pelajaran (Rp 130.000/bln)' },
                 { value: 'SMA 2 Mapel', label: 'SMA — 2 Mata Pelajaran (Rp 220.000/bln)' },
                 { value: 'SMA 3 Mapel', label: 'SMA — 3 Mata Pelajaran (Rp 300.000/bln)' },
-                { value: 'SMA 4 Mapel', label: 'SMA — 4 Mata Pelajaran (Rp 370.000/bln)' },
-                { value: 'SMA 5 Mapel', label: 'SMA — 5 Mata Pelajaran (Rp 430.000/bln)' },
-                { value: 'SMA 6 Mapel', label: 'SMA — 6 Mata Pelajaran (Rp 480.000/bln)' },
+                { value: 'SMA 4 Mapel', label: 'SMA — 4 Mata Pelajaran (Rp 350.000/bln)' },
+                { value: 'SMA 5 Mapel', label: 'SMA — 5 Mata Pelajaran (Rp 400.000/bln)' },
+                { value: 'SMA 6 Mapel', label: 'SMA — 6 Mata Pelajaran (Rp 450.000/bln)' },
                 { value: 'SMA UTBK 1', label: 'SMA — 1 Mapel UTBK / SNBT (Rp 175.000/bln)' },
                 { value: 'SMA UTBK 2', label: 'SMA — 2 Mapel UTBK / SNBT (Rp 290.000/bln)' },
                 { value: 'SMA UTBK 3', label: 'SMA — 3 Mapel UTBK / SNBT (Rp 390.000/bln)' },
