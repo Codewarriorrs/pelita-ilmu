@@ -102,17 +102,40 @@ class AdminPanelProvider extends PanelProvider
                         .fi-topbar .fi-topbar-item {
                             color: #193836 !important;
                         }
+                        /* Searchbar Borderless & Clean in Topbar */
+                        .fi-topbar .fi-global-search-ctn,
+                        .fi-topbar .fi-global-search-field,
+                        .fi-topbar .fi-input-wrp {
+                            border: none !important;
+                            box-shadow: none !important;
+                            outline: none !important;
+                            background: transparent !important;
+                            --tw-ring-color: transparent !important;
+                            --tw-ring-offset-color: transparent !important;
+                            --tw-ring-shadow: none !important;
+                            ring: none !important;
+                        }
                         .fi-topbar input {
                             background-color: #ffffff !important;
-                            border: 1px solid #cbd5e1 !important;
+                            border: none !important;
+                            outline: none !important;
                             color: #0f172a !important;
                             font-weight: 500 !important;
-                            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+                            box-shadow: none !important;
+                            --tw-ring-shadow: none !important;
+                            border-radius: 0.5rem !important;
                         }
                         .fi-topbar input:focus {
-                            border-color: #94a3b8 !important;
-                            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.05) !important;
+                            border: none !important;
+                            outline: none !important;
+                            box-shadow: none !important;
+                            --tw-ring-shadow: none !important;
                             color: #0f172a !important;
+                        }
+                        .fi-topbar .fi-input-wrp:focus-within {
+                            border: none !important;
+                            box-shadow: none !important;
+                            --tw-ring-shadow: none !important;
                         }
                         .fi-topbar input::placeholder {
                             color: #64748b !important;

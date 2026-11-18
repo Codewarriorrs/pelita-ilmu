@@ -347,11 +347,17 @@ class PendaftaranResource extends Resource
                                     if (str_contains($lower, 'sosiologi')) {
                                         $mapelKeywords[] = 'SOSIO';
                                         $mapelKeywords[] = 'SOSIOLOGI';
+                                        $mapelKeywords[] = 'IPS';
                                     }
                                     if (str_contains($lower, 'ekonomi')) {
                                         $mapelKeywords[] = 'EKO';
                                         $mapelKeywords[] = 'EKONOMI';
                                         $mapelKeywords[] = 'AKUN';
+                                        $mapelKeywords[] = 'IPS';
+                                    }
+                                    if (str_contains($lower, 'geografi') || str_contains($lower, 'sejarah')) {
+                                        $mapelKeywords[] = 'IPS';
+                                        $mapelKeywords[] = 'SOSIO';
                                     }
 
                                     $query->where(function ($sub) use ($mapelKeywords) {
@@ -375,6 +381,29 @@ class PendaftaranResource extends Resource
                                         return [$k->id => "{$k->nama_kelompok} [{$mapelTitle}]{$jadwal} — {$k->siswa_count}/9 Siswa (Sisa {$sisa}) — Tentor: {$tentorName}"];
                                     })
                                     ->all();
+
+                                // Fallback jika kelompok khusus mapel belum ada di rombel kelas ini: tampilkan seluruh kelompok kelas ini yang tersedia
+                                if (empty($options) && $targetKelas) {
+                                    $fallbackQuery = \App\Models\Kelompok::query()
+                                        ->where(function ($sub) use ($targetKelas) {
+                                            $sub->where('nama_kelompok', 'ILIKE', "%{$targetKelas}%")
+                                                ->orWhereHas('mapel', fn ($mq) => $mq->where('nama_mapel', 'ILIKE', "%{$targetKelas}%"));
+                                        });
+
+                                    $options = $fallbackQuery
+                                        ->with(['mapel', 'tentor'])
+                                        ->withCount('siswa')
+                                        ->get()
+                                        ->filter(fn ($k) => $k->siswa_count < 9)
+                                        ->mapWithKeys(function ($k) {
+                                            $sisa = 9 - $k->siswa_count;
+                                            $mapelTitle = $k->mapel?->nama_mapel ?? '-';
+                                            $tentorName = $k->tentor?->name ?? 'Belum ada tentor';
+                                            $jadwal = $k->jadwal_hari ? " ({$k->jadwal_hari})" : '';
+                                            return [$k->id => "{$k->nama_kelompok} [{$mapelTitle}]{$jadwal} — {$k->siswa_count}/9 Siswa — Tentor: {$tentorName}"];
+                                        })
+                                        ->all();
+                                }
 
                                 $hasOptions = !empty($options);
 

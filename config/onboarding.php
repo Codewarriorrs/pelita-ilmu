@@ -26,7 +26,7 @@ return [
             'side' => 'bottom',
             'align' => 'end',
         ],
-        // STEP 4: Widget Statistik Dashboard (jika di halaman dashboard)
+        // STEP 4: Widget Statistik Dashboard
         [
             'element' => '.fi-wi-stats-overview, .filament-stats-overview-widget',
             'title' => 'Ringkasan Statistik Utama',
@@ -34,7 +34,7 @@ return [
             'side' => 'bottom',
             'align' => 'center',
         ],
-        // STEP 5: Data Siswa
+        // STEP 5: Data Siswa (Sidebar)
         [
             'element' => 'a[href*="/behindpelita/siswas"]',
             'title' => 'Manajemen Data Siswa',
@@ -50,15 +50,39 @@ return [
             'side' => 'right',
             'align' => 'start',
         ],
-        // STEP 7: Jadwal & Sesi Belajar
+        // STEP 7: Jadwal & Sesi Belajar (Sidebar)
         [
             'element' => 'a[href*="/behindpelita/jadwal-kelompoks"]',
             'title' => 'Penjadwalan & Sesi Belajar',
-            'description' => 'Buat sesi pertemuan baru dengan pemilihan ruang kelas otomatis yang mencegah jadwal bentrok.',
+            'description' => 'Kelola jadwal belajar mingguan, buka sesi presensi mengajar, dan atur pemakaian ruangan kelas.',
             'side' => 'right',
             'align' => 'start',
         ],
-        // STEP 8: Rekap Keuangan
+        // STEP 8: Tombol Tambah Jadwal / Sesi (Action Button)
+        [
+            'element' => '.fi-ta-header-ctn .fi-btn-primary, .fi-page-header-actions .fi-btn-primary, a[href*="/behindpelita/jadwal-kelompoks/create"], a[href*="/behindpelita/kelompoks/create"], a[href*="/behindpelita/siswas/create"]',
+            'title' => 'Tombol Tambah Data & Sesi Baru',
+            'description' => 'Gunakan tombol utama ini untuk membuat jadwal atau sesi belajar baru, mendaftarkan kelompok baru, atau menambah siswa secara manual.',
+            'side' => 'bottom',
+            'align' => 'end',
+        ],
+        // STEP 9: Filter & Pencarian Tabel
+        [
+            'element' => '.fi-ta-header-ctn, .fi-ta-search-field, .fi-ta-filters',
+            'title' => 'Filter & Aksi Tabel',
+            'description' => 'Setiap tabel dilengkapi pencarian instan dan filter status untuk memudahkan Anda menyaring data dalam hitungan detik.',
+            'side' => 'bottom',
+            'align' => 'center',
+        ],
+        // STEP 10: Tombol Aksi Baris (Presensi / Edit / Hapus)
+        [
+            'element' => '.fi-ta-actions, .fi-ta-record-action, .fi-ta-row:first-child .fi-ta-actions',
+            'title' => 'Aksi Cepat Presensi, Edit & Hapus',
+            'description' => 'Pada setiap baris data, Anda dapat langsung mengklik ikon presensi untuk mencatat kehadiran siswa saat sesi berlangsung, ikon pensil untuk mengubah data kelas, atau ikon tong sampah untuk menghapus.',
+            'side' => 'left',
+            'align' => 'center',
+        ],
+        // STEP 11: Rekap Keuangan
         [
             'element' => 'a[href*="/behindpelita/rekap-pembayarans"]',
             'title' => 'Rekap Pembayaran & SPP',
@@ -66,7 +90,7 @@ return [
             'side' => 'right',
             'align' => 'start',
         ],
-        // STEP 9: Data Ruangan
+        // STEP 12: Data Ruangan
         [
             'element' => 'a[href*="/behindpelita/ruangans"]',
             'title' => 'Manajemen Ruang Kelas',
@@ -74,7 +98,7 @@ return [
             'side' => 'right',
             'align' => 'start',
         ],
-        // STEP 10: Tombol Bantuan
+        // STEP 13: Tombol Bantuan
         [
             'element' => '#onboarding-bantuan-btn',
             'title' => 'Panduan & Bantuan Mandiri',
@@ -101,15 +125,31 @@ return [
             'side' => 'right',
             'align' => 'start',
         ],
-        // STEP 3: Presensi Siswa
+        // STEP 3: Tombol Buat Sesi / Tambah Pertemuan
+        [
+            'element' => '.fi-ta-header-ctn .fi-btn-primary, .fi-page-header-actions .fi-btn-primary, a[href*="/behindpelita/jadwal-kelompoks/create"]',
+            'title' => 'Buat Pertemuan & Sesi Mengajar',
+            'description' => 'Klik tombol ini untuk menjadwalkan sesi belajar baru bagi kelompok belajar yang Anda ampu.',
+            'side' => 'bottom',
+            'align' => 'end',
+        ],
+        // STEP 4: Ikon Aksi Presensi Langsung
+        [
+            'element' => '.fi-ta-actions, .fi-ta-record-action, .fi-ta-row:first-child .fi-ta-actions',
+            'title' => 'Pengisian Presensi Kelas',
+            'description' => 'Klik ikon presensi pada baris sesi yang sedang aktif untuk mulai mencatat kehadiran siswa (Hadir, Izin, Sakit, Alpa). Presensi terbuka selama rentang jam belajar.',
+            'side' => 'left',
+            'align' => 'center',
+        ],
+        // STEP 5: Presensi Siswa (Menu)
         [
             'element' => 'a[href*="/behindpelita/detail-presensis"]',
-            'title' => 'Pengisian Presensi Siswa',
-            'description' => 'Presensi dibuka selama rentang jam belajar berlangsung. Siswa berstatus Belum Mulai maupun Nonaktif tetap dapat diabsen.',
+            'title' => 'Riwayat & Detail Presensi',
+            'description' => 'Pantau rekap seluruh absensi siswa yang sudah pernah Anda catat pada pertemuan-pertemuan sebelumnya.',
             'side' => 'right',
             'align' => 'start',
         ],
-        // STEP 4: Rekap Presensi Matrix
+        // STEP 6: Rekap Presensi Matrix
         [
             'element' => 'a[href*="/behindpelita/rekap-presensi-matrix"]',
             'title' => 'Rekapitulasi Kehadiran Siswa',
@@ -117,7 +157,7 @@ return [
             'side' => 'right',
             'align' => 'start',
         ],
-        // STEP 5: Tombol Bantuan
+        // STEP 7: Tombol Bantuan
         [
             'element' => '#onboarding-bantuan-btn',
             'title' => 'Pusat Bantuan Tentor',

@@ -8,22 +8,34 @@
 
         .po-toggle-bar {
             display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem 1rem;
-            padding: 0.85rem 1.15rem;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 0.75rem;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
         }
 
+        .po-bar-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .po-bar-row:not(:last-child) {
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
         .po-toggle-meta {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 0.65rem;
+            gap: 0.75rem;
         }
 
         .po-toggle-title {
@@ -50,14 +62,15 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.5rem;
+            width: 100%;
         }
 
         .po-pill-btn {
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            padding: 0.35rem 0.7rem;
+            padding: 0.4rem 0.85rem;
             border-radius: 0.5rem;
             font-size: 0.75rem;
             font-weight: 600;
@@ -111,7 +124,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
-            padding: 0.35rem 0.65rem;
+            padding: 0.4rem 0.85rem;
             border-radius: 0.5rem;
             font-size: 0.75rem;
             font-weight: 600;
@@ -131,14 +144,14 @@
             display: inline-flex;
             align-items: center;
             gap: 0.25rem;
-            padding: 0.2rem;
+            padding: 0.25rem;
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 0.5rem;
         }
 
         .po-qf-btn {
-            padding: 0.25rem 0.65rem;
+            padding: 0.3rem 0.75rem;
             border-radius: 0.375rem;
             font-size: 0.75rem;
             font-weight: 600;
@@ -157,6 +170,8 @@
         .po-qf-btn--active {
             background: #0f766e !important;
             color: #ffffff !important;
+            box-shadow: 0 1px 2px rgba(15, 118, 110, 0.2);
+        }
             box-shadow: 0 1px 2px rgba(15, 118, 110, 0.2);
         }
             box-shadow: 0 1px 2px rgba(15, 118, 110, 0.25);
@@ -218,29 +233,32 @@
 
     <div class="po-overview-wrapper">
         <div class="po-toggle-bar">
-            <div class="po-toggle-meta">
-                <span class="po-toggle-title">Kartu Ringkasan</span>
-                <div class="po-period-chip" style="display: inline-flex; align-items: center; padding: 0.15rem 0.5rem; background: #0f766e; border-radius: 0.375rem; border: 1px solid #0f766e;">
-                    <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="margin-right: 0.25rem; flex-shrink: 0;">
-                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
-                    </svg>
-                    <select 
-                        wire:change="setSpecificMonth($event.target.value)" 
-                        title="Pilih Bulan untuk Melihat Rekap Pendapatan Bulan Lampau"
-                        style="background: transparent; color: #ffffff; font-size: 0.75rem; font-weight: 800; border: none; outline: none; cursor: pointer; padding: 0.15rem 0.25rem; border-radius: 0.25rem;">
-                        @php
-                            $namaBulan = [
-                                1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
-                                5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
-                                9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
-                            ];
-                        @endphp
-                        @foreach ($namaBulan as $num => $nama)
-                            <option value="{{ $num }}" {{ (int) ($currentMonth ?? now()->month) === $num ? 'selected' : '' }} style="color: #193836; background: #ffffff;">
-                                {{ $nama }} {{ $currentYear ?? now()->year }}
-                            </option>
-                        @endforeach
-                    </select>
+            <!-- Baris 1: Judul, Pemilih Bulan & Quick Filter Hari Ini / Bulan Ini / Semua -->
+            <div class="po-bar-row">
+                <div class="po-toggle-meta">
+                    <span class="po-toggle-title">Kartu Ringkasan</span>
+                    <div class="po-period-chip">
+                        <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="margin-right: 0.25rem; flex-shrink: 0;">
+                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                        </svg>
+                        <select 
+                            wire:change="setSpecificMonth($event.target.value)" 
+                            title="Pilih Bulan untuk Melihat Rekap Pendapatan Bulan Lampau"
+                            style="background: transparent; color: #ffffff; font-size: 0.75rem; font-weight: 800; border: none; outline: none; cursor: pointer; padding: 0.15rem 0.25rem; border-radius: 0.25rem;">
+                            @php
+                                $namaBulan = [
+                                    1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+                                    5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+                                    9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+                                ];
+                            @endphp
+                            @foreach ($namaBulan as $num => $nama)
+                                <option value="{{ $num }}" {{ (int) ($currentMonth ?? now()->month) === $num ? 'selected' : '' }} style="color: #193836; background: #ffffff;">
+                                    {{ $nama }} {{ $currentYear ?? now()->year }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Quick Filter Switcher: Hari Ini, Bulan Ini, Semua Periode -->
@@ -269,32 +287,35 @@
                 </div>
             </div>
 
-            <div class="po-pill-group" role="group" aria-label="Pilih kartu statistik pembayaran">
-                @foreach ($cardOptions as $key => $label)
-                    @php
-                        $isActive = in_array($key, $visibleCards, true);
-                    @endphp
-                    <button
-                        type="button"
-                        wire:click="toggleCard('{{ $key }}')"
-                        wire:loading.attr="disabled"
-                        aria-pressed="{{ $isActive ? 'true' : 'false' }}"
-                        class="po-pill-btn {{ $isActive ? 'po-pill-btn--active' : '' }}"
-                    >
-                        <span class="po-pill-dot" aria-hidden="true"></span>
-                        <span>{{ $label }}</span>
-                    </button>
-                @endforeach
+            <!-- Baris 2: Filter Toggle Card Visibility (Simetris Sejajar) -->
+            <div class="po-bar-row">
+                <div class="po-pill-group" role="group" aria-label="Pilih kartu statistik pembayaran">
+                    @foreach ($cardOptions as $key => $label)
+                        @php
+                            $isActive = in_array($key, $visibleCards, true);
+                        @endphp
+                        <button
+                            type="button"
+                            wire:click="toggleCard('{{ $key }}')"
+                            wire:loading.attr="disabled"
+                            aria-pressed="{{ $isActive ? 'true' : 'false' }}"
+                            class="po-pill-btn {{ $isActive ? 'po-pill-btn--active' : '' }}"
+                        >
+                            <span class="po-pill-dot" aria-hidden="true"></span>
+                            <span>{{ $label }}</span>
+                        </button>
+                    @endforeach
 
-                @if (count($visibleCards) < count($cardOptions))
-                    <button
-                        type="button"
-                        wire:click="showAllCards"
-                        class="po-reset-btn"
-                    >
-                        Tampilkan Semua
-                    </button>
-                @endif
+                    @if (count($visibleCards) < count($cardOptions))
+                        <button
+                            type="button"
+                            wire:click="showAllCards"
+                            class="po-reset-btn"
+                        >
+                            Tampilkan Semua
+                        </button>
+                    @endif
+                </div>
             </div>
         </div>
 
