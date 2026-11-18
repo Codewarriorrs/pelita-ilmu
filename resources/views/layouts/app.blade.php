@@ -134,7 +134,7 @@
                 pointer-events: auto;
             }
 
-            /* Lightweight Pure CSS Preloader */
+            /* Pelita Ilmu Global Rocket & Brand Preloader */
             #page-preloader {
                 position: fixed;
                 inset: 0;
@@ -151,16 +151,31 @@
                 visibility: hidden;
                 pointer-events: none;
             }
-            .loader-spinner {
-                width: 54px;
-                height: 54px;
-                border: 3.5px solid rgba(255, 229, 0, 0.2);
-                border-top-color: #FFE500;
-                border-radius: 50%;
-                animation: loader-spin 0.8s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+            @keyframes rocketFloat {
+                0%, 100% {
+                    transform: translateY(6px) scale(0.95);
+                    opacity: 0.8;
+                }
+                50% {
+                    transform: translateY(-8px) scale(1.05);
+                    opacity: 1;
+                }
             }
-            @keyframes loader-spin {
-                to { transform: rotate(360deg); }
+            @keyframes pulseGlow {
+                0%, 100% {
+                    transform: scale(0.9);
+                    opacity: 0.3;
+                }
+                50% {
+                    transform: scale(1.15);
+                    opacity: 0.7;
+                }
+            }
+            .preloader-rocket {
+                animation: rocketFloat 1.8s infinite ease-in-out;
+            }
+            .preloader-glow {
+                animation: pulseGlow 2s infinite ease-in-out;
             }
         </style>
 
@@ -169,17 +184,30 @@
     </head>
     <body class="bg-canvas text-void min-h-screen flex flex-col antialiased selection:bg-primary selection:text-white">
 
-        <!-- LIGHTWEIGHT PRELOADER -->
+        <!-- PELITA ILMU LOGO & ROCKET PRELOADER (NO EMOJI) -->
         <div id="page-preloader">
-            <div class="relative flex items-center justify-center mb-4">
-                <div class="loader-spinner"></div>
-                <div class="absolute inset-0 flex items-center justify-center animate-pulse text-2xl">
-                    💡
+            <div class="relative flex items-center justify-center w-36 h-36 mb-2">
+                <!-- Radial Glow Background -->
+                <div class="preloader-glow absolute w-28 h-28 rounded-full bg-emerald-400/20 blur-md"></div>
+                
+                <!-- Animated Floating Rocket in Background -->
+                <div class="preloader-rocket absolute -top-1 -right-1 z-10 text-highlight">
+                    <svg class="w-10 h-10 drop-shadow-md" viewBox="0 0 24 24" fill="none" stroke="#FFE500" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+                        <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+                        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+                        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+                    </svg>
+                </div>
+
+                <!-- Official Pelita Ilmu Circular Logo Container -->
+                <div class="relative z-0 w-20 h-20 rounded-2xl bg-white p-2.5 shadow-xl border border-white/20 flex items-center justify-center">
+                    <img src="{{ asset('images/logo-bimbel.png') }}" alt="Pelita Ilmu" class="w-full h-full object-contain">
                 </div>
             </div>
-            <div class="text-center">
+            <div class="text-center mt-2">
                 <p class="font-headline font-black text-highlight text-sm tracking-wider uppercase">Pelita Ilmu</p>
-                <p class="font-subtitle text-[11px] text-white/70 font-medium">Bimbingan Belajar</p>
+                <p class="font-subtitle text-[11px] text-white/70 font-medium tracking-wide">Bimbingan Belajar</p>
             </div>
         </div>
 
