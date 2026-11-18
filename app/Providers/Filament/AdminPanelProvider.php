@@ -37,6 +37,8 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('images/logo-bimbel-removebg.png'))
             ->darkMode(false)
             ->font('Plus Jakarta Sans')
+            ->globalSearch(\App\Filament\GlobalSearch\ComprehensiveGlobalSearchProvider::class)
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->renderHook(
                 \Filament\View\PanelsRenderHook::GLOBAL_SEARCH_AFTER,
                 fn () => view('filament.components.notification-bell'),
@@ -98,63 +100,82 @@ class AdminPanelProvider extends PanelProvider
                         .fi-topbar .fi-topbar-item {
                             color: #193836 !important;
                         }
-                        /* Searchbar Borderless & Clean in Topbar */
-                        .fi-topbar .fi-global-search-ctn,
-                        .fi-topbar .fi-global-search-field,
-                        .fi-topbar .fi-global-search-field > div,
-                        .fi-topbar .fi-global-search-field .fi-input-wrp,
-                        .fi-topbar .fi-input-wrp {
+                        /* ===== TOPBAR SEARCH BAR: Modern, Minimalis, Ikon di Dalam, Sejajar ===== */
+                        .fi-topbar .fi-global-search-ctn {
+                            display: flex !important;
+                            align-items: center !important;
+                        }
+                        .fi-topbar .fi-global-search {
+                            position: relative !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            width: 100% !important;
+                            max-width: 320px !important;
+                        }
+                        .fi-topbar .fi-global-search-field {
+                            position: relative !important;
+                            width: 100% !important;
+                            display: flex !important;
+                            align-items: center !important;
+                        }
+                        .fi-topbar .fi-global-search-field .fi-input-wrp {
+                            position: relative !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            background-color: #ffffff !important;
+                            border: 1px solid rgba(15, 118, 110, 0.25) !important;
+                            border-radius: 0.65rem !important;
+                            height: 38px !important;
+                            min-height: 38px !important;
+                            max-height: 38px !important;
+                            width: 100% !important;
+                            padding: 0 !important;
+                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+                            transition: all 0.2s ease !important;
+                            --tw-ring-color: transparent !important;
+                            --tw-ring-shadow: none !important;
+                        }
+                        .fi-topbar .fi-global-search-field .fi-input-wrp:focus-within {
+                            border-color: #0f766e !important;
+                            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15) !important;
+                        }
+                        /* Icon search tepat di dalam kiri input, sejajar vertikal */
+                        .fi-topbar .fi-global-search-field .fi-input-wrp-prefix,
+                        .fi-topbar .fi-global-search-field .fi-input-wrp > svg,
+                        .fi-topbar .fi-global-search-field svg.fi-input-wrp-prefix-icon {
+                            position: absolute !important;
+                            left: 0.75rem !important;
+                            top: 50% !important;
+                            transform: translateY(-50%) !important;
+                            width: 16px !important;
+                            height: 16px !important;
+                            color: #64748b !important;
+                            pointer-events: none !important;
+                            z-index: 10 !important;
+                        }
+                        /* Input text field dengan padding kiri untuk memberi ruang bagi ikon */
+                        .fi-topbar .fi-global-search-field input.fi-input {
+                            width: 100% !important;
+                            height: 36px !important;
                             border: none !important;
-                            border-color: transparent !important;
-                            box-shadow: none !important;
                             outline: none !important;
                             background: transparent !important;
-                            --tw-ring-color: transparent !important;
-                            --tw-ring-offset-color: transparent !important;
-                            --tw-ring-shadow: none !important;
-                            --tw-ring-inset: none !important;
-                            ring: none !important;
-                        }
-                        .fi-topbar .fi-global-search-field input,
-                        .fi-topbar .fi-input-wrp input,
-                        .fi-topbar input {
-                            background-color: #ffffff !important;
-                            border: none !important;
-                            border-color: transparent !important;
-                            outline: none !important;
+                            padding-left: 2.35rem !important;
+                            padding-right: 0.75rem !important;
+                            padding-top: 0 !important;
+                            padding-bottom: 0 !important;
+                            font-size: 0.825rem !important;
                             color: #0f172a !important;
                             font-weight: 500 !important;
                             box-shadow: none !important;
                             --tw-ring-shadow: none !important;
                             --tw-ring-color: transparent !important;
-                            border-radius: 0.5rem !important;
+                            border-radius: 0.65rem !important;
                         }
-                        .fi-topbar .fi-global-search-field input:focus,
-                        .fi-topbar .fi-input-wrp input:focus,
-                        .fi-topbar input:focus {
-                            border: none !important;
-                            border-color: transparent !important;
-                            outline: none !important;
-                            box-shadow: none !important;
-                            --tw-ring-shadow: none !important;
-                            --tw-ring-color: transparent !important;
-                            color: #0f172a !important;
-                        }
-                        .fi-topbar .fi-global-search-field:focus-within,
-                        .fi-topbar .fi-input-wrp:focus-within {
-                            border: none !important;
-                            border-color: transparent !important;
-                            box-shadow: none !important;
-                            --tw-ring-shadow: none !important;
-                            --tw-ring-color: transparent !important;
-                        }
-                        .fi-topbar .fi-global-search-field *,
-                        .fi-topbar .fi-input-wrp * {
-                            border-color: transparent !important;
-                        }
-                        .fi-topbar input::placeholder {
-                            color: #64748b !important;
-                            font-weight: 500 !important;
+                        .fi-topbar .fi-global-search-field input.fi-input::placeholder {
+                            color: #94a3b8 !important;
+                            font-size: 0.825rem !important;
+                            font-weight: 400 !important;
                         }
                         .fi-topbar .pelita-bell-btn {
                             color: #193836 !important;
